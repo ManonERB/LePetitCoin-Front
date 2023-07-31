@@ -39,8 +39,8 @@ const SignUp = ({ navigation }) => {
 
   return (
     
-    <SafeAreaView>
-        <Text>SignUp</Text>
+    <SafeAreaView style={styles.container}>
+        <Text style={styles.title}>SignUp</Text>
       {/* creation des inputs*/}
       <TextInput
         style={styles.input}
@@ -69,17 +69,17 @@ const SignUp = ({ navigation }) => {
       >
         <Text style={styles.textButton}>Submit</Text>
       </TouchableOpacity>
-      {emailError && <Text style={styles.error}>email ou isername déja existant</Text>}
+      {emailError && <Text style={styles.error}>email ou username déja existant</Text>}
 
       <View style={styles.icons}>
         <TouchableOpacity>
-          <FontAwesome style={styles.google} name="google" />
+          <FontAwesome style={styles.google} name="google" size={34} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <FontAwesome style={styles.apple} name="apple" />
+          <FontAwesome style={styles.apple} name="apple" size={34} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <FontAwesome style={styles.facebook} name="facebook" />
+          <FontAwesome style={styles.facebook} name="facebook" size={34} />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -87,28 +87,66 @@ const SignUp = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+    container:{
+        flex:1,
+        alignItems:"center",
+    },  
+    title: {
+        fontSize:30,
+        textAlign:"center",
+        paddingTop:40,
+        paddingBottom:50,
+    },
   input: {
+    width:"60%",
     height: 40,
     margin: 12,
     borderWidth: 1,
     padding: 10,
+    borderColor:"#B08BBB",
+    borderTopLeftRadius:5,
+    borderTopRightRadius:5,
+    borderBottomLeftRadius:5,
+    borderBottomRightRadius:5,
+  },
+  button:{
+    width:"65%",
+    justifyContent:"center",
+    alignItems:"center",
+    padding:30,
+  },
+  textButton:{
+    backgroundColor:'#b08bbb',
+    width:"65%",
+    height:38,
+    textAlign:"center",
+   alignItems:"center",
+    color:"white",
   },
   icons:{
-    height:50,
+    
+    width:"65%",
+    flexDirection:"row",
+    justifyContent:"space-around",
+    alignItems:"center"
+    
   },
-  google: {
-    size:30,
-    color:"red"
-  },
-  facebook: {
-    width:10,
-    color:"black"
-  },
-  apple: {
-    width:10,
-    color:"grey"
-  },error:{
-      color:'red'
+//   google: {
+//     size:30,
+//     color:"red"
+//   },
+//   facebook: {
+//     width:10,
+//     color:"black"
+//   },
+//   apple: {
+//     width:10,
+//     color:"grey"
+//   },
+error:{
+      color:'red',
+      paddingBottom:30,
+      fontWeight:'bold'
   }
 
 });

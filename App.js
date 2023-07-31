@@ -30,7 +30,7 @@ const TabNavigator = () => {
 
         // si la route est home, alors petit icône maison
         if (route.name === 'Home') {
-          iconName = 'house'
+          iconName = 'home'
         } else if (route.name === 'FavoriteToilets') {
           iconName = 'heart'
         } else if (route.name === 'FunFacts') {
