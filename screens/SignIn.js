@@ -11,8 +11,7 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import SignUp from "../screens/SignUp";
-
+import SignUp from "./SignUp";
 
 export default function SignIn({ navigation }) {
   const dispatch = useDispatch();
@@ -35,13 +34,13 @@ export default function SignIn({ navigation }) {
       <View>
         <TextInput
           // onChangeText={(value) => setNickname(value)}
-        
+
           style={styles.input}
         />
         <Text style={styles.placeholders}>Email</Text>
         <TextInput
           // onChangeText={(value) => setNickname(value)}
-          
+
           style={styles.input}
         />
         <Text style={styles.placeholders}>Password</Text>
@@ -52,20 +51,20 @@ export default function SignIn({ navigation }) {
         activeOpacity={0.8}
       >
         <Text style={styles.textButton}>Sign in</Text>
-          <View>
-            <TouchableOpacity>
-              <FontAwesome style={styles.google} name="google" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <FontAwesome style={styles.apple} icon="apple" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <FontAwesome style={styles.facebook} icon="facebook" />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity onPress={() => navigation.navigate(SignUp)}>
-            <Text style={styles.signUp}>No account yet?</Text>
+        <View>
+          <TouchableOpacity>
+            <FontAwesome style={styles.google} name="google" />
           </TouchableOpacity>
+          <TouchableOpacity>
+            <FontAwesome style={styles.apple} icon="apple" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <FontAwesome style={styles.facebook} icon="facebook" />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity onPress={() => navigation.navigate(SignUp)}>
+          <Text style={styles.signUp}>No account yet?</Text>
+        </TouchableOpacity>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
@@ -109,13 +108,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 20,
   },
-  google: {
-
-  }, 
-  facebook: {
-
-  },
-  apple: {
-
-  }
+  google: {},
+  facebook: {},
+  apple: {},
 });
