@@ -1,12 +1,56 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Home from './screens/Home'
+
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const TabNavigator = () => {
+  return (
+    <Tab.Navigator screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size }) => {
+        let iconName = '';
+
+        // si la route est home, alors petit icône maison
+        if (route.name === 'Home') {
+          iconName = 'house'
+        } else if (route.name === 'FavoriteToilets') {
+          iconName = 'heart'
+        } else if (route.name === 'FunFacts') {
+          iconName = 'toilet-paper'
+        } else if (route.name === 'Profile') {
+          iconName = 'user'
+        }
+       
+        return <FontAwesome name={iconName} size={size} color={color} />;
+      },
+      // couleur de fond violette ou blanc en fonction de l'activité
+      tabBarActiveTintColor: '#B08BBB',
+      tabBarInactiveTintColor: '#ffffff',
+      headerShown: false,
+    })}>
+    
+      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Favoris" component={FavoriteToilets} />
+      <Tab.Screen name="Fun facts" component={FunFacts} />
+      <Tab.Screen name="Profil" component={Profile} />
+
+    </Tab.Navigator>
+  );
+};
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Home" component={SignIn} />
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
+
   );
 }
 
