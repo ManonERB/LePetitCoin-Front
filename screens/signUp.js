@@ -1,9 +1,10 @@
 git import {useState} from 'react';
 import {SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faGoogle, faApple, faFacebook } from '@fortawesome/free-solid-svg-icons/faMugSaucer'
+import { faGoogle, faApple, faFacebook } from '@fortawesome/free-solid-svg-icons'
 
-const signUp = () => {
+
+const SignUp = ( {navigation} ) => {
 
     // useState pour les changement d'état des inputs
   const [username, setUsername] = useState('');
@@ -61,4 +62,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default signUp;
+export default SignUp;
