@@ -15,16 +15,32 @@ const SignUp = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState(false);
 
+
+  
   const handleSubmit = () => {
-    // dispatch(updateNickname(nickname));
 
-    //redirige au click de l'input a la Home
-    navigation.navigate("TabNavigator");
+      fetch('http://10.20.2.189:3000/users/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({userName: username, email, password})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.result){
+            //redirige au click de l'input a la Home
+            navigation.navigate("TabNavigator");
+        }else{
+            setEmailError(true)
+        }
+    });
   };
 
   return (
+    
     <SafeAreaView>
+        <Text>SignUp</Text>
       {/* creation des inputs*/}
       <TextInput
         style={styles.input}
@@ -53,15 +69,17 @@ const SignUp = ({ navigation }) => {
       >
         <Text style={styles.textButton}>Submit</Text>
       </TouchableOpacity>
-      <View>
+      {emailError && <Text style={styles.error}>email ou isername déja existant</Text>}
+
+      <View style={styles.icons}>
         <TouchableOpacity>
-          <FontAwesome style={styles.google} icon="google" />
+          <FontAwesome style={styles.google} name="google" />
         </TouchableOpacity>
         <TouchableOpacity>
-          <FontAwesome style={styles.apple} icon="apple" />
+          <FontAwesome style={styles.apple} name="apple" />
         </TouchableOpacity>
         <TouchableOpacity>
-          <FontAwesome style={styles.facebook} icon="facebook" />
+          <FontAwesome style={styles.facebook} name="facebook" />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -75,6 +93,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
+  icons:{
+    height:50,
+  },
+  google: {
+    size:30,
+    color:"red"
+  },
+  facebook: {
+    width:10,
+    color:"black"
+  },
+  apple: {
+    width:10,
+    color:"grey"
+  },error:{
+      color:'red'
+  }
+
 });
 
 export default SignUp;
