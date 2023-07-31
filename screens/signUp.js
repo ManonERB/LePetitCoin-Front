@@ -1,4 +1,4 @@
-git import {useState} from 'react';
+import {useState} from 'react';
 import {SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGoogle, faApple, faFacebook } from '@fortawesome/free-solid-svg-icons'

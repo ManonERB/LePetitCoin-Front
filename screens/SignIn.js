@@ -10,9 +10,10 @@ import {
   View,
 } from "react-native";
 import { useDispatch } from "react-redux";
-import { updateNickname } from "../reducers/user";
+
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import signUp from "./SignUp";
+
 
 export default function SignIn({ navigation }) {
   const dispatch = useDispatch();
@@ -52,20 +53,20 @@ export default function SignIn({ navigation }) {
         activeOpacity={0.8}
       >
         <Text style={styles.textButton}>Sign in</Text>
-        <View>
-          <TouchableOpacity>
-            <FontAwesome style={styles.google} name={Google} />
+          <View>
+            <TouchableOpacity>
+              <FontAwesome style={styles.google} name={Google} />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <FontAwesome style={styles.apple} icon={faApple} />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <FontAwesome style={styles.facebook} icon={faFacebook} />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+            <Text style={styles.signUp}>No account yet?</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome style={styles.apple} icon={faApple} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome style={styles.facebook} icon={faFacebook} />
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-          <Text style={styles.signUp}>No account yet?</Text>
-        </TouchableOpacity>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
