@@ -7,7 +7,7 @@ import Home from './screens/Home'
 import SignIn from './screens/SignIn';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import SignUp from './screens/SignUp';
+import SignUp from './screens/signUp';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
