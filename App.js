@@ -5,9 +5,16 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './screens/Home'
 import SignIn from './screens/SignIn';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import SignUp from './screens/SignUp';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const store = configureStore({
+  reducer: {} ,
+});
 
 const TabNavigator = () => {
   return (
@@ -45,12 +52,15 @@ const TabNavigator = () => {
 
 export default function App() {
   return (
+    <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="SignIn" component={SignIn} />
+          <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
+    </Provider>
 
   );
 }

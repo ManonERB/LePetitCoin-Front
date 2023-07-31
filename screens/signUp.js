@@ -1,7 +1,8 @@
 import {useState} from 'react';
-import {SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faGoogle, faApple, faFacebook } from '@fortawesome/free-solid-svg-icons'
+
+import {SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View, Text} from 'react-native';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+
 
 
 const SignUp = ( {navigation} ) => {
@@ -45,9 +46,9 @@ const SignUp = ( {navigation} ) => {
         <Text style={styles.textButton}>Submit</Text>
       </TouchableOpacity>
       <View>
-            <TouchableOpacity><FontAwesome style={styles.google} icon={faGoogle} /></TouchableOpacity>
-            <TouchableOpacity><FontAwesome style={styles.apple} icon={faApple} /></TouchableOpacity>
-            <TouchableOpacity><FontAwesome style={styles.facebook} icon={faFacebook} /></TouchableOpacity>
+            <TouchableOpacity><FontAwesome style={styles.google} icon="google" /></TouchableOpacity>
+            <TouchableOpacity><FontAwesome style={styles.apple} icon="apple" /></TouchableOpacity>
+            <TouchableOpacity><FontAwesome style={styles.facebook} icon="facebook" /></TouchableOpacity>
       </View>
     </SafeAreaView>
   );

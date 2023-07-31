@@ -10,9 +10,8 @@ import {
   View,
 } from "react-native";
 import { useDispatch } from "react-redux";
-
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import signUp from "./SignUp";
+import SignUp from "../screens/SignUp";
 
 
 export default function SignIn({ navigation }) {
@@ -23,7 +22,7 @@ export default function SignIn({ navigation }) {
   const [password, setPassword] = useState("");
 
   const handleSubmit = () => {
-    dispatch(updateNickname(nickname));
+    // dispatch(updateNickname(nickname));
     navigation.navigate("TabNavigator");
   };
 
@@ -35,14 +34,14 @@ export default function SignIn({ navigation }) {
       <Text style={styles.title}></Text>
       <View>
         <TextInput
-          onChangeText={(value) => setNickname(value)}
-          value={nickname}
+          // onChangeText={(value) => setNickname(value)}
+        
           style={styles.input}
         />
         <Text style={styles.placeholders}>Email</Text>
         <TextInput
-          onChangeText={(value) => setNickname(value)}
-          value={nickname}
+          // onChangeText={(value) => setNickname(value)}
+          
           style={styles.input}
         />
         <Text style={styles.placeholders}>Password</Text>
@@ -55,16 +54,16 @@ export default function SignIn({ navigation }) {
         <Text style={styles.textButton}>Sign in</Text>
           <View>
             <TouchableOpacity>
-              <FontAwesome style={styles.google} name={Google} />
+              <FontAwesome style={styles.google} name="google" />
             </TouchableOpacity>
             <TouchableOpacity>
-              <FontAwesome style={styles.apple} icon={faApple} />
+              <FontAwesome style={styles.apple} icon="apple" />
             </TouchableOpacity>
             <TouchableOpacity>
-              <FontAwesome style={styles.facebook} icon={faFacebook} />
+              <FontAwesome style={styles.facebook} icon="facebook" />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+          <TouchableOpacity onPress={() => navigation.navigate(SignUp)}>
             <Text style={styles.signUp}>No account yet?</Text>
           </TouchableOpacity>
       </TouchableOpacity>
@@ -110,4 +109,13 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 20,
   },
+  google: {
+
+  }, 
+  facebook: {
+
+  },
+  apple: {
+
+  }
 });
