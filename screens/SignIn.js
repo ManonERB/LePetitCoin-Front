@@ -14,7 +14,6 @@ import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import SignUp from "./SignUp";
 
 export default function SignIn({ navigation }) {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [inputEmpty, setInputEmpty] = useState(false);
@@ -223,8 +222,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 20,
     width: 230,
-    textAlign: 'center',  
-    textAlignVertical: 'center',
+    textAlign: "center",
+    textAlignVertical: "center",
     backgroundColor: "#B08BBB",
     borderRadius: 8,
   },

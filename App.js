@@ -1,58 +1,58 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import Home from './screens/Home'
-import SignIn from './screens/SignIn';
-import SignUp from './screens/SignUp';
-import FavoriteToilets from './screens/FavoriteToilets';
-import FunFacts from './screens/FunFacts';
-import Profile from './screens/Profile';
-import ToiletPage from './screens/ToiletPage';
-import AddToilet from './screens/AddToilet';
-import FontAwesome from "react-native-vector-icons/FontAwesome5"
-
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import Home from "./screens/Home";
+import SignIn from "./screens/SignIn";
+import SignUp from "./screens/SignUp";
+import FavoriteToilets from "./screens/FavoriteToilets";
+import FunFacts from "./screens/FunFacts";
+import Profile from "./screens/Profile";
+import ToiletPage from "./screens/ToiletPage";
+import AddToilet from "./screens/AddToilet";
+import FontAwesome from "react-native-vector-icons/FontAwesome5";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const store = configureStore({
-  reducer: {} ,
+  reducer: {},
 });
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator screenOptions={({ route }) => ({
-      tabBarIcon: ({ color, size }) => {
-        let iconName = '';
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName = "";
 
-        // selon la route, les icones va s'afficher.
-        if (route.name === 'Home') {
-          iconName = 'home'
-        } else if (route.name === 'Favoris') {
-          iconName = 'heart'
-        } else if (route.name === 'Fun facts') {
-          iconName = 'toilet-paper'
-        } else if (route.name === 'Profil') {
-          iconName = 'user-alt'
-        }
-       
-        return <FontAwesome name={iconName} size={size} color={color} solid />;
-        
-      },
-      // couleur de fond violette ou blanc en fonction de l'activité
-      tabBarActiveTintColor: '#B08BBB',
-      tabBarInactiveTintColor: 'black',
-      headerShown: false,
-    })}>
-    
+          // selon la route, les icones va s'afficher.
+          if (route.name === "Home") {
+            iconName = "home";
+          } else if (route.name === "Favoris") {
+            iconName = "heart";
+          } else if (route.name === "Fun facts") {
+            iconName = "toilet-paper";
+          } else if (route.name === "Profil") {
+            iconName = "user-alt";
+          }
+
+          return (
+            <FontAwesome name={iconName} size={size} color={color} solid />
+          );
+        },
+        // couleur de fond violette ou blanc en fonction de l'activité
+        tabBarActiveTintColor: "#B08BBB",
+        tabBarInactiveTintColor: "black",
+        headerShown: false,
+      })}
+    >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Favoris" component={FavoriteToilets} />
       <Tab.Screen name="Fun facts" component={FunFacts} />
       <Tab.Screen name="Profil" component={Profile} />
-
     </Tab.Navigator>
   );
 };
@@ -69,15 +69,14 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
-
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
