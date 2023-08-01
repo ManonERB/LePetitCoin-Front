@@ -5,7 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import SignUp from './screens/SignUp';
+import SignUp from './screens/signUp';
+import SignIn from './screens/SignIn';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
