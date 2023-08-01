@@ -42,7 +42,8 @@ export default function SignIn({ navigation }) {
               <Text style={styles.placeholders}>Mail</Text>
               <TextInput
                 // onChangeText={(value) => setNickname(value)}
-                style={styles.input} placeholder="john@gmail.com" 
+                style={styles.input} 
+                placeholder="john@gmail.com" 
                 textColor = '#51bc8a'
                 baseColor = '#FFFFFF'
                 />
@@ -52,7 +53,9 @@ export default function SignIn({ navigation }) {
             <Text style={styles.placeholders}>Mot de Passe</Text>
             <TextInput
               // onChangeText={(value) => setNickname(value)}
-              style={styles.input} placeholder="***********" 
+              style={styles.input} 
+              placeholder="Password" 
+              secureTextEntry={true}
             />
           </View>
       </View>

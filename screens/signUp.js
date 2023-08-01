@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         padding: 10,
         zIndex: 0,
-        marginBottom:10,
+
       },
       inputHolder: {
         display: 'flex',
