@@ -50,7 +50,7 @@
                 </Stack.Navigator> */}
                     <View style={styles.buttonShadow}>
                         <TouchableOpacity style={styles.buttonMap} >
-                            <FontAwesome name='map' size={24} solid />
+                            <FontAwesome name='map' size={18} solid />
                         <Text style={styles.textMap}>Map</Text> 
                         </TouchableOpacity>
                     </View>
