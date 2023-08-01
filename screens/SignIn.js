@@ -24,7 +24,7 @@ export default function SignIn({ navigation }) {
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const handleSubmit = () => {
-    fetch(`http://${process.env.EXPO_PUBLIC_IP}/users/signup`, {
+    fetch(`http://${process.env.EXPO_PUBLIC_IP}/users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password }),
@@ -202,14 +202,14 @@ const styles = StyleSheet.create({
     height: 70,
     marginTop: 20,
     borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 2,
-      height: -5,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 2.62,
-    elevation: 10,
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 2,
+    //   height: -5,
+    // },
+    // shadowOpacity: 0.5,
+    // shadowRadius: 2.62,
+    // elevation: 10,
   },
   media: {
     display: "flex",
@@ -223,8 +223,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 20,
     width: 230,
-    textAlign: "center",
-    textAlignVertical: "center",
+    textAlign: 'center',  
+    textAlignVertical: 'center',
+    backgroundColor: "#B08BBB",
     borderRadius: 8,
   },
   icon: {},
