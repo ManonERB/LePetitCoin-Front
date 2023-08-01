@@ -68,7 +68,8 @@ export default function SignIn({ navigation }) {
             //la valeur de l'input
             value={email}
             style={styles.input}
-            placeholder="john@gmail.com"
+            
+                placeholder="john@gmail.com"
             textColor="#51bc8a"
             baseColor="#FFFFFF"
           />
@@ -81,7 +82,9 @@ export default function SignIn({ navigation }) {
             //la valeur de l'input
             value={password}
             style={styles.input}
-            placeholder="***********"
+            
+              placeholder="Password"
+              secureTextEntry={true}
           />
         </View>
         {inputEmpty && (
