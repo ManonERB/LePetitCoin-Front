@@ -7,17 +7,17 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import Home from './screens/Home'
 import SignIn from './screens/SignIn';
-import SignUp from './screens/signUp';
+import SignUp from './screens/SignUp';
 import FavoriteToilets from './screens/FavoriteToilets';
 import FunFacts from './screens/FunFacts';
 import Profile from './screens/Profile';
 import ToiletPage from './screens/ToiletPage';
 import AddToilet from './screens/AddToilet';
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import FontAwesome from "react-native-vector-icons/FontAwesome5"
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
 const store = configureStore({
   reducer: {} ,
 });
@@ -28,22 +28,23 @@ const TabNavigator = () => {
       tabBarIcon: ({ color, size }) => {
         let iconName = '';
 
-        // si la route est home, alors petit icône maison
+        // selon la route, les icones va s'afficher.
         if (route.name === 'Home') {
-          iconName = 'house'
-        } else if (route.name === 'FavoriteToilets') {
+          iconName = 'home'
+        } else if (route.name === 'Favoris') {
           iconName = 'heart'
-        } else if (route.name === 'FunFacts') {
+        } else if (route.name === 'Fun facts') {
           iconName = 'toilet-paper'
-        } else if (route.name === 'Profile') {
-          iconName = 'user'
+        } else if (route.name === 'Profil') {
+          iconName = 'user-alt'
         }
        
-        return <FontAwesome name={iconName} size={size} color={color} />;
+        return <FontAwesome name={iconName} size={size} color={color} solid />;
+        
       },
       // couleur de fond violette ou blanc en fonction de l'activité
       tabBarActiveTintColor: '#B08BBB',
-      tabBarInactiveTintColor: '#ffffff',
+      tabBarInactiveTintColor: 'black',
       headerShown: false,
     })}>
     
