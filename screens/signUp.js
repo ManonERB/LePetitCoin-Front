@@ -73,7 +73,7 @@ const SignUp = ({ navigation }) => {
         style={styles.button}
         activeOpacity={0.8}
       >
-        <Text style={styles.textButton}>Submit</Text>
+        <Text style={styles.textButton}>Sign Up</Text>
       </TouchableOpacity>
       {inputEmpty && <Text style={styles.error}>Veuillez remplir tout les champs de saisie</Text>}
       {emailError && <Text style={styles.error}>email incorrect</Text>}
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     width:"65%",
     height:38,
     textAlign:"center",
-   alignItems:"center",
+    textAlignVertical:"center",
     color:"white",
   },
   icons:{
