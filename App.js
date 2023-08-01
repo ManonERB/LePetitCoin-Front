@@ -14,12 +14,14 @@ import Profile from './screens/Profile';
 import ToiletPage from './screens/ToiletPage';
 import AddToilet from './screens/AddToilet';
 import FontAwesome from "react-native-vector-icons/FontAwesome5"
+import user from './reducers/user'
 
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
 const store = configureStore({
-  reducer: {} ,
+  reducer: {user} ,
 });
 
 const TabNavigator = () => {
