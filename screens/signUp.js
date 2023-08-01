@@ -15,24 +15,30 @@ const SignUp = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [inputEmpty, setInputEmpty] = useState(false);
   const [emailError, setEmailError] = useState(false);
 
-
+  const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   
   const handleSubmit = () => {
 
-      fetch('http://127.0.0.1:3000/users/signup', {
+      fetch('http://10.20.2.189:3000/users/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({userName: username, email, password})
     })
     .then(response => response.json())
     .then(data => {
+      if(EMAIL_REGEX.test(email)){
         if(data.result){
             //redirige au click de l'input a la Home
             navigation.navigate("TabNavigator");
         }else{
-            setEmailError(true)
+            setInputEmpty(true)
+          }
+        }else{
+          setEmailError(true)
+          
         }
     });
   };
@@ -69,7 +75,8 @@ const SignUp = ({ navigation }) => {
       >
         <Text style={styles.textButton}>Submit</Text>
       </TouchableOpacity>
-      {emailError && <Text style={styles.error}>email ou username déja existant</Text>}
+      {inputEmpty && <Text style={styles.error}>Veuillez remplir tout les champs de saisie</Text>}
+      {emailError && <Text style={styles.error}>email incorrect</Text>}
 
       <View style={styles.icons}>
         <TouchableOpacity>

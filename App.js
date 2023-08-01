@@ -5,8 +5,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import SignUp from './screens/signUp';
+import Home from './screens/Home'
 import SignIn from './screens/SignIn';
+import SignUp from './screens/signUp';
+import FavoriteToilets from './screens/FavoriteToilets';
+import FunFacts from './screens/FunFacts';
+import Profile from './screens/Profile';
+import ToiletPage from './screens/ToiletPage';
+import AddToilet from './screens/AddToilet';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
