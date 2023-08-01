@@ -38,13 +38,16 @@
         <View style={styles.containerButtons}>
                     
       {/* Utilisez les props de navigation pour naviguer vers "AddToilet" */}
-
+            {/* <Stack.Navigator initialRouteName='Home'>
+              <Stack.Screen > */}
                 <TouchableOpacity style={styles.buttonAddToilet}
                 activeOpacity={0.8} 
                 onPress={() => navigation.navigate('AddToilet')}
                 >
                 <Text style={styles.textButton} >Un petit coin à ajouter ?        </Text>
                 </TouchableOpacity>
+              {/* </Stack.Screen>
+            </Stack.Navigator> */}
                 <TouchableOpacity style={styles.buttonMap} >
                     <Text style={styles.textMap} >Map</Text> 
                     
