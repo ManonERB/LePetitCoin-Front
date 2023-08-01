@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import SignIn from './SignIn'
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../reducers/user";
 
 const SignUp = ({ navigation }) => {
   // useState pour les changement d'état des inputs
@@ -21,10 +23,13 @@ const SignUp = ({ navigation }) => {
   const [emailError, setEmailError] = useState(false);
 
   const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  const dispatch = useDispatch()
+
+  const user = useSelector((state) => state.user.value) 
   
   const handleSubmit = () => {
-
-      fetch(`http://${process.env.EXPO_PUBLIC_IP}/users/signup`, {
+    fetch(`http://${process.env.EXPO_PUBLIC_IP}/users/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({userName: username, email, password})
@@ -33,7 +38,9 @@ const SignUp = ({ navigation }) => {
     .then(data => {
       if(EMAIL_REGEX.test(email)){
         if(data.result){
-            //redirige au click de l'input a la Home
+          //redirige au click de l'input a la Home
+          dispatch(login({username: data.username, token: data.token }))
+          console.log(data);
             navigation.navigate("TabNavigator");
         }else{
             setInputEmpty(true)
@@ -121,9 +128,10 @@ const SignUp = ({ navigation }) => {
           <FontAwesome style={styles.facebook} name="facebook" size={34} />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate(SignUp)}>
+      <TouchableOpacity onPress={() => navigation.navigate(SignIn)}>
           <Text style={styles.signUp} >Se connecter?</Text>
         </TouchableOpacity>
+        
     </View>
   );
 };
