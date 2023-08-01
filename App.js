@@ -12,6 +12,7 @@ import FavoriteToilets from './screens/FavoriteToilets';
 import FunFacts from './screens/FunFacts';
 import Profile from './screens/Profile';
 import ToiletPage from './screens/ToiletPage';
+import Map from './screens/Map';
 import AddToilet from './screens/AddToilet';
 import FontAwesome from "react-native-vector-icons/FontAwesome5"
 
@@ -61,9 +62,13 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
+        {/* Toutes les screens vers lesquelles nous voulons naviguer */}
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="SignIn" component={SignIn} />
           <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="AddToilet" component={AddToilet} />
+          <Stack.Screen name="Map" component={Map} />
+
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>

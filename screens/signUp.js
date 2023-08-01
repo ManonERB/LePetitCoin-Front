@@ -11,7 +11,7 @@ import {
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const SignUp = ({ navigation }) => {
-  // useState pour les changement d'état des inputs
+  // useState pour les changements d'état des inputs
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
