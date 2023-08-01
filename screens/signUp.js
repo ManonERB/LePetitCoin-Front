@@ -107,22 +107,21 @@ const SignUp = ({ navigation }) => {
        {emailError && <Text style={styles.error}>email incorrect</Text>}
 
         <Text style={styles.textButton}>Sign Up</Text>
+      </TouchableOpacity>
+      {inputEmpty && <Text style={styles.error}>Veuillez remplir tout les champs de saisie</Text>}
+      {emailError && <Text style={styles.error}>email incorrect</Text>}
+
+      <View style={styles.icons}>
+        <TouchableOpacity>
+          <FontAwesome style={styles.google} name="google" size={34} />
         </TouchableOpacity>
-        <View style={styles.media}>
-          <TouchableOpacity>
-            <FontAwesome style={styles.icon} name="google" color="#263238" size={34} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome style={styles.icon} name="apple" color="#263238" size={34} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome style={styles.icon} name="facebook" color="#263238" size={34} />
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity onPress={() => navigation.navigate(SignIn)}>
-          <Text style={styles.signUp} >Se connecter ?</Text>
+        <TouchableOpacity>
+          <FontAwesome style={styles.apple} name="apple" size={34} />
         </TouchableOpacity>
-      
+        <TouchableOpacity>
+          <FontAwesome style={styles.facebook} name="facebook" size={34} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
