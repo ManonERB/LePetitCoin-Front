@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, BlurView } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -24,7 +24,13 @@ const store = configureStore({
 const TabNavigator = () => {
   return (
     <Tab.Navigator
+
       screenOptions={({ route }) => ({
+        tabBarStyle: {backgroundColor: "#B08BBB", borderRadius: 8 },
+        tabBarLabelStyle: {color: "black"},
+        tabBarActiveTintColor: "#A86B98",
+        tabBarInactiveTintColor: "white",
+        tabBarActiveBackgroundColor: "white",
         tabBarIcon: ({ color, size }) => {
           let iconName = "";
 
@@ -44,8 +50,6 @@ const TabNavigator = () => {
           );
         },
         // couleur de fond violette ou blanc en fonction de l'activité
-        tabBarActiveTintColor: "#B08BBB",
-        tabBarInactiveTintColor: "black",
         headerShown: false,
       })}
     >
@@ -78,5 +82,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  tabs: {
+    
   },
 });

@@ -73,7 +73,6 @@ export default function SignIn({ navigation }) {
             baseColor="#FFFFFF"
           />
         </View>
-
         <View style={styles.label}>
           <Text style={styles.placeholders}>Mot de Passe</Text>
           <TextInput
@@ -157,6 +156,7 @@ const styles = StyleSheet.create({
   placeholders: {
     padding: 0,
     position: "relative",
+    zIndex: 5,
   },
   toilet: {
     marginTop: 12,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     marginRight: 3,
   },
   input: {
-    width: 230,
+    width: 250,
     height: 45,
     borderColor: "#B08BBB",
     borderRadius: 8,
@@ -181,34 +181,30 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 30,
   },
-  labelContainer: {
-    backgroundColor: "white", // Same color as background
-    alignSelf: "flex-start", // Have View be same width as Text inside
-    paddingHorizontal: 3, // Amount of spacing between border and first/last letter
-    marginStart: 10, // How far right do you want the label to start
-    zIndex: 1, // Label must overlap border
-    elevation: 1, // Needed for android
-    shadowColor: "black", // Same as background color because elevation: 1 creates a shadow that we don't want
-    position: "absolute", // Needed to be able to precisely overlap label with border
-    top: -12,
+  button: {
+
   },
-  button: {},
   shadow: {
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 8,
     width: "65%",
-    height: 70,
+    height: 50,
     marginTop: 20,
     borderRadius: 20,
-    // shadowColor: "#000",
-    // shadowOffset: {
-    //   width: 2,
-    //   height: -5,
-    // },
-    // shadowOpacity: 0.5,
-    // shadowRadius: 2.62,
-    // elevation: 10,
+    backgroundColor : "white",
+    borderRadius: 10,
+    marginBottom : 10,
+    // borderStyle : "solid",
+    // borderColor : "black",
+    // borderWidth : 1,
+    shadowColor: "grey",
+    shadowOffset: {
+        width: 0,
+        height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
   },
   media: {
     display: "flex",
@@ -224,7 +220,7 @@ const styles = StyleSheet.create({
     width: 230,
     textAlign: "center",
     textAlignVertical: "center",
-    backgroundColor: "#B08BBB",
+    color: "#B08BBB",
     borderRadius: 8,
   },
   icon: {},
