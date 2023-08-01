@@ -108,10 +108,9 @@ const SignUp = ({ navigation }) => {
 
         <Text style={styles.textButton}>Sign Up</Text>
       </TouchableOpacity>
-      {inputEmpty && <Text style={styles.error}>Veuillez remplir tout les champs de saisie</Text>}
-      {emailError && <Text style={styles.error}>email incorrect</Text>}
 
-      <View style={styles.icons}>
+
+      <View style={styles.media}>
         <TouchableOpacity>
           <FontAwesome style={styles.google} name="google" size={34} />
         </TouchableOpacity>
@@ -122,6 +121,9 @@ const SignUp = ({ navigation }) => {
           <FontAwesome style={styles.facebook} name="facebook" size={34} />
         </TouchableOpacity>
       </View>
+      <TouchableOpacity onPress={() => navigation.navigate(SignUp)}>
+          <Text style={styles.signUp} >Se connecter?</Text>
+        </TouchableOpacity>
     </View>
   );
 };
@@ -132,6 +134,14 @@ const styles = StyleSheet.create({
         backgroundColor: "#ffffff",
         alignItems: "center",
         justifyContent: "center",
+      },
+      media: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: "space-around",
+        width: '65%',
+        marginTop: 40,
+    
       },
       topLogo: {
         width: "100%",
