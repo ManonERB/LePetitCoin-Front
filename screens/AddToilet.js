@@ -6,7 +6,7 @@ import { StyleSheet } from 'react-native';
 export default function AddToilet () {
     return (
         <Text style={styles.title}>
-            Hello
+            Hello - Add Toilet
         </Text>
 
     )
