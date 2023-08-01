@@ -14,7 +14,7 @@ import SignIn from './SignIn'
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/user";
 
-const SignUp = ({ navigation }) => {
+export default function  SignUp ({ navigation }) {
   // useState pour les changement d'état des inputs
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -129,8 +129,8 @@ const SignUp = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={() => navigation.navigate(SignIn)}>
-          <Text style={styles.signUp} >Se connecter?</Text>
-        </TouchableOpacity>
+        <Text style={styles.signUp}>Se connecter</Text>
+      </TouchableOpacity>
         
     </View>
   );
@@ -252,5 +252,3 @@ const styles = StyleSheet.create({
   }
 
 });
-
-export default SignUp;
