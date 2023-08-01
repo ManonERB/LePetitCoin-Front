@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import Home from './screens/Home'
 import SignIn from './screens/SignIn';
-import SignUp from './screens/signUp';
+import SignUp from './screens/SignUp';
 import FavoriteToilets from './screens/FavoriteToilets';
 import FunFacts from './screens/FunFacts';
 import Profile from './screens/Profile';
