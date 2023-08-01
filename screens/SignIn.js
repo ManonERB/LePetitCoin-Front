@@ -11,19 +11,37 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
-import SignUp from './SignUp';
-
+import SignUp from "./SignUp";
 
 export default function SignIn({ navigation }) {
-  const dispatch = useDispatch();
 
-  // const [nickname, setNickname] = useState('');
-  const [userName, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [inputEmpty, setInputEmpty] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+
+  const EMAIL_REGEX =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const handleSubmit = () => {
-    // dispatch(updateNickname(nickname));
-    navigation.navigate("TabNavigator");
+    fetch("http://10.20.2.181:3000/users/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, password }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (EMAIL_REGEX.test(email)) {
+          if (data.result) {
+            //redirige au click de l'input a la Home
+            navigation.navigate("TabNavigator");
+          } else {
+            setInputEmpty(true);
+          }
+        } else {
+          setEmailError(true);
+        }
+      });
   };
 
   return (
@@ -32,52 +50,89 @@ export default function SignIn({ navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.topLogo}>
-          <Text style={styles.logoText}>LE PETIT C</Text>              
-              <FontAwesome  name="toilet-paper" color="#B08BBB" size={34} style={styles.toilet}/>
-          <Text style={styles.logoText}>IN</Text>
+        <Text style={styles.logoText}>LE PETIT C</Text>
+        <FontAwesome
+          name="toilet-paper"
+          color="#B08BBB"
+          size={34}
+          style={styles.toilet}
+        />
+        <Text style={styles.logoText}>IN</Text>
       </View>
-    
-      <View style={styles. inputHolder}>
-          <View style={styles.label}>
-              <Text style={styles.placeholders}>Mail</Text>
-              <TextInput
-                // onChangeText={(value) => setNickname(value)}
-                style={styles.input} placeholder="john@gmail.com" 
-                textColor = '#51bc8a'
-                baseColor = '#FFFFFF'
-                />
-          </View>
-          
-          <View style={styles.label}>
-            <Text style={styles.placeholders}>Mot de Passe</Text>
-            <TextInput
-              // onChangeText={(value) => setNickname(value)}
-              style={styles.input} placeholder="***********" 
-            />
-          </View>
-      </View>
-      <TouchableOpacity
-        onPress={() => handleSubmit()}
-        style={styles.button}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.textButton}>Sign in</Text>
-        </TouchableOpacity>
-        <View style={styles.media}>
-          <TouchableOpacity>
-            <FontAwesome style={styles.icon} name="google" color="#263238" size={34} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome style={styles.icon} name="apple" color="#263238" size={34} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome style={styles.icon} name="facebook" color="#263238" size={34} />
-          </TouchableOpacity>
+
+      <View style={styles.inputHolder}>
+        <View style={styles.label}>
+          <Text style={styles.placeholders}>Mail</Text>
+          <TextInput
+            //changeText avec le changement d'etat
+            onChangeText={(value) => setEmail(value)}
+            //la valeur de l'input
+            value={email}
+            style={styles.input}
+            placeholder="john@gmail.com"
+            textColor="#51bc8a"
+            baseColor="#FFFFFF"
+          />
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate(SignUp)}>
-          <Text style={styles.signUp} >pas de compte?</Text>
+
+        <View style={styles.label}>
+          <Text style={styles.placeholders}>Mot de Passe</Text>
+          <TextInput
+            //changeText avec le changement d'etat
+            onChangeText={(value) => setPassword(value)}
+            //la valeur de l'input
+            value={password}
+            style={styles.input}
+            placeholder="***********"
+          />
+        </View>
+        {inputEmpty && (
+          <Text style={styles.error}>
+            Veuillez remplir tout les champs de saisie
+          </Text>
+        )}
+        {emailError && <Text style={styles.error}>email incorrect</Text>}
+      </View>
+
+      <View style={styles.shadow}>
+        <TouchableOpacity
+          onPress={() => handleSubmit()}
+          style={styles.button}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.textButton}>Sign in</Text>
         </TouchableOpacity>
-      
+      </View>
+
+      <View style={styles.media}>
+        <TouchableOpacity>
+          <FontAwesome
+            style={styles.icon}
+            name="google"
+            color="#263238"
+            size={34}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <FontAwesome
+            style={styles.icon}
+            name="apple"
+            color="#263238"
+            size={34}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <FontAwesome
+            style={styles.icon}
+            name="facebook"
+            color="#263238"
+            size={34}
+          />
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity onPress={() => navigation.navigate(SignUp)}>
+        <Text style={styles.signUp}>pas de compte?</Text>
+      </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 }
@@ -91,14 +146,14 @@ const styles = StyleSheet.create({
   },
   topLogo: {
     width: "100%",
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     height: 80,
   },
   logoText: {
-  fontSize: 38,
-  color: "#B08BBB",
+    fontSize: 38,
+    color: "#B08BBB",
   },
   placeholders: {
     padding: 0,
@@ -108,7 +163,6 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginLeft: 2,
     marginRight: 3,
-
   },
   input: {
     width: 230,
@@ -121,11 +175,11 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   inputHolder: {
-    display: 'flex',
-    height: '18%',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    textAlign: 'center',
+    display: "flex",
+    height: "18%",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    textAlign: "center",
     margin: 30,
   },
   labelContainer: {
@@ -137,50 +191,46 @@ const styles = StyleSheet.create({
     elevation: 1, // Needed for android
     shadowColor: "black", // Same as background color because elevation: 1 creates a shadow that we don't want
     position: "absolute", // Needed to be able to precisely overlap label with border
-    top: -12
+    top: -12,
   },
-  button: {
-    display: 'flex',
+  button: {},
+  shadow: {
     alignItems: "center",
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingTop: 8,
     width: "65%",
     height: 70,
     marginTop: 20,
-    borderRadius: 10,
-    shadowColor: "red",
-    // shadowOffset: {
-	  //   width: 5,
-    //   height: -2,
-    // },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 4.84,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: -5,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 2.62,
+    elevation: 10,
   },
   media: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     justifyContent: "space-around",
-    width: '65%',
-    marginTop: 40,
-
+    width: "65%",
+    marginTop: 50,
   },
   textButton: {
     height: 38,
     fontWeight: "600",
     fontSize: 20,
     width: 230,
-    textAlign: 'center',  
-    textAlignVertical: 'center',
-    backgroundColor: "#B08BBB",
+    textAlign: "center",
+    textAlignVertical: "center",
     borderRadius: 8,
   },
-  icon: {
-
-  },
+  icon: {},
   signUp: {
-    marginTop: '20%',
+    marginTop: "15%",
     fontSize: 22,
-
-  }
-
+    color: "#B08BBB",
+  },
 });
