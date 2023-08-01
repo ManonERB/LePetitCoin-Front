@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
-import SignUp from '../screens/SignUp';
+import SignUp from './SignUp';
 
 
 export default function SignIn({ navigation }) {
