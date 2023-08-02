@@ -27,7 +27,13 @@ const store = configureStore({
 
 const TabIcon = ({ iconName, size, color, isActive }) => {
   return (
-    <View style={isActive ? styles.activeTabIconContainer : styles.inactiveTabIconContainer}>
+    <View
+      style={
+        isActive
+          ? styles.activeTabIconContainer
+          : styles.inactiveTabIconContainer
+      }
+    >
       <FontAwesome name={iconName} size={size} color={color} solid />
     </View>
   );
@@ -42,7 +48,7 @@ const TabNavigator = () => {
         tabBarActiveTintColor: "#A86B98",
         tabBarInactiveTintColor: "white",
         tabBarActiveBackgroundColor: "rgba(255, 255, 255, 0.9)",
-        tabBarIcon: ({ color, size }) => {
+        tabBarIcon: ({ color, size, focused }) => {
           let iconName = "";
 
           // selon la route, les icones va s'afficher.
@@ -56,7 +62,14 @@ const TabNavigator = () => {
             iconName = "user-alt";
           }
 
-          return <TabIcon iconName={iconName} size={size} color={color} isActive={focused} />;
+          return (
+            <TabIcon
+              iconName={iconName}
+              size={size}
+              color={color}
+              isActive={focused}
+            />
+          );
         },
         // couleur de fond violette ou blanc en fonction de l'activité
         headerShown: false,

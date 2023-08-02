@@ -74,7 +74,7 @@ export default function Map({ navigation }) {
       </View>
       {/* Conditional rendering: Show loading indicator while fetching location */}
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#ffffff" />
       ) : (
         /* only Show MapView when currentPosition is available */
         currentPosition && (

@@ -12,7 +12,11 @@ import React, { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 
 export default function Review({ navigation }) {
-  //add state for stars
+    const [review, setReview] = useState[0]
+    
+  
+  
+    //add state for stars
   const [starRating, setStarRating] = useState(null);
   //animation for touchable icons
   const animatedButtonScale = new Animated.Value(1);
@@ -41,125 +45,129 @@ export default function Review({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Evaluer ce coin</Text>
-      <View style={styles.boxContainer}>
-        <View style={styles.leftBox}>
-          <View>
-            <Image
-              style={styles.images}
-              source={require("../assets/Placeholder_view.png")}
-            />
-          </View>
-          <View style={styles.plusButton} activeOpacity={0.8}>
-            <TouchableOpacity style={styles.plusPic}>
-              <FontAwesome name="plus" size={22} color="white" />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.rightBox}>
-          <View style={styles.rightBoxTop}>
-            <Text>Ajouter aux favoris</Text>
-            <TouchableOpacity>
-              <FontAwesome name="heart" size={30} solid color="#CCCCCC" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.rightBoxBottom}>
-            <Text style={styles.heading}>
-              {starRating ? `${starRating}` : "Tap to rate"}
-            </Text>
-            <View style={styles.stars}>
-              <TouchableWithoutFeedback
-                onPressIn={handlePressIn}
-                onPressOut={handlePressOut}
-                onPress={() => setStarRating(1)}
-              >
-                <Animated.View style={animatedScaleStyle}>
-                  <FontAwesome
-                    name={"star"}
-                    size={28}
-                    style={
-                      starRating >= 1
-                        ? styles.starSelected
-                        : styles.starUnselected
-                    }
-                    solid
-                  />
-                </Animated.View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback
-                onPressIn={handlePressIn}
-                onPressOut={handlePressOut}
-                onPress={() => setStarRating(2)}
-              >
-                <Animated.View style={animatedScaleStyle}>
-                  <FontAwesome
-                    name={"star"}
-                    size={28}
-                    style={
-                      starRating >= 2
-                        ? styles.starSelected
-                        : styles.starUnselected
-                    }
-                    solid
-                  />
-                </Animated.View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback
-                onPressIn={handlePressIn}
-                onPressOut={handlePressOut}
-                onPress={() => setStarRating(3)}
-              >
-                <Animated.View style={animatedScaleStyle}>
-                  <FontAwesome
-                    name={"star"}
-                    size={28}
-                    style={
-                      starRating >= 3
-                        ? styles.starSelected
-                        : styles.starUnselected
-                    }
-                    solid
-                  />
-                </Animated.View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback
-                onPressIn={handlePressIn}
-                onPressOut={handlePressOut}
-                onPress={() => setStarRating(4)}
-              >
-                <Animated.View style={animatedScaleStyle}>
-                  <FontAwesome
-                    name={"star"}
-                    size={28}
-                    style={
-                      starRating >= 4
-                        ? styles.starSelected
-                        : styles.starUnselected
-                    }
-                    solid
-                  />
-                </Animated.View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback
-                onPressIn={handlePressIn}
-                onPressOut={handlePressOut}
-                onPress={() => setStarRating(5)}
-              >
-                <Animated.View style={animatedScaleStyle}>
-                  <FontAwesome
-                    name={"star"}
-                    size={28}
-                    style={
-                      starRating >= 5
-                        ? styles.starSelected
-                        : styles.starUnselected
-                    }
-                    solid
-                  />
-                </Animated.View>
-              </TouchableWithoutFeedback>
+        <View style={styles.boxContainer}>
+            <View style={styles.leftBox}>
+            <View>
+                <Image
+                style={styles.images}
+                source={require("../assets/Placeholder_view.png")}
+                />
             </View>
-          </View>
-        </View>
+            <View style={styles.plusButton} activeOpacity={0.8}>
+                <TouchableOpacity style={styles.plusPic}>
+                <FontAwesome name="plus" size={22} color="white" />
+                </TouchableOpacity>
+            </View>
+            </View>
+            <View style={styles.rightBox}>
+                <View style={styles.rightBoxTop}>
+                    <Text>Ajouter aux favoris</Text>
+                    <TouchableOpacity>
+                    <FontAwesome name="heart" size={30} solid color="#CCCCCC" />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.rightBoxBottom}>
+                    <Text style={styles.heading}>
+                    {starRating ? `${starRating}` : "Tap to rate"}
+                    </Text>
+                    <View style={styles.stars}>
+                    <TouchableWithoutFeedback
+                        onPressIn={handlePressIn}
+                        onPressOut={handlePressOut}
+                        onPress={() => setStarRating(1)}
+                    >
+                        <Animated.View style={animatedScaleStyle}>
+                        <FontAwesome
+                            name={"star"}
+                            size={28}
+                            style={
+                            starRating >= 1
+                                ? styles.starSelected
+                                : styles.starUnselected
+                            }
+                            solid
+                        />
+                        </Animated.View>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback
+                        onPressIn={handlePressIn}
+                        onPressOut={handlePressOut}
+                        onPress={() => setStarRating(2)}
+                    >
+                        <Animated.View style={animatedScaleStyle}>
+                        <FontAwesome
+                            name={"star"}
+                            size={28}
+                            style={
+                            starRating >= 2
+                                ? styles.starSelected
+                                : styles.starUnselected
+                            }
+                            solid
+                        />
+                        </Animated.View>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback
+                        onPressIn={handlePressIn}
+                        onPressOut={handlePressOut}
+                        onPress={() => setStarRating(3)}
+                    >
+                        <Animated.View style={animatedScaleStyle}>
+                        <FontAwesome
+                            name={"star"}
+                            size={28}
+                            style={
+                            starRating >= 3
+                                ? styles.starSelected
+                                : styles.starUnselected
+                            }
+                            solid
+                        />
+                        </Animated.View>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback
+                        onPressIn={handlePressIn}
+                        onPressOut={handlePressOut}
+                        onPress={() => setStarRating(4)}
+                    >
+                        <Animated.View style={animatedScaleStyle}>
+                        <FontAwesome
+                            name={"star"}
+                            size={28}
+                            style={
+                            starRating >= 4
+                                ? styles.starSelected
+                                : styles.starUnselected
+                            }
+                            solid
+                        />
+                        </Animated.View>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback
+                        onPressIn={handlePressIn}
+                        onPressOut={handlePressOut}
+                        onPress={() => setStarRating(5)}
+                    >
+                        <Animated.View style={animatedScaleStyle}>
+                        <FontAwesome
+                            name={"star"}
+                            size={28}
+                            style={
+                            starRating >= 5
+                                ? styles.starSelected
+                                : styles.starUnselected
+                            }
+                            solid
+                        />
+                        </Animated.View>
+                    </TouchableWithoutFeedback>
+                    </View>
+                </View>
+            </View>
+      </View>
+      <View style={styles.reviewInputs}>
+        <TextInput style={styles.title}></TextInput>
+        <TextInput style={styles.text}></TextInput>
       </View>
     </View>
   );
@@ -185,6 +193,8 @@ const styles = StyleSheet.create({
   boxContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
+    borderBottomWidth: 2,
+    borderBottomColor: "#A86B98",
   },
   leftBox: {
     display: "flex",
