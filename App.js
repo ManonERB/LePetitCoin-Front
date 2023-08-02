@@ -1,4 +1,4 @@
-import { StyleSheet, BlurView } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -12,7 +12,9 @@ import FavoriteToilets from "./screens/FavoriteToilets";
 import FunFacts from "./screens/FunFacts";
 import Profile from "./screens/Profile";
 import ToiletPage from "./screens/ToiletPage";
+import Review from "./screens/Review";
 import AddToilet from "./screens/AddToilet";
+import Map from "./screens/Map";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import user from "./reducers/user";
 
@@ -22,6 +24,14 @@ const Tab = createBottomTabNavigator();
 const store = configureStore({
   reducer: { user },
 });
+
+const TabIcon = ({ iconName, size, color, isActive }) => {
+  return (
+    <View style={isActive ? styles.activeTabIconContainer : styles.inactiveTabIconContainer}>
+      <FontAwesome name={iconName} size={size} color={color} solid />
+    </View>
+  );
+};
 
 const TabNavigator = () => {
   return (
@@ -46,9 +56,7 @@ const TabNavigator = () => {
             iconName = "user-alt";
           }
 
-          return (
-            <FontAwesome name={iconName} size={size} color={color} solid />
-          );
+          return <TabIcon iconName={iconName} size={size} color={color} isActive={focused} />;
         },
         // couleur de fond violette ou blanc en fonction de l'activité
         headerShown: false,
@@ -66,10 +74,13 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
+        {/* Toutes les screens vers lesquelles nous voulons naviguer */}
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="SignIn" component={SignIn} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="AddToilet" component={AddToilet} />
+          <Stack.Screen name="Map" component={Map} />
+          <Stack.Screen name="Review" component={Review} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
