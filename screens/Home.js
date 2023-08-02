@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   InputPlaceholder: {
     flexDirection: "row",
-    width: "85%",
+    width: "90%",
     height: 50,
     alignContent: "space-between",
     alignItems: "center",
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "white",
-    width: "85%",
+    width: "90%",
     height: 140,
     borderRadius: 15,
     padding: 10,
