@@ -9,14 +9,6 @@ import {Dimensions} from 'react-native';
 export default function Map () {
     const [currentPosition, setCurrentPosition] = useState(null);
 
-//     const location = await Location.getCurrentPositionAsync({});
-//         setLivePosition(location.coords);
-//         setInitialRegion({
-//             latitude: location.coords.latitude,
-//             longitude: location.coords.longitude,
-//             latitudeDelta: 0.01,
-//             longitudeDelta: 0.005,
-// });
     useEffect(() => {
         (async () => {
           const { status } = await Location.requestForegroundPermissionsAsync();
@@ -34,8 +26,10 @@ export default function Map () {
         <View   >
 
         <MapView 
-// Obtient la position de l'utilisateur au chargement de l'application
- 
+        // initialRegion={{
+        //   latitudeDelta: 0.04,
+        //   longitudeDelta: 0.02,
+        // }}
         mapType="hybrid" style={styles.map}>
                 {currentPosition && <Marker coordinate={currentPosition} title="My position"  />} 
                 {/* mettre des pins pour les wc */}
