@@ -104,21 +104,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#ffffff",
     paddingTop: 40,
-  },
+},
 
   title: {
     color: "#A86B98",
     fontSize: 16,
     fontWeight: "bold",
     paddingBottom: 12,
-  },
+},
   reviewButton: {
     width: 120,
     height: 60,
     backgroundColor: 'red',
    
-     },
-  
+},
 placeholder : { 
         color : '#B08BBB',
         fontWeight : "bold",
@@ -128,7 +127,7 @@ placeholder : {
         height : 50,
         width : "90%",
         padding : 10,
-
+},
   placeholder: {
     color: "#B08BBB",
     fontWeight: "bold",
@@ -140,7 +139,7 @@ placeholder : {
     padding: 10,
     // borderRadius : 15,
     // backgroundColor : 'transparent',
-  },
+},
   InputPlaceholder: {
     flexDirection: "row",
     width: "90%",
@@ -160,11 +159,11 @@ placeholder : {
     shadowOpacity: 0.29,
     shadowRadius: 4.65,
     elevation: 7,
-  },
+},
   searchIcon: {
     marginRight: 10,
-  },
-  cardToilet: {
+},
+cardToilet: {
     marginTop: 10,
     flexDirection: "row",
     alignItems: "center",
@@ -180,8 +179,9 @@ placeholder : {
     shadowOffset: {
       width: 0,
       height: 3,
-    },
-    buttonAddToilet : {
+  }
+},
+buttonAddToilet : {
         backgroundColor : "#B08BBB",
         width : "65%",
         padding : 5,
@@ -190,29 +190,29 @@ placeholder : {
         alignItems : "center",
         alignContent : "center",
         justifyContent : "center",
-    },
-    textButton : { 
+},
+textButton : { 
         color : "white",
         fontWeight: 'bold',
         fontSize: 22,
         textAlign: 'center',
         width: "100%"
-    },
-    buttonMap : {  
+},
+buttonMap : {  
         borderTopStartRadius: 12,
         borderBottomLeftRadius : 12,
         width : "45%",
         alignItems : "center",
         justifyContent : "center",
         flexDirection: 'row',
-    },
-    textMap : {  
+},
+textMap : {  
         color : "#A86B98",
         fontWeight: 'bold',
         fontSize: 28,
         marginLeft: 15,
-    },
-    buttonShadow: { // rajouter ombre
+},
+buttonShadow: { // rajouter ombre
         alignItems : "center",
         justifyContent : "center",
         borderRadius: 8,
@@ -227,39 +227,39 @@ placeholder : {
         shadowRadius: 4.65,
         elevation: 7,
         marginLeft: 10,
-    },
-    image : { 
+},
+image : { 
         width : 100,
         height : 120,
         borderRadius : 15,
         paddingLeft : 10
-    },
-    caracteristiques : { 
+},
+caracteristiques : { 
         flexDirection : "column"
-    },
-    textCard : {
+},
+textCard : {
         flexDirection : 'column',
         paddingLeft : 8,
-    },
-    distanceEtAvis : { 
+},
+distanceEtAvis : { 
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingTop: 10,
-    },
-    distance : {
+},
+distance : {
         color: "#B08BBB",
         fontSize : 14,
         fontWeight : "bold",
-    },
-    avis : { 
+},
+avis : { 
         color: "#B08BBB",
         fontSize : 14,
         fontWeight : "bold",
         paddingRight : 10,
         paddingLeft : 60,
-    },
-    avisContainer : {
+},
+avisContainer: {
         alignItems: 'flex-end',
-    }
-    });
+},
+});
