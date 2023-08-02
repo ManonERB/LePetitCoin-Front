@@ -44,10 +44,7 @@ export default function SignIn({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
+    <View style={styles.container}>
       <View style={styles.topLogo}>
         <Text style={styles.logoText}>LE PETIT C</Text>
         <FontAwesome
@@ -66,10 +63,10 @@ export default function SignIn({ navigation }) {
             //changeText avec le changement d'etat
             onChangeText={(value) => setEmail(value)}
             //la valeur de l'input
+            autoCapitalize="none"
             value={email}
             style={styles.input}
-            
-                placeholder="john@gmail.com"
+            placeholder="john@gmail.com"
             textColor="#51bc8a"
             baseColor="#FFFFFF"
           />
@@ -82,9 +79,8 @@ export default function SignIn({ navigation }) {
             //la valeur de l'input
             value={password}
             style={styles.input}
-            
-              placeholder="Password"
-              secureTextEntry={true}
+            placeholder="Password"
+            secureTextEntry={true}
           />
         </View>
         {inputEmpty && (
@@ -134,7 +130,7 @@ export default function SignIn({ navigation }) {
       <TouchableOpacity onPress={() => navigation.navigate(SignUp)}>
         <Text style={styles.signUp}>pas de compte?</Text>
       </TouchableOpacity>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
@@ -184,9 +180,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 30,
   },
-  button: {
-
-  },
+  button: {},
   shadow: {
     alignItems: "center",
     justifyContent: "center",
@@ -194,16 +188,16 @@ const styles = StyleSheet.create({
     height: 50,
     marginTop: 20,
     borderRadius: 20,
-    backgroundColor : "white",
+    backgroundColor: "white",
     borderRadius: 10,
-    marginBottom : 10,
+    marginBottom: 10,
     // borderStyle : "solid",
     // borderColor : "black",
     // borderWidth : 1,
     shadowColor: "grey",
     shadowOffset: {
-        width: 0,
-        height: 3,
+      width: 0,
+      height: 3,
     },
     shadowOpacity: 0.29,
     shadowRadius: 4.65,
@@ -214,7 +208,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     width: "65%",
-    marginTop: 50,
+    marginTop: "10%",
   },
   textButton: {
     height: 38,
@@ -228,7 +222,7 @@ const styles = StyleSheet.create({
   },
   icon: {},
   signUp: {
-    marginTop: "15%",
+    marginTop: "10%",
     fontSize: 22,
     color: "#B08BBB",
   },

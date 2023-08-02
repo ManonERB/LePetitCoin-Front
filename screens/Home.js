@@ -1,118 +1,97 @@
     import { Text, TouchableOpacity, View, TextInput, Image } from 'react-native';
     import { StyleSheet } from 'react-native';
     import { useDispatch } from 'react-redux';
-    import { useState, useEffect  } from 'react';
-
+    import { useState } from 'react';
     import { NavigationContainer } from '@react-navigation/native';
     import { createNativeStackNavigator } from '@react-navigation/native-stack';
     import FontAwesome from "react-native-vector-icons/FontAwesome5";
     import AddToilet from './AddToilet';
-    import MapView, { Marker } from 'react-native-maps';
-    import * as Location from 'expo-location';
-    import Map from './Map';
-
 
     const Stack = createNativeStackNavigator();
-    
+
+
     export default function Home ({navigation}) {
-        const [currentPosition, setCurrentPosition] = useState(null);
-        const [rechercherUnCoin, setRechercherUnCoin] = useState('');
- 
-        useEffect(() => {
-            (async () => {
-              const { status } = await Location.requestForegroundPermissionsAsync();
-         
-              if (status === 'granted') {
-                Location.watchPositionAsync({ distanceInterval: 10 },
-                  (location) => {
-                    console.log('ici', location); // vérifier que l'on reçoit bien ma location
-                    setCurrentPosition(location.coords); // mettre quoi renvoyer. pas forcément location.coords
-                  });
-              }
-            })();
-          }, []);
-     
         const dispatch = useDispatch();
 
+        const [rechercherUnCoin, setRechercherUnCoin] = useState('');
 
-    // mettre sa fonction avec un dispatch (updateRechercheUnCoin(rechercheUnCoin))
-        // const handleSubmit = () => {
-        //     dispatch(sdfsf ( dsfsdfv ));
-        //   };
+  // mettre sa fonction avec un dispatch (updateRechercheUnCoin(rechercheUnCoin))
+  // const handleSubmit = () => {
+  //     dispatch(sdfsf ( dsfsdfv ));
+  //   };
 
         return (
         
         <View style={styles.container}>
-        <View style={styles.InputPlaceholder}>
-            <TextInput placeholder="Recherche ton petit coin idéal..." 
-            style={styles.placeholder}
-                onChangeText={(value) => setRechercherUnCoin(value)} 
-                value={rechercherUnCoin}  /> 
-                {/* en value l'état "rechercherUnCoin', au clic, déclenchement de la fonction hangleSubmit, et ... interrogation de l'API ? + filtre de la recherche*/}
-                <FontAwesome name='MagnifyingGlass' 
-                    // onPress={() => handleSubmit(data.records[0].fields.commune)} size={25} color='#ec6e5b' 
-                    // à vérifier le chemin pour aller chercher le nom de la commune
-                    // affiche un ? au lieu d'une loupe
-                    />
-        </View>
-        <View style={styles.containerButtons}>
-                    
-      {/* Utilisez les props de navigation pour naviguer vers "AddToilet" */}
-            {/* <Stack.Navigator initialRouteName='Home'>
-              <Stack.Screen > */}
-                <TouchableOpacity style={styles.buttonAddToilet}
-                activeOpacity={0.8} 
-                onPress={() => navigation.navigate('AddToilet')}
-                >
-                <Text style={styles.textButton} >Un petit coin à ajouter ?        </Text>
-                </TouchableOpacity>
-              {/* </Stack.Screen>
-            </Stack.Navigator> */}
-                <TouchableOpacity style={styles.buttonMap} >
-                    <Text style={styles.textMap} >Map</Text> 
-                    
-                </TouchableOpacity>
-        </View>
-        <View style={styles.cardToilet}>
-        <Image style={styles.image} source={require('../assets/LeSplendido.jpg')} />
-            <View style={styles.textCard}>
-                <Text style={styles.title}>
-                    Adresse
-                </Text>
-                <View style={styles.caracteristiques}>
-                    <Text>Gratuit</Text>
-                    <Text>Horaires</Text>
-                    <Text>Disponibilité</Text>
-                </View>
-                <View style={styles.distanceEtAvis}>
-                    <Text style={styles.distance}>150m</Text>
-                    <View style={styles.avisContainer}>
-                    <Text style={styles.avis}>Etoiles</Text>
+            <View style={styles.InputPlaceholder}>
+                <TextInput placeholder="Recherche ton petit coin idéal..." 
+                style={styles.placeholder}
+                    onChangeText={(value) => setRechercherUnCoin(value)} 
+                    value={rechercherUnCoin}  /> 
+                    {/* en value l'état "rechercherUnCoin', au clic, déclenchement de la fonction hangleSubmit, et ... interrogation de l'API ? + filtre de la recherche*/}
+                    <FontAwesome name='search' 
+                        // onPress={() => handleSubmit(data.records[0].fields.commune)} size={25} color='#ec6e5b' 
+                        // à vérifier le chemin pour aller chercher le nom de la commune
+                        // affiche un ? au lieu d'une loupe
+                        />
+            </View>
+            <View style={styles.containerButtons}>
+                        
+            {/* Utilisez les props de navigation pour naviguer vers "AddToilet" */}
+                {/* <Stack.Navigator initialRouteName='Home'>
+                <Stack.Screen > */}
+                    <TouchableOpacity style={styles.buttonAddToilet}
+                    activeOpacity={0.8} 
+                    onPress={() => navigation.navigate('AddToilet')}
+                    >
+                    <Text style={styles.textButton}>Un petit coin à ajouter ?</Text>
+                    </TouchableOpacity>
+                {/* </Stack.Screen>
+                </Stack.Navigator> */}
+                    <View style={styles.buttonShadow}>
+                        <TouchableOpacity style={styles.buttonMap} >
+                            <FontAwesome name='map' size={18} solid />
+                        <Text style={styles.textMap}>Map</Text> 
+                        </TouchableOpacity>
+                    </View>
+            </View>
+            <View style={styles.cardToilet}>
+            <Image style={styles.image} source={require('../assets/LeSplendido.jpg')} />
+                <View style={styles.textCard}>
+                    <Text style={styles.title}>
+                        Adresse
+                    </Text>
+                    <View style={styles.caracteristiques}>
+                        <Text>Gratuit</Text>
+                        <Text>Horaires</Text>
+                        <Text>Disponibilité</Text>
+                    </View>
+                    <View style={styles.distanceEtAvis}>
+                        <Text style={styles.distance}>150m</Text>
+                        <View style={styles.avisContainer}>
+                        <Text style={styles.avis}>Etoiles</Text>
+                        </View>
                     </View>
                 </View>
             </View>
         </View>
-        </View>
-
-
-
         )
     }
 
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            alignItems : "center",
-            backgroundColor: '#ffffff',
-            paddingTop : 50,
-        },
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    paddingTop: 50,
+  },
 
-        title: {
-        color: "#B08BBB",
-        fontSize : 16,
-        fontWeight : "bold",
-        paddingBottom : 12, 
-    },
+  title: {
+    color: "#A86B98",
+    fontSize: 16,
+    fontWeight: "bold",
+    paddingBottom: 12,
+  },
 
     
 
@@ -258,6 +237,5 @@
     },
     avisContainer : {
         alignItems: 'flex-end',
-    },
-
+    }
     });
