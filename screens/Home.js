@@ -1,6 +1,5 @@
-    import { Text, TouchableOpacity, View, TextInput, Image } from 'react-native';
-    import { StyleSheet } from 'react-native';
-    import { useDispatch } from 'react-redux';
+    import { Text, TouchableOpacity, View, TextInput, Image, StyleSheet } from 'react-native';
+    import { useDispatch, useSelector } from 'react-redux';
     import { useState, useEffect } from 'react';
     import { NavigationContainer } from '@react-navigation/native';
     import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -8,16 +7,22 @@
     import AddToilet from './AddToilet';
     import MapView, { Marker } from 'react-native-maps';
     import * as Location from 'expo-location';
-
+    import Map from './Map';
+    import user, { recupeToilet } from '../reducers/user';
+    import { configureStore } from '@reduxjs/toolkit';
 
     const Stack = createNativeStackNavigator();
 
+// store configuré dans App.js - sert pour récupérer les cards avec infos des toilets dans la BDD 
 
     export default function Home ({navigation}) {
-        const dispatch = useDispatch();
+
+        const dispatch = useDispatch(); // va chercher les données
+        const user = useSelector ((state) => state.user.value)
 
         const [currentPosition, setCurrentPosition] = useState(null);
         const [rechercherUnCoin, setRechercherUnCoin] = useState('');
+        const [toilet, setToilet] = useState([])
 
         useEffect(() => {
             (async () => {
@@ -26,7 +31,8 @@
               if (status === 'granted') {
                 Location.watchPositionAsync({ distanceInterval: 10 },
                   (location) => {
-                    console.log('ici', location); // vérifier que l'on reçoit bien ma location
+                      // vérifier que l'on reçoit bien ma location
+                    //console.log('ici', location); 
                     setCurrentPosition(location.coords); // mettre quoi renvoyer. pas forcément location.coords
                   });
               }
@@ -37,6 +43,45 @@
   // const handleSubmit = () => {
   //     dispatch(sdfsf ( dsfsdfv ));
   //   };
+
+  fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet`)
+  .then((response) => response.json())
+  .then((data) => {   
+      //si data.result est vrai
+      // console.log(user)
+ 
+      if(data.result){
+          const cards = data.toilets.map((data, i) =>{
+            //  console.log(data)
+       return (
+        <View style={styles.cardToilet}>
+            <Image style={styles.image} source={require('../assets/LeSplendido.jpg')} />
+
+        <View style={styles.textCard}>
+            <Text style={styles.title}>
+                {data.commune}
+            </Text>
+            <View style={styles.caracteristiques}>
+                <Text>Gratuit : {data.fee !== undefined ? `${data.fee}` : "- -"}</Text>
+                <Text>Horaires:{data.tags_opening_hours !== null ? `${data.tags_opening_hours}` : "- -"}</Text>
+            </View>
+            <View style={styles.distanceEtAvis}>
+                <Text style={styles.distance}>150m</Text>
+                <View style={styles.avisContainer}>
+                <Text style={styles.avis}>Etoiles</Text>
+            </View>
+            </View>
+            </View>
+        </View>
+             )
+             
+         }); 
+        setToilet(cards)
+      }
+      
+    })
+ 
+
 
         return (
         
@@ -72,28 +117,8 @@
                         </TouchableOpacity>
                     </View>
             </View>
-            <View style={styles.cardToilet}>
-                  <Image style={styles.image} source={require('../assets/LeSplendido.jpg')} />
-                  <View style={styles.textCard}>
-                      <Text style={styles.title}>
-                          Adresse
-                      </Text>
-                      <View style={styles.caracteristiques}>
-                          <Text>Gratuit</Text>
-                          <Text>Horaires</Text>
-                          <Text>Disponibilité</Text>
-                      </View>
-                      <View style={styles.distanceEtAvis}>
-                          <Text style={styles.distance}>150m</Text>
-                          <View style={styles.avisContainer}>
-                          <Text style={styles.avis}>Etoiles</Text>
-                          </View>
-                      </View>
-                  </View>
-            </View>
-            <TouchableOpacity style={styles.reviewButton} onPress={() => navigation.navigate('Review')}>
-
-        </TouchableOpacity>
+                {toilet}
+            
         </View>
         )
     }
