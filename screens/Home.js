@@ -1,11 +1,14 @@
     import { Text, TouchableOpacity, View, TextInput, Image } from 'react-native';
     import { StyleSheet } from 'react-native';
     import { useDispatch } from 'react-redux';
-    import { useState } from 'react';
+    import { useState, useEffect } from 'react';
     import { NavigationContainer } from '@react-navigation/native';
     import { createNativeStackNavigator } from '@react-navigation/native-stack';
     import FontAwesome from "react-native-vector-icons/FontAwesome5";
     import AddToilet from './AddToilet';
+    import MapView, { Marker } from 'react-native-maps';
+    import * as Location from 'expo-location';
+    import Map from './Map';
 
     const Stack = createNativeStackNavigator();
 
@@ -13,8 +16,23 @@
     export default function Home ({navigation}) {
         const dispatch = useDispatch();
 
+        const [currentPosition, setCurrentPosition] = useState(null);
         const [rechercherUnCoin, setRechercherUnCoin] = useState('');
 
+        useEffect(() => {
+            (async () => {
+              const { status } = await Location.requestForegroundPermissionsAsync();
+         
+              if (status === 'granted') {
+                Location.watchPositionAsync({ distanceInterval: 10 },
+                  (location) => {
+                    console.log('ici', location); // vérifier que l'on reçoit bien ma location
+                    setCurrentPosition(location.coords); // mettre quoi renvoyer. pas forcément location.coords
+                  });
+              }
+            })();
+          }, []);
+     
   // mettre sa fonction avec un dispatch (updateRechercheUnCoin(rechercheUnCoin))
   // const handleSubmit = () => {
   //     dispatch(sdfsf ( dsfsdfv ));
@@ -197,7 +215,6 @@ const styles = StyleSheet.create({
         elevation: 7,
         marginLeft: 10,
     },
-    //ici
     image : { 
         width : 100,
         height : 120,
