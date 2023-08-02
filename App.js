@@ -1,4 +1,4 @@
-import { StyleSheet, BlurView } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -12,7 +12,9 @@ import FavoriteToilets from "./screens/FavoriteToilets";
 import FunFacts from "./screens/FunFacts";
 import Profile from "./screens/Profile";
 import ToiletPage from "./screens/ToiletPage";
+import Review from "./screens/Review";
 import AddToilet from "./screens/AddToilet";
+import Map from "./screens/Map";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import user from './reducers/user'
 
@@ -24,6 +26,14 @@ const store = configureStore({
   reducer: {user} ,
 });
 
+const TabIcon = ({ iconName, size, color, isActive }) => {
+  return (
+    <View style={isActive ? styles.activeTabIconContainer : styles.inactiveTabIconContainer}>
+      <FontAwesome name={iconName} size={size} color={color} solid />
+    </View>
+  );
+};
+
 const TabNavigator = () => {
   return (
     <Tab.Navigator
@@ -33,8 +43,8 @@ const TabNavigator = () => {
         tabBarLabelStyle: {color: "black"},
         tabBarActiveTintColor: "#A86B98",
         tabBarInactiveTintColor: "white",
-        tabBarActiveBackgroundColor: "white",
-        tabBarIcon: ({ color, size }) => {
+        tabBarActiveBackgroundColor: 'rgba(255, 255, 255, 0.8)',
+        tabBarIcon: ({ color, size, focused }) => {
           let iconName = "";
 
           // selon la route, les icones va s'afficher.
@@ -48,9 +58,7 @@ const TabNavigator = () => {
             iconName = "user-alt";
           }
 
-          return (
-            <FontAwesome name={iconName} size={size} color={color} solid />
-          );
+          return <TabIcon iconName={iconName} size={size} color={color} isActive={focused} />;
         },
         // couleur de fond violette ou blanc en fonction de l'activité
         headerShown: false,
@@ -74,7 +82,7 @@ export default function App() {
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="AddToilet" component={AddToilet} />
           <Stack.Screen name="Map" component={Map} />
-
+          <Stack.Screen name="Review" component={Review} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
@@ -89,7 +97,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  tabs: {
-    
+  activeTabIconContainer: {
+    // Add your drop shadow styles here when the tab is active
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.4,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 6,
+      },
+    }),
+  },
+  inactiveTabIconContainer: {
+    // Add any styles here for when the tab is inactive
+
   },
 });

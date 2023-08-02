@@ -1,12 +1,14 @@
-import { Text } from 'react-native';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 
 
 
-export default function ToiletPage () {
+export default function ToiletPage ({navigation}) {
     return (
         <Text style={styles.title}>
             Hello
+        <TouchableOpacity style={styles.reviewButton} onPress={() => navigation.navigate('Review')}>
+
+        </TouchableOpacity>
         </Text>
 
     )
@@ -19,6 +21,12 @@ const styles = StyleSheet.create({
       color: "black",
       alignItems: 'center',
       justifyContent: 'center',
-  }
+  },
+  reviewButton: {
+ width: 120,
+ height: 60,
+ backgroundColor: 'red',
+
+  },
 });
   

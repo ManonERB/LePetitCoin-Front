@@ -8,7 +8,7 @@
     import AddToilet from './AddToilet';
     import MapView, { Marker } from 'react-native-maps';
     import * as Location from 'expo-location';
-    import Map from './Map';
+
 
     const Stack = createNativeStackNavigator();
 
@@ -46,11 +46,10 @@
                 style={styles.placeholder}
                     onChangeText={(value) => setRechercherUnCoin(value)} 
                     value={rechercherUnCoin}  /> 
-                    {/* en value l'état "rechercherUnCoin', au clic, déclenchement de la fonction hangleSubmit, et ... interrogation de l'API ? + filtre de la recherche*/}
+                    {/* en value l'état "rechercherUnCoin', au clic, déclenchement de la fonction handleSubmit, et ... interrogation de l'API ? + filtre de la recherche*/}
                     <FontAwesome name='search' 
                         // onPress={() => handleSubmit(data.records[0].fields.commune)} size={25} color='#ec6e5b' 
                         // à vérifier le chemin pour aller chercher le nom de la commune
-                        // affiche un ? au lieu d'une loupe
                         />
             </View>
             <View style={styles.containerButtons}>
@@ -67,31 +66,34 @@
                 {/* </Stack.Screen>
                 </Stack.Navigator> */}
                     <View style={styles.buttonShadow}>
-                        <TouchableOpacity style={styles.buttonMap} >
-                            <FontAwesome name='map' size={18} solid />
-                        <Text style={styles.textMap}>Map</Text> 
+                        <TouchableOpacity style={styles.buttonMap} onPress={() => navigation.navigate('Map')}>
+                            <FontAwesome name='map' size={18} solid color='#A86B98' />
+                            <Text style={styles.textMap}>Map</Text> 
                         </TouchableOpacity>
                     </View>
             </View>
             <View style={styles.cardToilet}>
-            <Image style={styles.image} source={require('../assets/LeSplendido.jpg')} />
-                <View style={styles.textCard}>
-                    <Text style={styles.title}>
-                        Adresse
-                    </Text>
-                    <View style={styles.caracteristiques}>
-                        <Text>Gratuit</Text>
-                        <Text>Horaires</Text>
-                        <Text>Disponibilité</Text>
-                    </View>
-                    <View style={styles.distanceEtAvis}>
-                        <Text style={styles.distance}>150m</Text>
-                        <View style={styles.avisContainer}>
-                        <Text style={styles.avis}>Etoiles</Text>
-                        </View>
-                    </View>
-                </View>
+                  <Image style={styles.image} source={require('../assets/LeSplendido.jpg')} />
+                  <View style={styles.textCard}>
+                      <Text style={styles.title}>
+                          Adresse
+                      </Text>
+                      <View style={styles.caracteristiques}>
+                          <Text>Gratuit</Text>
+                          <Text>Horaires</Text>
+                          <Text>Disponibilité</Text>
+                      </View>
+                      <View style={styles.distanceEtAvis}>
+                          <Text style={styles.distance}>150m</Text>
+                          <View style={styles.avisContainer}>
+                          <Text style={styles.avis}>Etoiles</Text>
+                          </View>
+                      </View>
+                  </View>
             </View>
+            <TouchableOpacity style={styles.reviewButton} onPress={() => navigation.navigate('Review')}>
+
+        </TouchableOpacity>
         </View>
         )
     }
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: "#ffffff",
-    paddingTop: 50,
+    paddingTop: 40,
   },
 
   title: {
@@ -110,10 +112,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingBottom: 12,
   },
-
-    
-
-    placeholder : { 
+  reviewButton: {
+    width: 120,
+    height: 60,
+    backgroundColor: 'red',
+   
+     },
+  
+placeholder : { 
         color : '#B08BBB',
         fontWeight : "bold",
         alignItems : "center",
@@ -122,10 +128,9 @@ const styles = StyleSheet.create({
         height : 50,
         width : "90%",
         padding : 10,
-        // borderRadius : 15,
-        // backgroundColor : 'transparent',
-    },
-    InputPlaceholder : { // rajouter ombre
+
+},
+InputPlaceholder : { // rajouter ombre
         flexDirection : "row",
         width : "85%",
         height : 50,
@@ -135,9 +140,6 @@ const styles = StyleSheet.create({
         paddingRight : 10,
         borderRadius: 8,
         marginBottom : 10,
-        // borderStyle : "solid",
-        // borderColor : "black",
-        // borderWidth : 1,
         backgroundColor : "white",
         shadowColor: "grey",
         shadowOffset: {
@@ -147,7 +149,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.29,
         shadowRadius: 4.65,
         elevation: 7,
-    },
+},
     cardToilet : {
         marginTop : 10,
         flexDirection : "row",
@@ -194,10 +196,16 @@ const styles = StyleSheet.create({
     buttonMap : {  
         borderTopStartRadius: 12,
         borderBottomLeftRadius : 12,
-        width : "50%",
+        width : "45%",
         alignItems : "center",
         justifyContent : "center",
         flexDirection: 'row',
+    },
+    textMap : {  
+        color : "#A86B98",
+        fontWeight: 'bold',
+        fontSize: 28,
+        marginLeft: 15,
     },
     buttonShadow: { // rajouter ombre
         alignItems : "center",
@@ -227,12 +235,6 @@ const styles = StyleSheet.create({
     textCard : {
         flexDirection : 'column',
         paddingLeft : 8,
-    },
-    textMap : {  
-        color : "#B08BBB",
-        fontWeight: 'bold',
-        fontSize: 28,
-        marginLeft: 15,
     },
     distanceEtAvis : { 
         alignItems: 'center',
