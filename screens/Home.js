@@ -7,7 +7,7 @@
     import AddToilet from './AddToilet';
     import MapView, { Marker } from 'react-native-maps';
     import * as Location from 'expo-location';
-    import Map from './Map';
+  
     import user, { recupeToilet } from '../reducers/user';
     import { configureStore } from '@reduxjs/toolkit';
 
@@ -53,7 +53,7 @@
   //         const cards = data.toilets.map((data, i) =>{
             //  console.log(data)
       //  return (
-      //   <View style={styles.cardToilet}>
+      //   <View key={i} style={styles.cardToilet}>
       //       <Image style={styles.image} source={require('../assets/LeSplendido.jpg')} />
 
       //   <View style={styles.textCard}>
@@ -92,7 +92,7 @@
                     value={rechercherUnCoin}  /> 
                     {/* en value l'état "rechercherUnCoin', au clic, déclenchement de la fonction handleSubmit, et ... interrogation de l'API ? + filtre de la recherche*/}
                     <FontAwesome name='search' 
-                        // onPress={() => handleSubmit(data.records[0].fields.commune)} size={25} color='#ec6e5b' 
+                        onPress={() => handleSubmit(/*data.records[0].fields.commune*/)} size={25} color='#B08BBB' 
                         // à vérifier le chemin pour aller chercher le nom de la commune
                         />
             </View>
@@ -110,7 +110,9 @@
                         </TouchableOpacity>
                     </View>
             </View>
-                {toilet}
+              <Text>
+                 {toilet} 
+                </Text>
             
         </View>
         )
