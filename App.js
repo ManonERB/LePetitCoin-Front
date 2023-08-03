@@ -44,7 +44,7 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarStyle: { backgroundColor: "#B08BBB", borderRadius: 12 },
+        tabBarStyle: { backgroundColor: "#B08BBB" },
         tabBarLabelStyle: { color: "black" },
         tabBarActiveTintColor: "#A86B98",
         tabBarInactiveTintColor: "white",
