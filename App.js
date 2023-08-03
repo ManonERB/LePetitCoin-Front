@@ -16,15 +16,14 @@ import Review from "./screens/Review";
 import AddToilet from "./screens/AddToilet";
 import Map from "./screens/Map";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
-import user from './reducers/user'
-
+import user from "./reducers/user";
 
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: {user} ,
+  reducer: { user },
 });
 
 const TabIcon = ({ iconName, size, color, isActive }) => {
@@ -38,13 +37,12 @@ const TabIcon = ({ iconName, size, color, isActive }) => {
 const TabNavigator = () => {
   return (
     <Tab.Navigator
-
       screenOptions={({ route }) => ({
-        tabBarStyle: {backgroundColor: "#B08BBB", borderRadius: 8 },
-        tabBarLabelStyle: {color: "black"},
+        tabBarStyle: { backgroundColor: "#B08BBB", borderRadius: 12 },
+        tabBarLabelStyle: { color: "black" },
         tabBarActiveTintColor: "#A86B98",
         tabBarInactiveTintColor: "white",
-        tabBarActiveBackgroundColor: 'rgba(255, 255, 255, 0.8)',
+        tabBarActiveBackgroundColor: "rgba(255, 255, 255, 0.9)",
         tabBarIcon: ({ color, size, focused }) => {
           let iconName = "";
 
