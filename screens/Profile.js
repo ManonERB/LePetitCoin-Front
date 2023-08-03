@@ -3,15 +3,18 @@ import { StyleSheet } from 'react-native';
 
 
 
-export default function Profile () {
+export default function Profile ({ navigation }) {
     return (
         <View style={styles.container}>
             <View>
                 <Image style={styles.avatar} source={require('../assets/avatar-vide.png')} />
-            </View>
+            </View >
             <Text style={styles.title}>
                 Hello
             </Text>
+            <TouchableOpacity style={styles.buttonReview} onPress={() => navigation.navigate('Review')}>
+                <Text>temp access to Review</Text>
+            </TouchableOpacity>
         </View>
 
     )
@@ -33,5 +36,8 @@ title: {
     width: '20%',
     height: '20%',
   },
+  buttonReview: {
+    backgroundColor: 'blue'
+  }
 });
   

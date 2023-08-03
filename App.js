@@ -19,6 +19,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import user from './reducers/user'
 
 
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
