@@ -117,7 +117,7 @@
                         </TouchableOpacity>
                     </View>
             </View>
-                {toilet}
+                {/* {toilet} */}
             
         </View>
         )
