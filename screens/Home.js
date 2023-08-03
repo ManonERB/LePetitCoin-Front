@@ -40,48 +40,47 @@
           }, []);
      
   // mettre sa fonction avec un dispatch (updateRechercheUnCoin(rechercheUnCoin))
-  // const handleSubmit = () => {
-  //     dispatch(sdfsf ( dsfsdfv ));
-  //   };
+  const handleSubmit = () => {
+   
 
-  fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet`)
-  .then((response) => response.json())
-  .then((data) => {   
-      //si data.result est vrai
-      // console.log(user)
+  // fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet`)
+  // .then((response) => response.json())
+  // .then((data) => {   
+  //     //si data.result est vrai
+  //     // console.log(user)
  
-      if(data.result){
-          const cards = data.toilets.map((data, i) =>{
+  //     if(data.result){
+  //         const cards = data.toilets.map((data, i) =>{
             //  console.log(data)
-       return (
-        <View style={styles.cardToilet}>
-            <Image style={styles.image} source={require('../assets/LeSplendido.jpg')} />
+      //  return (
+      //   <View style={styles.cardToilet}>
+      //       <Image style={styles.image} source={require('../assets/LeSplendido.jpg')} />
 
-        <View style={styles.textCard}>
-            <Text style={styles.title}>
-                {data.commune}
-            </Text>
-            <View style={styles.caracteristiques}>
-                <Text>Gratuit : {data.fee !== undefined ? `${data.fee}` : "- -"}</Text>
-                <Text>Horaires:{data.tags_opening_hours !== null ? `${data.tags_opening_hours}` : "- -"}</Text>
-            </View>
-            <View style={styles.distanceEtAvis}>
-                <Text style={styles.distance}>150m</Text>
-                <View style={styles.avisContainer}>
-                <Text style={styles.avis}>Etoiles</Text>
-            </View>
-            </View>
-            </View>
-        </View>
-             )
+      //   <View style={styles.textCard}>
+      //       <Text style={styles.title}>
+      //           {data.commune}
+      //       </Text>
+      //       <View style={styles.caracteristiques}>
+      //           <Text>Gratuit : {data.fee !== undefined ? `${data.fee}` : "- -"}</Text>
+      //           <Text>Horaires:{data.tags_opening_hours !== null ? `${data.tags_opening_hours}` : "- -"}</Text>
+      //       </View>
+      //       <View style={styles.distanceEtAvis}>
+      //           <Text style={styles.distance}>150m</Text>
+      //           <View style={styles.avisContainer}>
+      //           <Text style={styles.avis}>Etoiles</Text>
+      //       </View>
+      //       </View>
+      //       </View>
+      //   </View>
+      //        )
              
-         }); 
-        setToilet(cards)
-      }
+    //      }); 
+    //     setToilet(cards)
+    //   }
       
-    })
+    // })
  
-
+  };
 
         return (
         
@@ -98,18 +97,12 @@
                         />
             </View>
             <View style={styles.containerButtons}>
-                        
-            {/* Utilisez les props de navigation pour naviguer vers "AddToilet" */}
-                {/* <Stack.Navigator initialRouteName='Home'>
-                <Stack.Screen > */}
                     <TouchableOpacity style={styles.buttonAddToilet}
                     activeOpacity={0.8} 
                     onPress={() => navigation.navigate('AddToilet')}
                     >
                     <Text style={styles.textButton}>Un petit coin à ajouter ?</Text>
                     </TouchableOpacity>
-                {/* </Stack.Screen>
-                </Stack.Navigator> */}
                     <View style={styles.buttonShadow}>
                         <TouchableOpacity style={styles.buttonMap} onPress={() => navigation.navigate('Map')}>
                             <FontAwesome name='map' size={18} solid color='#A86B98' />
@@ -152,6 +145,9 @@ placeholder : {
     height : 50,
     width : "90%",
     padding : 10,
+},
+containerButtons: {
+flexDirection: 'row',
 },
 InputPlaceholder: {
     flexDirection: "row",
