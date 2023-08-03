@@ -5,6 +5,7 @@ const initialState = {
   value: { 
     token: null,
     username:null,
+    photos: [],
    },
 };
 
@@ -19,7 +20,10 @@ export const userSlice = createSlice({
     logout: (state, action) => {
       state.value.token = null
       state.value.username = null
-    }
+    },
+    addPhoto: (state, action) => {
+      state.value.photos.push(action.payload)
+    },
     // addPlace: (state, action) => {
     //   state.value.places.push(action.payload);  
     // },
@@ -32,5 +36,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, addPhoto } = userSlice.actions;
 export default userSlice.reducer;

@@ -10,14 +10,51 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
-
+import { Camera, CameraType, FlashMode } from "expo-camera";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Review({ navigation }) {
-    const [review, setReview] = useState(0)
-    
-  
-  
-    //add state for stars and heart
+  const [review, setReview] = useState(0);
+  const [hasPermission, setHasPermission] = useState(false);
+  const [type, setType] = useState(CameraType.back);
+  const [flashMode, setFlashMode] = useState(FlashMode.off);
+
+  // Create a reference to the camera
+  let cameraRef = useRef(null);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
+  const takePicture = async () => {
+    const photo = await cameraRef.current.takePictureAsync({ quality: 0.5 });
+    const formData = new FormData();
+
+    formData.append("photoFromFront", {
+      uri: photo.uri,
+      name: "photo.jpg",
+      type: "image/jpeg",
+    });
+
+    fetch("http://10.20.2.181:3000/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        //add to redux store if upload is successful
+        dispatch(addPhoto(data.url));
+      });
+  };
+
+  if (!hasPermission || !isFocused) {
+    return <View />;
+  }
+
+  //add state for stars and heart
   const [starRating, setStarRating] = useState(null);
   const [heartRating, setHeartRating] = useState(false);
   //animation for touchable icons
@@ -86,6 +123,11 @@ export default function Review({ navigation }) {
           <View style={styles.plusButton} activeOpacity={0.8}>
             <TouchableOpacity style={styles.plusPic}>
               <FontAwesome name="plus" size={18} color="white" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.cameraButton} activeOpacity={0.8}>
+            <TouchableOpacity style={styles.cameraPic}>
+              <FontAwesome name="camera" size={18} color="white" />
             </TouchableOpacity>
           </View>
         </View>
@@ -254,12 +296,12 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 15,
+    marginRight: 12,
   },
   rightBox: {
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 15,
+    marginLeft: 12,
   },
   rightBoxTop: {
     flexDirection: "column",
@@ -278,7 +320,7 @@ const styles = StyleSheet.create({
     height: 70,
   },
   plusPic: {
-    width: 40,
+    width: 60,
     height: 40,
     backgroundColor: "#A86B98",
     justifyContent: "center",
@@ -296,8 +338,30 @@ const styles = StyleSheet.create({
   },
   plusButton: {
     position: "absolute",
-    paddingRight: "80%",
+    paddingRight: "70%",
     paddingTop: "30%",
+  },
+  cameraPic: {
+    width: 60,
+    height: 40,
+    backgroundColor: "#A86B98",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+    marginLeft: 30,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 9,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4.65,
+    elevation: 5,
+  },
+  cameraButton: {
+    position: "absolute",
+    paddingLeft: "44%",
+    paddingTop: "48%",
   },
   headingRate: {
     fontSize: 24,
