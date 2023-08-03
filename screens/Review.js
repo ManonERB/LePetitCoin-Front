@@ -133,7 +133,7 @@ export default function Review({ navigation }) {
         </View>
         <View style={styles.rightBox}>
           <View style={styles.rightBoxTop}>
-            <Text>Ajouter aux favoris</Text>
+            <Text style={styles.headingFav}>Ajouter aux favoris</Text>
             <TouchableOpacity
               onPressIn={handleHeartPressIn}
               onPressOut={handleHeartPressOut}
@@ -151,7 +151,7 @@ export default function Review({ navigation }) {
           </View>
           <View style={styles.rightBoxBottom}>
             <Text style={styles.headingRate}>
-              {starRating ? `${starRating}` : "Tap to rate"}
+              {starRating ? `${starRating}` : "Taper pour noter"}
             </Text>
             <View style={styles.stars}>
               <TouchableWithoutFeedback
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 48,
-    marginTop: 50,
+    marginTop: 60,
     height: 80,
   },
   images: {
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
     justifyContent: "start",
     borderBottomColor: "#A86B98",
     borderBottomWidth: 2,
-    paddingBottom: 10,
+    paddingBottom: 40,
     height: "25%",
   },
   leftBox: {
@@ -364,9 +364,15 @@ const styles = StyleSheet.create({
     paddingTop: "48%",
   },
   headingRate: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
+  },
+  headingFav: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 3,
+    width: '100%',
   },
   stars: {
     display: "flex",
@@ -379,16 +385,15 @@ const styles = StyleSheet.create({
     color: "#ffb300",
   },
   reviewParts: {
-    height: "60%",
+    height: "53%",
     width: 310,
     justifyContent: "flex-start",
-    margin: 15,
+    margin: 10,
   },
   reviewTitle: {
     width: "100%",
     fontSize: 28,
     fontWeight: "bold",
-    fontFamily: "BalooBhaijaan2-VariableFont_wght",
     textAlign: "left",
     marginTop: 15,
   },
