@@ -110,9 +110,7 @@
                         </TouchableOpacity>
                     </View>
             </View>
-              <Text>
-                 {toilet} 
-                </Text>
+                {/* {toilet} */}
             
         </View>
         )
@@ -224,26 +222,26 @@ textMap : {
     marginLeft: 15,
 },
 buttonShadow: { // rajouter ombre
-    alignItems : "center",
-    justifyContent : "center",
-    borderRadius: 8,
-    backgroundColor : "white",
-    shadowColor: "grey",
-    width: 140,
-    shadowOffset: {
-        width: 0,
-        height: 3,
+        alignItems : "center",
+        justifyContent : "center",
+        borderRadius: 8,
+        backgroundColor : "white",
+        shadowColor: "grey",
+        width: 140,
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.29,
+        shadowRadius: 4.65,
+        elevation: 7,
+        marginLeft: 10,
     },
-    shadowOpacity: 0.29,
-    shadowRadius: 4.65,
-    elevation: 7,
-    marginLeft: 10,
-},
-image : { 
-    width : 100,
-    height : 100,
-    borderRadius : 15,
-    paddingLeft : 10
+    image : { 
+        width : 120,
+        height : 100,
+        borderRadius : 15,
+        paddingLeft : 10
 },
 caracteristiques : { 
     flexDirection : "column"

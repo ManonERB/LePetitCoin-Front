@@ -109,5 +109,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  tabs: {},
+  activeTabIconContainer: {
+    // Add your drop shadow styles here when the tab is active
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.4,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 6,
+      },
+    }),
+  },
+  inactiveTabIconContainer: {
+    // Add any styles here for when the tab is inactive
+
+  },
 });
