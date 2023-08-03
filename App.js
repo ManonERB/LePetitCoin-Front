@@ -42,7 +42,7 @@ const TabNavigator = () => {
         tabBarActiveTintColor: "#A86B98",
         tabBarInactiveTintColor: "white",
         tabBarActiveBackgroundColor: "rgba(255, 255, 255, 0.9)",
-        tabBarIcon: ({ color, size }) => {
+        tabBarIcon: ({ color, size, focused }) => {
           let iconName = "";
 
           // selon la route, les icones va s'afficher.
