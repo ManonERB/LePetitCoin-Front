@@ -18,6 +18,7 @@ import Map from "./screens/Map";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import user from "./reducers/user";
 
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -27,7 +28,13 @@ const store = configureStore({
 
 const TabIcon = ({ iconName, size, color, isActive }) => {
   return (
-    <View style={isActive ? styles.activeTabIconContainer : styles.inactiveTabIconContainer}>
+    <View
+      style={
+        isActive
+          ? styles.activeTabIconContainer
+          : styles.inactiveTabIconContainer
+      }
+    >
       <FontAwesome name={iconName} size={size} color={color} solid />
     </View>
   );
@@ -56,7 +63,14 @@ const TabNavigator = () => {
             iconName = "user-alt";
           }
 
-          return <TabIcon iconName={iconName} size={size} color={color} isActive={focused} />;
+          return (
+            <TabIcon
+              iconName={iconName}
+              size={size}
+              color={color}
+              isActive={focused}
+            />
+          );
         },
         // couleur de fond violette ou blanc en fonction de l'activité
         headerShown: false,
@@ -95,5 +109,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  tabs: {},
+  activeTabIconContainer: {
+    // Add your drop shadow styles here when the tab is active
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.4,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 6,
+      },
+    }),
+  },
+  inactiveTabIconContainer: {
+    // Add any styles here for when the tab is inactive
+
+  },
 });
