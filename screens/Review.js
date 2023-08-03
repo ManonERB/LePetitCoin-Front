@@ -10,10 +10,10 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
-import * as Font from "expo-font";
+
 
 export default function Review({ navigation }) {
-    const [review, setReview] = useState[0]
+    const [review, setReview] = useState(0)
     
   
   
