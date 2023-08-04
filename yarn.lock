@@ -2684,6 +2684,11 @@ ci-info@^3.2.0, ci-info@^3.3.0:
   resolved "https://registry.npmjs.org/ci-info/-/ci-info-3.8.0.tgz"
   integrity sha512-eXTggHWSooYhq49F2opQhuHWgzucfF2YgODK4e1566GQs5BIfP30B0oenwBJHfWxAs2fyPB1s7Mg949zLf61Yw==
 
+classnames@^2.2.3, classnames@^2.3.1:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.2.tgz#351d813bf0137fcc6a76a16b88208d2560a0d924"
+  integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
+
 clean-stack@^2.0.0:
   version "2.2.0"
   resolved "https://registry.npmjs.org/clean-stack/-/clean-stack-2.2.0.tgz"
@@ -5565,6 +5570,14 @@ rc@~1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-bootstrap-range-slider@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-range-slider/-/react-bootstrap-range-slider-3.0.8.tgz#5efc36314dc02195914b3dbdaed00da41af83682"
+  integrity sha512-FpDd1J1BW23jNN3fXmpy5nNDJ3PwMZ2/0dNse9RORwQ/z2rmpMQp/g6iNRpW6SjQkLKyGeNHyctK6dP+3zUXQA==
+  dependencies:
+    classnames "^2.3.1"
+    prop-types "^15.7.2"
+
 react-devtools-core@^4.27.2:
   version "4.28.0"
   resolved "https://registry.npmjs.org/react-devtools-core/-/react-devtools-core-4.28.0.tgz"
@@ -5670,6 +5683,14 @@ react-native@0.72.3:
     whatwg-fetch "^3.0.0"
     ws "^6.2.2"
     yargs "^17.6.2"
+
+react-rangeslider@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-rangeslider/-/react-rangeslider-2.2.0.tgz#4362b01f4f5a455f0815d371d496f69ca4c6b5aa"
+  integrity sha512-5K7Woa+cyqZ5wiW5+KhqGV+3+FiFxGKQ9rUxTMh52sObXVYEeBbfxFrp1eBvS8mRIxnUbHz9ppnFP0LhwOyNeg==
+  dependencies:
+    classnames "^2.2.3"
+    resize-observer-polyfill "^1.4.2"
 
 react-redux@^8.1.2:
   version "8.1.2"
@@ -5833,6 +5854,11 @@ reselect@^4.1.7, reselect@^4.1.8:
   version "4.1.8"
   resolved "https://registry.npmjs.org/reselect/-/reselect-4.1.8.tgz"
   integrity sha512-ab9EmR80F/zQTMNeneUr4cv+jSwPJgIlvEmVwLerwrWVbpLlBuls9XHzIeTFy4cegU2NHBp3va0LKOzU5qFEYQ==
+
+resize-observer-polyfill@^1.4.2:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
+  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
 resolve-from@^3.0.0:
   version "3.0.0"
