@@ -18,7 +18,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "cloudinary": "^1.40.0",
     "expo": "~49.0.5",
-    "expo-camera": "~13.4.2",
+    "expo-camera": "^13.4.2",
     "expo-font": "~11.4.0",
     "expo-location": "~16.1.0",
     "expo-status-bar": "~1.6.0",
