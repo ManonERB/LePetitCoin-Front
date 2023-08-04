@@ -37,17 +37,6 @@ useEffect(() => {
 }, []);
 
 // Fetch toilets within 1km of the current position
-useEffect(() => {
-    (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-
-      if (status === 'granted') {
-        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-          setCurrentPosition(location.coords);
-        });
-      }
-    })();
-  }, []);
 
   // Fetch toilets within 1km of the current position
   useEffect(() => {
