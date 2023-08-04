@@ -24,36 +24,41 @@ export default function Review({ navigation }) {
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
-  //Create a reference to the camera
-  let cameraRef = useRef(null);
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
-  }, []);
+  // Create a reference to the camera
+  // let cameraRef = useRef(null);
 
-  const takePicture = async () => {
-    const photo = await cameraRef.current.takePictureAsync({ quality: 0.5 });
-    const formData = new FormData();
+  // useEffect(() => {
+  //   (async () => {
+  //     const { status } = await Camera.requestCameraPermissionsAsync();
+  //     setHasPermission(status === "granted");
+  //   })();
+  // }, []);
 
-    formData.append("photoFromFront", {
-      uri: photo.uri,
-      name: "photo.jpg",
-      type: "image/jpeg",
-    });
+  // const takePicture = async () => {
+  //   const photo = await cameraRef.current.takePictureAsync({ quality: 0.5 });
+  //   const formData = new FormData();
 
-    fetch("http://10.20.2.181:3000/upload", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        //add to redux store if upload is successful
-        dispatch(addPhoto(data.url));
-      });
-  };
+  //   formData.append("photoFromFront", {
+  //     uri: photo.uri,
+  //     name: "photo.jpg",
+  //     type: "image/jpeg",
+  //   });
+
+  //   fetch("http://10.20.2.181:3000/upload", {
+  //     method: "POST",
+  //     body: formData,
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       //add to redux store if upload is successful
+  //       dispatch(addPhoto(data.url));
+  //     });
+  // };
+
+  // if (!hasPermission || !isFocused) {
+  //   return <View />;
+  // }
 
   //add state for stars and heart
 
