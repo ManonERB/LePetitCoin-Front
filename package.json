@@ -16,6 +16,7 @@
     "@react-navigation/native": "6",
     "@react-navigation/native-stack": "6",
     "@reduxjs/toolkit": "^1.9.5",
+    "cloudinary": "^1.40.0",
     "expo": "~49.0.5",
     "expo-font": "~11.4.0",
     "expo-location": "~16.1.0",

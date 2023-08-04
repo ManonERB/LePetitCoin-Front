@@ -44,7 +44,7 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarStyle: { backgroundColor: "#B08BBB", borderRadius: 12 },
+        tabBarStyle: { backgroundColor: "#B08BBB" },
         tabBarLabelStyle: { color: "black" },
         tabBarActiveTintColor: "#A86B98",
         tabBarInactiveTintColor: "white",
@@ -89,7 +89,7 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         {/* Toutes les screens vers lesquelles nous voulons naviguer */}
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator screenOptions={{ headerShown: true }}>
           <Stack.Screen name="SignIn" component={SignIn} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="AddToilet" component={AddToilet} />
