@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   Animated,
   View,
+  Button,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef,} from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import { Camera, CameraType, FlashMode } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
@@ -19,7 +20,7 @@ export default function Review({ navigation }) {
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
 
-  // Create a reference to the camera
+  //Create a reference to the camera
   let cameraRef = useRef(null);
 
   useEffect(() => {
@@ -50,9 +51,6 @@ export default function Review({ navigation }) {
       });
   };
 
-  if (!hasPermission || !isFocused) {
-    return <View />;
-  }
 
   //add state for stars and heart
   const [starRating, setStarRating] = useState(null);
@@ -95,11 +93,11 @@ export default function Review({ navigation }) {
       speed: 50,
       bounciness: 1,
     }).start();
-  };
-  const handleHeartFlip = () => {
-    setHeartRating(!heartRating); // Toggle the heart rating state
-    animatedHeartScale.setValue(1); // Set the scale value to 1 for the initial state
-  };
+};
+const handleHeartFlip = () => {
+  setHeartRating(!heartRating); // Toggle the heart rating state
+  animatedHeartScale.setValue(1); // Set the scale value to 1 for the initial state
+};
 
   //styles for the animation
   const animatedHeartScaleStyle = {
@@ -109,8 +107,14 @@ export default function Review({ navigation }) {
     transform: [{ scale: animatedButtonScale }],
   };
 
+  if (!hasPermission || !useIsFocused) {
+    return <View />;
+  }
+
   return (
     <View style={styles.container}>
+      <Camera type={type}>
+   </Camera>
       <Text style={styles.title}>Evaluer ce coin</Text>
       <View style={styles.boxContainer}>
         <View style={styles.leftBox}>
