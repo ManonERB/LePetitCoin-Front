@@ -203,7 +203,7 @@ export default function Review({ navigation }) {
                 <TouchableWithoutFeedback
                   onPressIn={handlePressIn}
                   onPressOut={handlePressOut}
-                  onPress={() => setRating(1)}
+                  onPress={() => setStarRating(1)}
                 >
                   <Animated.View style={animatedScaleStyle}>
                     <FontAwesome
@@ -221,7 +221,7 @@ export default function Review({ navigation }) {
                 <TouchableWithoutFeedback
                   onPressIn={handlePressIn}
                   onPressOut={handlePressOut}
-                  onPress={() => setRating(2)}
+                  onPress={() => setStarRating(2)}
                 >
                   <Animated.View style={animatedScaleStyle}>
                     <FontAwesome
@@ -239,7 +239,7 @@ export default function Review({ navigation }) {
                 <TouchableWithoutFeedback
                   onPressIn={handlePressIn}
                   onPressOut={handlePressOut}
-                  onPress={() => setRating(3)}
+                  onPress={() => setStarRating(3)}
                 >
                   <Animated.View style={animatedScaleStyle}>
                     <FontAwesome
@@ -257,7 +257,7 @@ export default function Review({ navigation }) {
                 <TouchableWithoutFeedback
                   onPressIn={handlePressIn}
                   onPressOut={handlePressOut}
-                  onPress={() => setRating(4)}
+                  onPress={() => setStarRating(4)}
                 >
                   <Animated.View style={animatedScaleStyle}>
                     <FontAwesome
@@ -275,7 +275,7 @@ export default function Review({ navigation }) {
                 <TouchableWithoutFeedback
                   onPressIn={handlePressIn}
                   onPressOut={handlePressOut}
-                  onPress={() => setRating(5)}
+                  onPress={() => setStarRating(5)}
                 >
                   <Animated.View style={animatedScaleStyle}>
                     <FontAwesome
@@ -316,7 +316,7 @@ export default function Review({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    width: "100%",
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "space-between",
