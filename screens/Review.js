@@ -18,10 +18,10 @@ export default function Review({ navigation }) {
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState("");
   const [review, setReview] = useState("");
-  const [submitReview, setSubmitReview] = useState(null);
-  const [heartRating, setHeartRating] = useState(false);
 
-  const [hasPermission, setHasPermission] = useState(false);
+  const [heartRating, setHeartRating] = useState(false);
+  const [starRating, setStarRating] = useState(null);
+  // const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
 
@@ -112,9 +112,9 @@ export default function Review({ navigation }) {
     transform: [{ scale: animatedButtonScale }],
   };
 
-  if (!hasPermission || !useIsFocused) {
-    return <View />;
-  }
+  // if (!hasPermission || !useIsFocused) {
+  //   return <View />;
+  // }
 
   const handleSubmitReview = () => {
     fetch("http://10.20.2.181:3000/review", {
@@ -129,8 +129,7 @@ export default function Review({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          dispatch(addPlace(newPlace));
-          setReview("");
+          console.log(data);
         }
       });
   };
@@ -297,16 +296,16 @@ export default function Review({ navigation }) {
         </View>
       </View>
       <View style={styles.bottomRow}>
-        <TouchableOpacity style={styles.buttons}>
+        <TouchableOpacity style={styles.buttonCancel}>
           <Text
-            style={styles.buttonText}
+            style={styles.cancelText}
             onPress={() => navigation.navigate(Home)}
           >
             Annuler
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttons}>
-          <Text style={styles.buttonText} onPress={() => handleSubmitReview()}>
+        <TouchableOpacity style={styles.buttonSubmit}>
+          <Text style={styles.submitText} onPress={() => handleSubmitReview()}>
             Ajouter
           </Text>
         </TouchableOpacity>
@@ -317,6 +316,7 @@ export default function Review({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "space-between",
@@ -459,16 +459,16 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     textAlign: "left",
-    borderWidth: 1,
-    borderRadius: 12,
+    borderTopWidth: 1,
     borderColor: "#A86B98",
-    paddingLeft: 15,
-    padding: 10,
+    paddingLeft: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
     zIndex: 0,
   },
   reviewText: {
     display: "flex",
-    padding: 10,
+    marginLeft: 10,
     flexWrap: "wrap",
   },
   bottomRow: {
@@ -476,18 +476,33 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "space-around",
   },
-  buttons: {
+  buttonCancel: {
+    borderWidth: 2,
+    borderColor: "#B08BBB",
+    width: "35%",
+    height: 45,
+    justifyContent: "center",
+    borderRadius: 12,
+  },
+  buttonSubmit: {
     backgroundColor: "#B08BBB",
     width: "35%",
     height: 45,
     justifyContent: "center",
     borderRadius: 12,
   },
-  buttonText: {
+  submitText: {
     textAlign: "center",
     textAlignVertical: "center",
     fontSize: 18,
     fontWeight: "bold",
     color: "white",
+  },
+  cancelText: {
+    textAlign: "center",
+    textAlignVertical: "center",
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#B08BBB",
   },
 });

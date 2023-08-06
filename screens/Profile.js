@@ -1,5 +1,6 @@
 import { Text, View, TouchableOpacity, TextInput, Image } from "react-native";
 import { StyleSheet } from "react-native";
+import Review from "./Review";
 
 export default function Profile({ navigation }) {
   return (
@@ -13,7 +14,7 @@ export default function Profile({ navigation }) {
       <Text style={styles.title}>Hello</Text>
       <TouchableOpacity
         style={styles.buttonReview}
-        onPress={() => navigation.navigate("Review")}
+        onPress={() => navigation.navigate(Review)}
       >
         <Text>temp access to Review</Text>
       </TouchableOpacity>
@@ -27,7 +28,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    flex: 1,
+
     backgroundColor: "#fff",
     color: "black",
     alignItems: "center",

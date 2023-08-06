@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, TextInput, Image, TouchableOpacity, Switch,ScrollView,SafeAreaView } from 'react-native';
+import { Text, StyleSheet, View, TextInput, Image, TouchableOpacity, Switch, ScrollView, SafeAreaView } from 'react-native';
 import { useState } from 'react';
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import MapView, { Marker } from "react-native-maps";
@@ -391,7 +391,8 @@ container2: {
   },
   btnAnnuler:{
     width:"40%",
-    backgroundColor:'#b08bbb',
+    borderWidth: 2,
+    borderColor: "#B08BBB",
     borderRadius:15
 
   },
