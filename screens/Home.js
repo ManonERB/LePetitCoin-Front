@@ -1,17 +1,18 @@
 import { Text, TouchableOpacity, View, TextInput, Image, StyleSheet, ScrollView, Modal, Switch } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
-import AddToilet from './AddToilet';
-import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import MultiRangeSlider from "./component/multiRangeSlider/MultiRangeSlider";
+// import { NavigationContainer } from '@react-navigation/native';
+// import AddToilet from './AddToilet';
+// import MapView, { Marker } from 'react-native-maps';
+// import oneToilet from './ToiletPage'
+// import MultiRangeSlider from "./component/multiRangeSlider/MultiRangeSlider";
 
 
-import user, { recupeToilet } from '../reducers/user';
-import { configureStore } from '@reduxjs/toolkit';
+// import user, { recupeToilet } from '../reducers/user';
+// import { configureStore } from '@reduxjs/toolkit';
 
 const Stack = createNativeStackNavigator();
 
@@ -175,11 +176,11 @@ return (
              <View style={styles.containerToggles}>
 
              <Text style = {styles.rechercheText}>Propreté :</Text>
-             <MultiRangeSlider
+             {/* <MultiRangeSlider
               min={1}
               max={5}
               onChange={({ min, max }) => console.log(`min = ${min}, max = ${max}`)}   
-              />
+              /> */}
              </View>
 
              <View style={styles.containerToggles}>
@@ -224,7 +225,16 @@ return (
     {/* If there are filtered toilets, show them; otherwise, show all toilets */}
     {filteredToilets.length > 0
       ? filteredToilets.map((data, i) => (
-          <View key={i} style={styles.cardToilet}>
+          <View 
+          key={i} 
+          style={styles.cardToilet}
+            onpress={navigation.navigate('TabNavigator', { screen: 'ToiletPage' })}
+          >
+            {/* <TouchableOpacity */}
+            {/* // Dans Home.js, remplacez navigation.navigate('ToiletPage') par : */}
+
+            {/* > */}
+
             <Image style={styles.image} source={require('../assets/LeSplendido.jpg')} />
             <View style={styles.textCard}>
               <Text style={styles.title}>{data.commune}</Text>
@@ -244,6 +254,7 @@ return (
                 </View>
               </View>
             </View>
+            {/* </TouchableOpacity> */}
           </View>
         ))
       : toilet.map((data, i) => (
