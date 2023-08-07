@@ -92,7 +92,6 @@ export default function App() {
           <Stack.Screen name="SignIn" component={SignIn} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="AddToilet" component={AddToilet} />
-          <Stack.Screen name="ToiletPage" component={ToiletPage} />
           <Stack.Screen name="Map" component={Map} />
           <Stack.Screen name="Review" component={Review} />
           <Stack.Screen name="FavoriteToilets" component={Review} />

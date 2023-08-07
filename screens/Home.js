@@ -7,7 +7,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import AddToilet from './AddToilet';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import MultiRangeSlider from "./component/multiRangeSlider/MultiRangeSlider";
+// import MultiRangeSlider from "./component/multiRangeSlider/MultiRangeSlider";
 
 
 import user, { recupeToilet } from '../reducers/user';
