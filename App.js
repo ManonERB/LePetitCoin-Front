@@ -18,7 +18,6 @@ import Map from "./screens/Map";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import user from "./reducers/user";
 
-
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -96,7 +95,11 @@ export default function App() {
           <Stack.Screen name="ToiletPage" component={ToiletPage} />
           <Stack.Screen name="Map" component={Map} />
           <Stack.Screen name="Review" component={Review} />
+          <Stack.Screen name="FavoriteToilets" component={Review} />
+          <Stack.Screen name="FunFacts" component={Review} />
+          <Stack.Screen name="Profile" component={Review} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="ToiletPage" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
@@ -114,18 +117,24 @@ const styles = StyleSheet.create({
     // Add your drop shadow styles here when the tab is active
     ...Platform.select({
       ios: {
-        shadowColor: 'black',
+        shadowColor: "grey",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.4,
         shadowRadius: 4,
       },
       android: {
-        elevation: 6,
+        shadowColor: "grey",
+        shadowOffset: {
+          width: 0,
+          height: 9,
+        },
+        shadowOpacity: 0.4,
+        shadowRadius: 4,
+        elevation: 7,
       },
     }),
   },
   inactiveTabIconContainer: {
     // Add any styles here for when the tab is inactive
-
   },
 });

@@ -13,7 +13,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome5";
 // import SignIn from './SignIn'
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/user";
-
+import SignIn from "./SignIn";
 export default function  SignUp ({ navigation }) {
   // useState pour les changement d'état des inputs
   const [username, setUsername] = useState("");
@@ -192,14 +192,14 @@ const styles = StyleSheet.create({
         margin: 30,
       },
       labelContainer: {
-        backgroundColor: "white", // Same color as background
+        backgroundColor: "white", 
         alignSelf: "flex-start", // Have View be same width as Text inside
-        paddingHorizontal: 3, // Amount of spacing between border and first/last letter
-        marginStart: 10, // How far right do you want the label to start
+        paddingHorizontal: 3, 
+        marginStart: 10, 
         zIndex: 1, // Label must overlap border
         elevation: 1, // Needed for android
         shadowColor: "black", // Same as background color because elevation: 1 creates a shadow that we don't want
-        position: "absolute", // Needed to be able to precisely overlap label with border
+        position: "absolute",
         top: -12
       },
       button: {

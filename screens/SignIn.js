@@ -46,19 +46,22 @@ export default function SignIn({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.topLogo}>
-        <Text style={styles.logoText}>LE PETIT C</Text>
+        <Image style={styles.logo} source={require('../assets/logo.jpg')}></Image>
+        {/* <Text style={styles.logoText}>LE PETIT C</Text>
         <FontAwesome
           name="toilet-paper"
           color="#B08BBB"
           size={34}
           style={styles.toilet}
         />
-        <Text style={styles.logoText}>IN</Text>
+        <Text style={styles.logoText}>IN</Text> */}
       </View>
 
       <View style={styles.inputHolder}>
         <View style={styles.label}>
-          <Text style={styles.placeholders}>Mail</Text>
+          <View style={styles.mailHolder}>
+          <Text style={styles.email}>Mail</Text>
+          </View>
           <TextInput
             //changeText avec le changement d'etat
             onChangeText={(value) => setEmail(value)}
@@ -72,7 +75,9 @@ export default function SignIn({ navigation }) {
           />
         </View>
         <View style={styles.label}>
-          <Text style={styles.placeholders}>Mot de Passe</Text>
+          <View style={styles.passwordHolder}>
+          <Text style={styles.password}>Mot de Passe</Text>
+          </View>
           <TextInput
             //changeText avec le changement d'etat
             onChangeText={(value) => setPassword(value)}
@@ -142,7 +147,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   topLogo: {
-    width: "100%",
+    width: 200,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -152,10 +157,40 @@ const styles = StyleSheet.create({
     fontSize: 38,
     color: "#B08BBB",
   },
-  placeholders: {
+  logo: {
+  width: '155%',
+  resizeMode: 'contain',
+  marginBottom: 70
+  },
+  email: {
     padding: 0,
     position: "relative",
-    zIndex: 5,
+    marginBottom: -17,
+    marginLeft: 10,
+    backgroundColor: 'white',
+    zIndex: 1,
+    textAlign: 'center'
+  },
+  mailHolder: {
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    width: 37,
+    height: 17
+  },
+  password: {
+    padding: 0,
+    position: "relative",
+    marginBottom: -17,
+    marginLeft: 10,
+    backgroundColor: 'white',
+    zIndex: 1,
+    textAlign: 'center'
+  },
+  passwordHolder: {
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    width: 85,
+    height: 20
   },
   toilet: {
     marginTop: 12,
@@ -170,7 +205,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     fontSize: 18,
     padding: 10,
-    zIndex: 0,
+    zIndex: -1,
   },
   inputHolder: {
     display: "flex",
