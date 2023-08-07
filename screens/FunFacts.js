@@ -1,5 +1,5 @@
     import { Text, View, SafeAreaView, ScrollView, StyleSheet, RefreshControl, TouchableOpacity } from 'react-native';
-    import FontAwesome from 'react-native-vector-icons/FontAwesome';
+    import FontAwesome from 'react-native-vector-icons/FontAwesome5';
     import React, { useState, useEffect } from 'react';
 
 
@@ -22,7 +22,7 @@
         const fetchFunFact = () => {
             // Supposons que vous utilisez la fonction fetch pour faire des requêtes HTTP
             // // doit peut-être y avoir la const onRefresh ou Reload... à voir
-            fetch(`http://${process.env.EXPO_PUBLIC_IP}//funfact`)
+            fetch(`http://${process.env.EXPO_PUBLIC_IP}//funFacts`)
               .then(response => response.json())
               .then(data => {
                 setFunFact(data);
@@ -52,7 +52,7 @@
                 {funFact.text}
                 </Text>
                 <TouchableOpacity style={styles.buttonRefresh} onPress={() => handleReload()}>
-                    <FontAwesome name='reload-right' size={18} solid color='#A86B98' />      
+                    <FontAwesome name='redo-alt' size={18} solid color='#A86B98' />      
                 </TouchableOpacity>
             </View>
             </ScrollView>
