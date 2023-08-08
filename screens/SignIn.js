@@ -47,14 +47,6 @@ export default function SignIn({ navigation }) {
     <View style={styles.container}>
       <View style={styles.topLogo}>
         <Image style={styles.logo} source={require('../assets/logo.jpg')}></Image>
-        {/* <Text style={styles.logoText}>LE PETIT C</Text>
-        <FontAwesome
-          name="toilet-paper"
-          color="#B08BBB"
-          size={34}
-          style={styles.toilet}
-        />
-        <Text style={styles.logoText}>IN</Text> */}
       </View>
 
       <View style={styles.inputHolder}>
@@ -67,6 +59,8 @@ export default function SignIn({ navigation }) {
             onChangeText={(value) => setEmail(value)}
             //la valeur de l'input
             autoCapitalize="none"
+            autoComplete="email"
+            textContentType="emailAddress"
             value={email}
             style={styles.input}
             placeholder="john@gmail.com"
@@ -80,7 +74,7 @@ export default function SignIn({ navigation }) {
           </View>
           <TextInput
             //changeText avec le changement d'etat
-            onChangeText={(value) => setPassword(value)}
+            onChangeText={(value) => setPassword(value)} 
             //la valeur de l'input
             value={password}
             style={styles.input}
@@ -140,7 +134,7 @@ export default function SignIn({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
+container: {
     flex: 1,
     backgroundColor: "#ffffff",
     alignItems: "center",
@@ -149,18 +143,12 @@ const styles = StyleSheet.create({
   topLogo: {
     width: 200,
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    height: 80,
-  },
-  logoText: {
-    fontSize: 38,
-    color: "#B08BBB",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   logo: {
   width: '155%',
   resizeMode: 'contain',
-  marginBottom: 70
   },
   email: {
     padding: 0,
@@ -192,11 +180,6 @@ const styles = StyleSheet.create({
     width: 85,
     height: 20
   },
-  toilet: {
-    marginTop: 12,
-    marginLeft: 2,
-    marginRight: 3,
-  },
   input: {
     width: 250,
     height: 45,
@@ -215,7 +198,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 30,
   },
-  button: {},
   shadow: {
     alignItems: "center",
     justifyContent: "center",

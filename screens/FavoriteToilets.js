@@ -1,4 +1,4 @@
-import { Text, View, TextInput } from 'react-native';
+import { Text, View, TouchableOpacity, Image } from 'react-native';
 import { StyleSheet } from 'react-native';
 
 
@@ -7,39 +7,42 @@ export default function FavoriteToilets () {
 
 
 
-        
-       /* router.get('/toilets/:commune', (req, res) => {
-          const commune = req.params.commune;
-        
-          db.collection('toilets')
-            .find({ commune })
-            .toArray((err, result) => {
-              if (err) {
-                console.error('Error querying MongoDB:', err);
-                res.status(500).json({ error: 'Internal Server Error' });
-              } else {
-                res.json(result);
-              }
-            });
-        }); */
-
-
 
         return (
-        <View>
-            <Text style={styles.title}>Hello</Text>
+        <View style={styles.container}>
+          <View style={styles.topLogo}>
+              <Image style={styles.logo} source={require('../assets/logo.jpg')}></Image>
+          </View>
+          <View>
+            <Text style={styles.title}>Il n'y a rien dans ta cuvette...</Text>
+          </View>
         </View>
 
     )
 }
 
 const styles = StyleSheet.create({
-    title: {
-      flex: 1,
-      backgroundColor: '#fff',
-      color: "black",
-      alignItems: 'center',
-      justifyContent: 'center',
-  }
+container: {
+  flex: 1,
+  backgroundColor: '#fff',
+  alignItems: 'center',
+  justifyContent: 'space-evenly',
+},
+topLogo: {
+  width: 200,
+  flexDirection: "row",
+  justifyContent: 'center',
+  alignItems: 'center',
+
+},
+logo: {
+  width: '155%',
+  resizeMode: 'contain',
+  position: 'absolute',
+},
+title: {
+fontSize: 24
+},
+
 });
   

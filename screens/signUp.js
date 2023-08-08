@@ -14,6 +14,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/user";
 import SignIn from "./SignIn";
+
+
 export default function  SignUp ({ navigation }) {
   // useState pour les changement d'état des inputs
   const [username, setUsername] = useState("");
