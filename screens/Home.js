@@ -16,6 +16,9 @@ import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import AddToilet from "./AddToilet";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
+
+
 
 import user, { recupeToilet } from "../reducers/user";
 import { configureStore } from "@reduxjs/toolkit";
@@ -23,10 +26,22 @@ import { configureStore } from "@reduxjs/toolkit";
 const Stack = createNativeStackNavigator();
 
 // store configuré dans App.js - sert pour récupérer les cards avec infos des toilets dans la BDD
-
-export default function Home({ navigation }) {
+    
+    export default function Home({ navigation }) {
+  
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+  const [proprete, setProprete] = useState([0,5]);
+
+  const handleValuesChange = (values) => {
+    const [minValue, maxValue] = values;
+    // Vérifier si le min et le max ont la même valeur
+    if (minValue === maxValue) {
+      setProprete([minValue, maxValue + 1]);
+    } else {
+      setProprete(values);
+    }
+  };
 
   const [currentPosition, setCurrentPosition] = useState(null);
   const [rechercherUnCoin, setRechercherUnCoin] = useState("");
@@ -65,9 +80,9 @@ export default function Home({ navigation }) {
   const handleClose = () => {
     setModalVisible(false);
   };
-  // Fetch toilets within 1km of the current position
 
   // Fetch toilets within 1km of the current position
+
   useEffect(() => {
     if (currentPosition) {
       fetchToiletsNearby(currentPosition);
@@ -168,7 +183,7 @@ export default function Home({ navigation }) {
    <View style={styles.centeredView}>
       <View style={styles.modalView}>
        <View style={styles.InputPlaceholderModal}>
-        <TextInput placeholder="Recherchez votre trône royal..." style={styles.placeholderModal} />
+        <TextInput placeholder="Recherchez  votre trône royal..." style={styles.placeholderModal} />
         <FontAwesome
           name="search"
           onPress={() => handleSearchByCommune()}
@@ -178,16 +193,28 @@ export default function Home({ navigation }) {
         />
        </View>
        <View style={styles.containerTogglesGeneral}>
-         {/* <View style={styles.containerToggles}>
-
-         <Text style = {styles.rechercheText}>Propreté :</Text>
-         <MultiRangeSlider
-          min={1}
-          max={5}
-          onChange={({ min, max }) => console.log(`min = ${min}, max = ${max}`)}   
-          />
-         </View> */}
-
+          <Text style={styles.rechercheText}>
+          Propreté :</Text>
+         <View style={styles.containerToggles}>
+          <View style={styles.containerMinMax}>
+            <Text style={styles.MinMax}>Min : {proprete[0]}  </Text>
+            <Text style={styles.MinMax}>Max : {proprete[1]}  </Text>
+          </View>
+            <MultiSlider style={styles.multiSlider}          
+            trackColor={{false: '#767577', true: '#B08BBB'}}
+            thumbColor={handicapAccess ? '#A86B98' : '#A86B98'}
+            ios_backgroundColor="#3e3e3e"
+            values={proprete} 
+            max={5} 
+            trackStyle={{ height: 2, 
+                          backgroundColor: '#767577',  // Couleur pour la barre du curseur
+                          }}
+            selectedStyle={{ backgroundColor: '#B08BBB' }} // Couleur pour la plage sélectionnée 
+            unselectedStyle={{ backgroundColor: '#767577' }} // Couleur pour la plage non sélectionnée 
+            markerStyle={{ backgroundColor: '#A86B98' }} // Couleur pour les pouces
+            onValuesChange={handleValuesChange} // Gérer les changements de valeurs
+            />
+         </View>
          <View style={styles.containerToggles}>
           <Text style={styles.rechercheText}>
             Accès handicapé :
@@ -209,8 +236,8 @@ export default function Home({ navigation }) {
           </Text>
           <View style = {styles.toggles}>
           <Switch
-            trackColor={{false: '#767577', true: '#B08BBB'}} 
-            thumbColor={tableALanger ? '#A86B98' : '#F4F3F4'}
+            trackColor={{false: '#767577', true: '#B08BBB'}}
+            thumbColor={handicapAccess ? '#A86B98' : '#A86B98'}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggleSwitchTableALanger}
             value={tableALanger}
@@ -551,6 +578,19 @@ const styles = StyleSheet.create({
   rechercheText : {
     fontSize : 12,
     color : "#A86B98",
-    fontWeight : 'bold'
-  }
-});
+    fontWeight : 'bold',
+    textAlign: 'center'
+  },
+  MinMax : {
+    marginTop : 10,
+    color : "#767577",
+  },
+  containerMinMax : {
+    flexDirection : 'row'
+  },
+  // multiSlider : {
+  //   paddingLeft : 50,
+  //   paddingRight : 50
+  // },
+}
+);
