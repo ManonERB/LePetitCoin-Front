@@ -24,15 +24,7 @@ export const userSlice = createSlice({
     addPhoto: (state, action) => {
       state.value.photos.push(action.payload)
     },
-    // addPlace: (state, action) => {
-    //   state.value.places.push(action.payload);  
-    // },
-    // removePlace: (state, action) => {
-    //   state.value.places = state.value.places.filter(e => e.name !== action.payload);
-    // },
-    // recupePlace: (state, action) => {
-    //   state.value.places = action.payload;
-    // }
+
   },
 });
 
