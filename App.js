@@ -17,12 +17,13 @@ import AddToilet from "./screens/AddToilet";
 import Map from "./screens/Map";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import user from "./reducers/user";
+import funfact from "./reducers/funfact";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, funfact },
 });
 
 const TabIcon = ({ iconName, size, color, isActive }) => {

@@ -1,21 +1,15 @@
-import {
-  Text,
-  TouchableOpacity,
-  View,
-  TextInput,
-  Image,
-  StyleSheet,
-  ScrollView,
-  Modal,
-  Switch,
-} from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import React, { useState, useEffect } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Text, TouchableOpacity, View, TextInput, Image, StyleSheet, ScrollView, Modal,Switch,} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import AddToilet from "./AddToilet";
 import * as Location from "expo-location";
 import { getDistance } from 'geolib';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
+
+
 
 
 const Stack = createNativeStackNavigator();
@@ -24,6 +18,17 @@ const Stack = createNativeStackNavigator();
 export default function Home({ navigation }) {
 
   const user = useSelector((state) => state.user.value);
+  const [proprete, setProprete] = useState([0,5]);
+
+  const handleValuesChange = (values) => {
+    const [minValue, maxValue] = values;
+    // Vérifier si le min et le max ont la même valeur
+    if (minValue === maxValue) {
+      setProprete([minValue, maxValue + 1]);
+    } else {
+      setProprete(values);
+    }
+  };
 
   const [currentPosition, setCurrentPosition] = useState(null);
   const [rechercherUnCoin, setRechercherUnCoin] = useState("");
@@ -72,7 +77,6 @@ export default function Home({ navigation }) {
     })();
   }, []);
 
-  // Fetch toilets within 1km of the current position
   useEffect(() => {
   if (currentPosition) { // Check if currentPosition is not null
     fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/map`)
@@ -141,69 +145,79 @@ export default function Home({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      <Modal visible={modalVisible} animationType="fade" transparent>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.InputPlaceholderModal}>
-              <TextInput
-                placeholder="Recherchez votre trône royal..."
-                style={styles.placeholderModal}
-              />
-              <FontAwesome
-                name="search"
-                onPress={() => handleSearchByCommune()}
-                size={20}
-                color="#B08BBB"
-                // à vérifier le chemin pour aller chercher le nom de la commune
-              />
-            </View>
-            <View style={styles.containerTogglesGeneral}>
-              {/* <View style={styles.containerToggles}>
-
-         <Text style = {styles.rechercheText}>Propreté :</Text>
-         <MultiRangeSlider
-          min={1}
-          max={5}
-          onChange={({ min, max }) => console.log(`min = ${min}, max = ${max}`)}   
+  <Modal visible={modalVisible} animationType="fade" transparent>
+   <View style={styles.centeredView}>
+      <View style={styles.modalView}>
+       <View style={styles.InputPlaceholderModal}>
+        <TextInput placeholder="Recherchez  votre trône royal..." style={styles.placeholderModal} />
+        <FontAwesome
+          name="search"
+          onPress={() => handleSearchByCommune()}
+          size={20}
+          color="#B08BBB"
+          // à vérifier le chemin pour aller chercher le nom de la commune
+        />
+       </View>
+       <View style={styles.containerTogglesGeneral}>
+          <Text style={styles.rechercheText}>
+          Propreté :</Text>
+         <View style={styles.containerToggles}>
+          <View style={styles.containerMinMax}>
+            <Text style={styles.MinMax}>Min : {proprete[0]}  </Text>
+            <Text style={styles.MinMax}>Max : {proprete[1]}  </Text>
+          </View>
+            <MultiSlider style={styles.multiSlider}          
+            trackColor={{false: '#767577', true: '#B08BBB'}}
+            thumbColor={handicapAccess ? '#A86B98' : '#A86B98'}
+            ios_backgroundColor="#3e3e3e"
+            values={proprete} 
+            max={5} 
+            trackStyle={{ height: 2, 
+                          backgroundColor: '#767577',  // Couleur pour la barre du curseur
+                          }}
+            selectedStyle={{ backgroundColor: '#B08BBB' }} // Couleur pour la plage sélectionnée 
+            unselectedStyle={{ backgroundColor: '#767577' }} // Couleur pour la plage non sélectionnée 
+            markerStyle={{ backgroundColor: '#A86B98' }} // Couleur pour les pouces
+            onValuesChange={handleValuesChange} // Gérer les changements de valeurs
+            />
+         </View>
+         <View style={styles.containerToggles}>
+          <Text style={styles.rechercheText}>
+            Accès handicapé :
+          </Text>
+          <View style = {styles.toggles}>
+          <Switch
+            trackColor={{false: '#767577', true: '#B08BBB'}}
+            thumbColor={handicapAccess ? '#A86B98' : '#A86B98'}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitchHandicapAccess}
+            value={handicapAccess}
+            transparent
           />
-         </View> */}
-
-              <View style={styles.containerToggles}>
-                <Text style={styles.rechercheText}>Accès handicapé :</Text>
-                <View style={styles.toggles}>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "#B08BBB" }}
-                    thumbColor={handicapAccess ? "#A86B98" : "#A86B98"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={toggleSwitchHandicapAccess}
-                    value={handicapAccess}
-                    transparent
-                  />
-                </View>
-              </View>
-              <View style={styles.containerToggles}>
-                <Text style={styles.rechercheText}>Table à langer :</Text>
-                <View style={styles.toggles}>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "#B08BBB" }}
-                    thumbColor={tableALanger ? "#A86B98" : "#F4F3F4"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={toggleSwitchTableALanger}
-                    value={tableALanger}
-                    transparent
-                  />
-                </View>
-              </View>
-            </View>
-            <TouchableOpacity
-              onPress={() => handleClose()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.textButton}>Close</Text>
-            </TouchableOpacity>
+          </View>
+         </View>
+        <View style={styles.containerToggles}>
+          <Text style={styles.rechercheText}>
+            Table à langer :
+          </Text>
+          <View style = {styles.toggles}>
+          <Switch
+            trackColor={{false: '#767577', true: '#B08BBB'}}
+            thumbColor={handicapAccess ? '#A86B98' : '#A86B98'}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitchTableALanger}
+            value={tableALanger}
+            transparent
+          />
           </View>
         </View>
+  
+          </View>
+          <TouchableOpacity onPress={() => handleClose()} style={styles.button} activeOpacity={0.8}>
+              <Text style={styles.textButton}>Close</Text>
+           </TouchableOpacity>
+        </View>
+       </View>
       </Modal>
       <ScrollView style={styles.scroll}>
         {toilet.length > 0 && (
@@ -236,9 +250,13 @@ export default function Home({ navigation }) {
           ))
         )}
       </ScrollView>
-    </View>
-  );
-}
+
+  </View>
+);
+};
+
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -490,9 +508,22 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 15,
   },
-  rechercheText: {
-    fontSize: 12,
-    color: "#A86B98",
-    fontWeight: "bold",
+  rechercheText : {
+    fontSize : 12,
+    color : "#A86B98",
+    fontWeight : 'bold',
+    textAlign: 'center'
   },
-});
+  MinMax : {
+    marginTop : 10,
+    color : "#767577",
+  },
+  containerMinMax : {
+    flexDirection : 'row'
+  },
+  // multiSlider : {
+  //   paddingLeft : 50,
+  //   paddingRight : 50
+  // },
+}
+);
