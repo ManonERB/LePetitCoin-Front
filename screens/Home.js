@@ -248,8 +248,15 @@ const Stack = createNativeStackNavigator();
     {/* If there are filtered toilets, show them; otherwise, show all toilets */}
     {filteredToilets.length > 0
       ? filteredToilets.map((data, i) => (
-          <View key={i} style={styles.cardToilet}>
+          // <View 
+          // >
+            <TouchableOpacity
+            key={i}
+            style={styles.cardToilet} 
+            onPress={() => {navigation.navigate("ToiletPage", {toiletId:data._id});}}
+          >
             <Image style={styles.image} source={require('../assets/LeSplendido.jpg')} />
+              
             <View style={styles.textCard}>
               <Text style={styles.title}>{data.commune}</Text>
               <View style={styles.caracteristiques}>
@@ -268,10 +275,19 @@ const Stack = createNativeStackNavigator();
                 </View>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
+          // </View>
         ))
       : toilet.map((data, i) => (
-          <View key={i} style={styles.cardToilet}>
+          <View 
+          key={i} 
+          style={styles.cardToilet}
+          >
+            <TouchableOpacity
+            key={i}
+            style={styles.cardToilet} 
+            onPress={() => {navigation.navigate("ToiletPage", {toiletId:data._id})}}
+          >
             <Image style={styles.image} source={require('../assets/LeSplendido.jpg')} />
             <View style={styles.textCard}>
               <Text style={styles.title}>{data.commune}</Text>
@@ -291,6 +307,7 @@ const Stack = createNativeStackNavigator();
                 </View>
               </View>
             </View>
+            </TouchableOpacity>
           </View>
         ))}
     </ScrollView>
