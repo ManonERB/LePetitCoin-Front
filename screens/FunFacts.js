@@ -5,6 +5,7 @@
     import { Provider, useDispatch, useSelector } from 'react-redux';
     import { recupeFunFact } from '../reducers/funfact';
     import funfact from '../reducers/funfact';
+    import imageNames from './ImagesArray';
 
 //     // Combinaison des reducers en utilisant combineReducers
 //     const rootReducer = combineReducers({
@@ -14,22 +15,35 @@
         reducer: funfact,
       });
       
+      
+      export default function FunFacts () {
+          const [refreshing, setRefreshing] = useState(false);
+          const dispatch = useDispatch()
+          //state.funFact.value = acéder aux valeurs du reducer funfact
+          const funFact = useSelector((state) => state.funfact.value)
+          
+          const [randomIndex, setRandomIndex] = useState(0); // useState pour gérer l'état de l'index de l'image aléatoire à afficher.
+        
+          const getRandomImage =() => {     
+          const randomImageIndex = Math.floor(Math.random() * 66);
+            console.log(randomImageIndex)
+        return imageNames[randomImageIndex];
+    };    
 
-    export default function FunFacts () {
-        const [refreshing, setRefreshing] = useState(false);
-        const dispatch = useDispatch()
-        //state.funFact.value = acéder aux valeurs du reducer funfact
-        const funFact = useSelector((state) => state.funfact.value)
+            useEffect(() => { // chaque rechargement du composant, va sortir une image
+                setRandomIndex(getRandomImage); 
+             }, []); // Utilisation d'un tableau vide pour exécuter useEffect une seule fois
+                         
 
         const onRefresh = React.useCallback(() => {
             setRefreshing(true);
             fetchFunFact()
-    })
+        })
         //     setTimeout(() => {
-        //     }, 2000);
-        // }, []);
-
-        const handleReload = () => {
+            //     }, 2000);
+            // }, []);
+            
+            const handleReload = () => {
             fetchFunFact();
         }; 
         
@@ -57,8 +71,8 @@
             <View style={styles.imageTitleAndText}>
               <View style={styles.containerImage}>
                 <Image style={styles.image}
-                       source={require("../assets/LeSplendido.jpg")}
-                        />
+                source={getRandomImage()}
+                />
               </View>
               <View style={styles.titleAndText}>
                 <Text style={styles.title}>
@@ -103,9 +117,10 @@ const styles = StyleSheet.create({
         marginTop: 30,
         },
     image : {
-        width : 200,
-        height : 200,
-        borderRadius : 10
+        width : 300,
+        height : 300,
+        borderRadius : 10,
+        // backgroundColor : "blue"
         },
     titleAndText : {
         alignItems : "center",
@@ -117,7 +132,7 @@ const styles = StyleSheet.create({
         },        
     title: {
         backgroundColor: '#fff',
-        textAlign: 'flex-start',
+        textAlign: 'justify',
         paddingLeft : 20,
         paddingTop : 10,
         fontSize: 18,
@@ -132,7 +147,7 @@ const styles = StyleSheet.create({
         lineHeight: 25,
         },
     text : {
-        color : "B08BBB",
+        color : "black",
         fontSize : 15,
         textAlign : "center",
         justifyContent : "center",
@@ -157,4 +172,3 @@ const styles = StyleSheet.create({
 
 
     });
-    
