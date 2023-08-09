@@ -1,24 +1,30 @@
-import { Text, TouchableOpacity, View, TextInput, Image, StyleSheet, ScrollView, Modal,Switch,} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Modal,
+  Switch,
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import AddToilet from "./AddToilet";
 import * as Location from "expo-location";
-import { getDistance } from 'geolib';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
-
-
-
+import { getDistance } from "geolib";
+import MultiSlider from "@ptomasroos/react-native-multi-slider";
 
 const Stack = createNativeStackNavigator();
 // store configuré dans App.js - sert pour récupérer les cards avec infos des toilets dans la BDD
 
 export default function Home({ navigation }) {
-
   const user = useSelector((state) => state.user.value);
-  const [proprete, setProprete] = useState([0,5]);
+  const [proprete, setProprete] = useState([0, 5]);
 
   const handleValuesChange = (values) => {
     const [minValue, maxValue] = values;
@@ -33,28 +39,21 @@ export default function Home({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [rechercherUnCoin, setRechercherUnCoin] = useState("");
   const [toilet, setToilet] = useState([]);
-  const [filteredToilets, setFilteredToilets] = useState([]);
+  const [searchedToilets, setSearchedToilets] = useState([]);
   const [modalVisible, setModalVisible] = useState(false); // passer à false
   const [handicapAccess, setHandicapAccess] = useState(false); // état = pour les toogles
   const [tableALanger, setTableALanger] = useState(false);
   const [cleanliness, setCleanliness] = useState(0);
-
+  const [filteredToilets, setFilteredToilets] = useState([]);
 
   const toggleSwitchHandicapAccess = () =>
     setHandicapAccess((previousState) => !previousState); // previousState = initialisation (false ou true)
   const toggleSwitchTableALanger = () =>
     setTableALanger((previousState) => !previousState);
-    
-    const handleSearchByCommune = () => {
-      const searchResults = toilet.filter(
-        (data) => data.commune.toLowerCase() === rechercherUnCoin.toLowerCase()
-      );
-      setFilteredToilets(searchResults);
-    };
 
-    const handleClose = () => {
-      setModalVisible(false);
-    };
+  const handleClose = () => {
+    setModalVisible(false);
+  };
 
   useEffect(() => {
     (async () => {
@@ -78,35 +77,61 @@ export default function Home({ navigation }) {
   }, []);
 
   useEffect(() => {
-  if (currentPosition) { // Check if currentPosition is not null
-    fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/map`)
-      .then((response) => response.json())
-      .then((data) => {
+    if (currentPosition) {
+      // Check if currentPosition is not null
+      fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet`)
+        .then((response) => response.json())
+        .then((data) => {
+          const filteredToilets = data.toilets.filter((toiletData) => {
+            const distance = getDistance(
+              {
+                latitude: currentPosition.latitude,
+                longitude: currentPosition.longitude,
+              },
+              {
+                latitude: toiletData.point_geo.lat,
+                longitude: toiletData.point_geo.lon,
+              }
+            );
+            return distance <= 1000; // Filter toilets within 1km distance
+          });
+          console.log("Filtered toilets:", filteredToilets.length);
 
-        const filteredToilets = data.toilets.filter((toiletData) => {
-          const distance = getDistance(
-            {
-              latitude: currentPosition.latitude,
-              longitude: currentPosition.longitude,
-            },
-            {
-              latitude: toiletData.point_geo.lat,
-              longitude: toiletData.point_geo.lon,
-            }
-          );
-          return distance <= 1000; // Filter toilets within 1km distance
+          setToilet(filteredToilets);
+        })
+        .catch((error) => {
+          console.error("Error fetching toilets data:", error);
+          // You can handle the error here, such as displaying an error message to the user
         });
-        console.log('Filtered toilets:', filteredToilets.length);
+    }
+  }, [currentPosition]);
 
-        setToilet(filteredToilets);
+  const handleSearchByCommune = () => {
+    if (rechercherUnCoin === "") {
+      // If search term is empty, show toilets around current position
+      setSearchedToilets([]);
+    } else {
+      // Fetch toilets based on commune search term
+      fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/recherche`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ commune: rechercherUnCoin }),
       })
-      .catch((error) => {
-        console.error('Error fetching toilets data:', error);
-        // You can handle the error here, such as displaying an error message to the user
-      });
-  }
-}, [currentPosition]);
-
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log('data', data.toilets[0].commune)
+          setRechercherUnCoin("");
+          if (data.result) {
+            setSearchedToilets(data.toilets);
+          } else {
+            setSearchedToilets([]);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching toilets:", error);
+        });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -118,13 +143,15 @@ export default function Home({ navigation }) {
           value={rechercherUnCoin}
         />
         {/* en value l'état "rechercherUnCoin', au clic, déclenchement de la fonction handleSubmit, et ... interrogation de l'API ? + filtre de la recherche*/}
-        <FontAwesome
-          name="search"
-          onPress={() => handleSearchByCommune()}
-          size={25}
-          color="#B08BBB"
-          style={styles.searchIcon}
-        />
+        <TouchableOpacity>
+          <FontAwesome
+            name="search"
+            onPress={() => handleSearchByCommune()}
+            size={25}
+            color="#B08BBB"
+            style={styles.searchIcon}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.containerButtons}>
         <TouchableOpacity
@@ -145,87 +172,92 @@ export default function Home({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-  <Modal visible={modalVisible} animationType="fade" transparent>
-   <View style={styles.centeredView}>
-      <View style={styles.modalView}>
-       <View style={styles.InputPlaceholderModal}>
-        <TextInput placeholder="Recherchez  votre trône royal..." style={styles.placeholderModal} />
-        <FontAwesome
-          name="search"
-          onPress={() => handleSearchByCommune()}
-          size={20}
-          color="#B08BBB"
-          // à vérifier le chemin pour aller chercher le nom de la commune
-        />
-       </View>
-       <View style={styles.containerTogglesGeneral}>
-          <Text style={styles.rechercheText}>
-          Propreté :</Text>
-         <View style={styles.containerToggles}>
-          <View style={styles.containerMinMax}>
-            <Text style={styles.MinMax}>Min : {proprete[0]}  </Text>
-            <Text style={styles.MinMax}>Max : {proprete[1]}  </Text>
-          </View>
-            <MultiSlider style={styles.multiSlider}          
-            trackColor={{false: '#767577', true: '#B08BBB'}}
-            thumbColor={handicapAccess ? '#A86B98' : '#A86B98'}
-            ios_backgroundColor="#3e3e3e"
-            values={proprete} 
-            max={5} 
-            trackStyle={{ height: 2, 
-                          backgroundColor: '#767577',  // Couleur pour la barre du curseur
-                          }}
-            selectedStyle={{ backgroundColor: '#B08BBB' }} // Couleur pour la plage sélectionnée 
-            unselectedStyle={{ backgroundColor: '#767577' }} // Couleur pour la plage non sélectionnée 
-            markerStyle={{ backgroundColor: '#A86B98' }} // Couleur pour les pouces
-            onValuesChange={handleValuesChange} // Gérer les changements de valeurs
-            />
-         </View>
-         <View style={styles.containerToggles}>
-          <Text style={styles.rechercheText}>
-            Accès handicapé :
-          </Text>
-          <View style = {styles.toggles}>
-          <Switch
-            trackColor={{false: '#767577', true: '#B08BBB'}}
-            thumbColor={handicapAccess ? '#A86B98' : '#A86B98'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitchHandicapAccess}
-            value={handicapAccess}
-            transparent
-          />
-          </View>
-         </View>
-        <View style={styles.containerToggles}>
-          <Text style={styles.rechercheText}>
-            Table à langer :
-          </Text>
-          <View style = {styles.toggles}>
-          <Switch
-            trackColor={{false: '#767577', true: '#B08BBB'}}
-            thumbColor={handicapAccess ? '#A86B98' : '#A86B98'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitchTableALanger}
-            value={tableALanger}
-            transparent
-          />
-          </View>
-        </View>
-  
-          </View>
-          <TouchableOpacity onPress={() => handleClose()} style={styles.button} activeOpacity={0.8}>
+      <Modal visible={modalVisible} animationType="fade" transparent>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={styles.InputPlaceholderModal}>
+              <TextInput
+                placeholder="Recherchez votre trône royal..."
+                style={styles.placeholderModal}
+              />
+              <FontAwesome
+                name="search"
+                onPress={() => handleSearchByCommune()}
+                size={20}
+                color="#B08BBB"
+                // à vérifier le chemin pour aller chercher le nom de la commune
+              />
+            </View>
+            <View style={styles.containerTogglesGeneral}>
+              <Text style={styles.rechercheText}>Propreté :</Text>
+              <View style={styles.containerToggles}>
+                <View style={styles.containerMinMax}>
+                  <Text style={styles.MinMax}>Min : {proprete[0]} </Text>
+                  <Text style={styles.MinMax}>Max : {proprete[1]} </Text>
+                </View>
+                <MultiSlider
+                  style={styles.multiSlider}
+                  trackColor={{ false: "#767577", true: "#B08BBB" }}
+                  thumbColor={handicapAccess ? "#A86B98" : "#A86B98"}
+                  ios_backgroundColor="#3e3e3e"
+                  values={proprete}
+                  max={5}
+                  trackStyle={{
+                    height: 2,
+                    backgroundColor: "#767577", // Couleur pour la barre du curseur
+                  }}
+                  selectedStyle={{ backgroundColor: "#B08BBB" }} // Couleur pour la plage sélectionnée
+                  unselectedStyle={{ backgroundColor: "#767577" }} // Couleur pour la plage non sélectionnée
+                  markerStyle={{ backgroundColor: "#A86B98" }} // Couleur pour les pouces
+                  onValuesChange={handleValuesChange} // Gérer les changements de valeurs
+                />
+              </View>
+              <View style={styles.containerToggles}>
+                <Text style={styles.rechercheText}>Accès handicapé :</Text>
+                <View style={styles.toggles}>
+                  <Switch
+                    trackColor={{ false: "#767577", true: "#B08BBB" }}
+                    thumbColor={handicapAccess ? "#A86B98" : "#A86B98"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitchHandicapAccess}
+                    value={handicapAccess}
+                    transparent
+                  />
+                </View>
+              </View>
+              <View style={styles.containerToggles}>
+                <Text style={styles.rechercheText}>Table à langer :</Text>
+                <View style={styles.toggles}>
+                  <Switch
+                    trackColor={{ false: "#767577", true: "#B08BBB" }}
+                    thumbColor={handicapAccess ? "#A86B98" : "#A86B98"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitchTableALanger}
+                    value={tableALanger}
+                    transparent
+                  />
+                </View>
+              </View>
+            </View>
+            <TouchableOpacity
+              onPress={() => handleClose()}
+              style={styles.button}
+              activeOpacity={0.8}
+            >
               <Text style={styles.textButton}>Close</Text>
-           </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
         </View>
-       </View>
       </Modal>
       <ScrollView style={styles.scroll}>
-        {toilet.length > 0 && (
-          toilet.map((data, i) => (
+        {(searchedToilets.length > 0 ? searchedToilets : toilet).map(
+          (data, i) => (
             <TouchableOpacity
               key={i}
               style={styles.cardToilet}
-              onPress={() => navigation.navigate("ToiletDetails", { toilet: data })}
+              onPress={() =>
+                navigation.navigate("ToiletPage", { toilet: data })
+              }
             >
               <Image
                 style={styles.image}
@@ -234,12 +266,21 @@ export default function Home({ navigation }) {
               <View style={styles.textCard}>
                 <Text style={styles.title}>{data.commune}</Text>
                 <View style={styles.caracteristiques}>
-                  <Text>Gratuit : {data.fee !== undefined ? `${data.fee}` : "- -"}</Text>
-                  <Text>Horaires: {data.tags_opening_hours !== null ? `${data.tags_opening_hours}` : "- -"}</Text>
+                  <Text>
+                    Gratuit : {data.fee !== undefined ? `${data.fee}` : "- -"}
+                  </Text>
+                  <Text>
+                    Horaires:{" "}
+                    {data.tags_opening_hours !== null
+                      ? `${data.tags_opening_hours}`
+                      : "- -"}
+                  </Text>
                 </View>
                 <View style={styles.distanceEtAvis}>
                   <Text style={styles.distance}>
-                    {data.distance !== undefined ? `Distance: ${data.distance.toFixed(1)} km` : "-"}
+                    {data.distance !== undefined
+                      ? `Distance: ${data.distance.toFixed(1)} km`
+                      : "-"}
                   </Text>
                   <View style={styles.avisContainer}>
                     <Text style={styles.avis}>Etoiles</Text>
@@ -247,16 +288,12 @@ export default function Home({ navigation }) {
                 </View>
               </View>
             </TouchableOpacity>
-          ))
+          )
         )}
       </ScrollView>
-
-  </View>
-);
-};
-
-
-
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -273,14 +310,15 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   placeholder: {
+    display: "flex",
     color: "#B08BBB",
     fontWeight: "bold",
     alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
     height: 50,
     width: "90%",
-  },
-  containerButtons: {
-    flexDirection: "row",
+    padding: 10,
   },
   InputPlaceholder: {
     flexDirection: "row",
@@ -315,21 +353,22 @@ const styles = StyleSheet.create({
   cardToilet: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     width: "95%",
     height: 140,
     borderRadius: 15,
-    padding: 5,
+    padding: 10,
     backgroundColor: "white",
-    borderStyle: "solid",
-    borderColor: "black",
-    borderWeight: 1,
+    shadowColor: "grey",
     shadowOffset: {
       width: 0,
       height: 3,
-      shadowOpacity: 0.29,
-      shadowRadius: 4.65,
-      elevation: 7,
     },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 4,
+    marginLeft: 10,
+    marginVertical: 5,
   },
   buttonAddToilet: {
     backgroundColor: "#B08BBB",
@@ -389,7 +428,7 @@ const styles = StyleSheet.create({
   image: {
     width: 140,
     height: 110,
-    borderRadius: 15,
+    borderRadius: 12,
     paddingLeft: 10,
   },
   caracteristiques: {
@@ -501,29 +540,21 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
   },
-  textButton: {
-    color: "#ffffff",
-    justifyContent: "center",
-    height: 24,
-    fontWeight: "600",
-    fontSize: 15,
+  rechercheText: {
+    fontSize: 12,
+    color: "#A86B98",
+    fontWeight: "bold",
+    textAlign: "center",
   },
-  rechercheText : {
-    fontSize : 12,
-    color : "#A86B98",
-    fontWeight : 'bold',
-    textAlign: 'center'
+  MinMax: {
+    marginTop: 10,
+    color: "#767577",
   },
-  MinMax : {
-    marginTop : 10,
-    color : "#767577",
-  },
-  containerMinMax : {
-    flexDirection : 'row'
+  containerMinMax: {
+    flexDirection: "row",
   },
   // multiSlider : {
   //   paddingLeft : 50,
   //   paddingRight : 50
   // },
-}
-);
+});

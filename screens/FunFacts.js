@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         },        
     title: {
         backgroundColor: '#fff',
-        textAlign: 'flex-start',
+        textAlign: 'justify',
         paddingLeft : 20,
         paddingTop : 10,
         fontSize: 18,

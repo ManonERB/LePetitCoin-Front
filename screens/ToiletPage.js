@@ -103,18 +103,20 @@ export default function ToiletPage ({route, navigation}) {
             <View style={styles.reviewContainer}>
             <Text style={styles.titleReview}> Ce qu'ils disent</Text>
             </View>
-            {review.map((data,i) => {
-              // console.log(da);
-              <View key={i} style={styles.cardReview}>
-                <View>
-                  <Text>title:{data.title}</Text>
-                  <Text>{data.rating}</Text>
-                </View>
-                <View>
-                  {data.review}
-                </View>
-              </View>
-            })}
+            {review && review.map((data, i) => {
+                // You were missing the return statement here
+                
+                  <View key={i} style={styles.cardReview}>
+                    <View>
+                      <Text>title: {data.title}</Text>
+                      <Text>Rating: {data.rating}</Text>
+                    </View>
+                    <View>
+                      <Text>{data.review}</Text>
+                    </View>
+                  </View>
+                
+              })}
           </View>
         </SafeAreaView>
     )
