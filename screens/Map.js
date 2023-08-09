@@ -17,6 +17,7 @@ export default function Map({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [rechercherUnCoin, setRechercherUnCoin] = useState("");
   const [toilet, setToilet] = useState ([]);
+  const [searchedToilets, setSearchedToilets] = useState([]);
   const [initialRegion, setInitialRegion] = useState(null);
   //add loading function to avoid crash due to current position not being loaded before map
   const [loading, setLoading] = useState(true);
@@ -71,7 +72,30 @@ export default function Map({ navigation }) {
   }, [currentPosition]);
 
   const handleSearchByCommune = () => {
-    
+    if (rechercherUnCoin === "") {
+      // If search term is empty, show toilets around current position
+      setSearchedToilets([]);
+    } else {
+      // Fetch toilets based on commune search term
+      fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/recherche`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ commune: rechercherUnCoin }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log('data', data.toilets[0].commune)
+          setRechercherUnCoin('');
+          if (data.result) {
+            setSearchedToilets(data.toilets);
+          } else {
+            setSearchedToilets([]);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching toilets:", error);
+        });
+    }
   };
 
   return (
@@ -126,7 +150,10 @@ export default function Map({ navigation }) {
                 longitude: currentPosition.longitude,
               }}
             />
-            {toilet.map((toiletData, i) => {
+            {(searchedToilets.length > 0
+              ? searchedToilets
+              : toilet
+            ).map((toiletData, i) => {
               const distance = getDistance(
                 {
                   latitude: currentPosition.latitude,
@@ -204,6 +231,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.29,
     shadowRadius: 4.65,
     elevation: 7,
+    padding: 10,
   },
   containerButtons: {
     flexDirection: "row",

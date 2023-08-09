@@ -8,6 +8,7 @@ import {
   Animated,
   View,
   KeyboardAvoidingView,
+  ScrollView,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
@@ -15,6 +16,7 @@ import { Camera, CameraType, FlashMode } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import { launchCameraAsync } from "expo-image-picker";
 import Home from "./Home";
 
 export default function Review({ navigation }) {
@@ -72,9 +74,26 @@ export default function Review({ navigation }) {
   
     if (!hasMediaLibraryPermission) {
       return;
+      let data = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes:ImagePicker.MediaTypeOptions.Images,
+        allowsEditing:true,
+        aspect:[1,1],
+        quality:0.5
+      });
+      if(!data.canceled){
+        let newFile = {
+          uri:data.uri,
+          type:`test/${data.uri.split(".")[1]}`,
+          name:`test.${data.uri.split(".")[1]}`};
+          handleUpload(newFile);
+        }
+      } else {  Alert.alert('Siz bu funksiyani isletmek ucun icaze vermelisiz'); 
     }
+  };
+
   
     // Check for camera permissions
+  const takePicture = async () => {  
     const hasCameraPermission = await getCameraPermission();
   
     if (!hasCameraPermission) {
@@ -82,7 +101,7 @@ export default function Review({ navigation }) {
     }
   
     // Launch the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
+    let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
@@ -91,7 +110,7 @@ export default function Review({ navigation }) {
   
     console.log(result);
   
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
     
@@ -183,7 +202,7 @@ export default function Review({ navigation }) {
       consoleLog('error')
       return;
     }
-    fetch("http://10.20.2.181:3000/review", {
+    fetch(`http://${process.env.EXPO_PUBLIC_IP}/review`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
