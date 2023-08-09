@@ -10,18 +10,16 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
-import { getDistance } from 'geolib';
-
+import { getDistance } from "geolib";
 
 export default function Map({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [rechercherUnCoin, setRechercherUnCoin] = useState("");
-  const [toilet, setToilet] = useState ([]);
+  const [toilet, setToilet] = useState([]);
   const [searchedToilets, setSearchedToilets] = useState([]);
   const [initialRegion, setInitialRegion] = useState(null);
   //add loading function to avoid crash due to current position not being loaded before map
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     (async () => {
@@ -44,14 +42,14 @@ export default function Map({ navigation }) {
     })();
   }, []);
 
-
   useEffect(() => {
-    if (currentPosition) { // Check if currentPosition is not null
+    if (currentPosition) {
+      // Check if currentPosition is not null
       fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/map`)
         .then((response) => response.json())
         .then((data) => {
           // console.log('data', data.toilets);
-  
+
           const filteredToilets = data.toilets.filter((toiletData) => {
             const distance = getDistance(
               {
@@ -65,7 +63,7 @@ export default function Map({ navigation }) {
             );
             return distance <= 1000; // Filter toilets within 1km distance
           });
-  
+
           setToilet(filteredToilets);
         });
     }
@@ -85,7 +83,7 @@ export default function Map({ navigation }) {
         .then((response) => response.json())
         .then((data) => {
           // console.log('data', data.toilets[0].commune)
-          setRechercherUnCoin('');
+          setRechercherUnCoin("");
           if (data.result) {
             setSearchedToilets(data.toilets);
           } else {
@@ -150,34 +148,33 @@ export default function Map({ navigation }) {
                 longitude: currentPosition.longitude,
               }}
             />
-            {(searchedToilets.length > 0
-              ? searchedToilets
-              : toilet
-            ).map((toiletData, i) => {
-              const distance = getDistance(
-                {
-                  latitude: currentPosition.latitude,
-                  longitude: currentPosition.longitude,
-                },
-                {
-                  latitude: toiletData.point_geo.lat,
-                  longitude: toiletData.point_geo.lon,
-                }
-              );
-
-              return (
-                <Marker
-                  key={i}
-                  pinColor="red"
-                  coordinate={{
+            {(searchedToilets.length > 0 ? searchedToilets : toilet).map(
+              (toiletData, i) => {
+                const distance = getDistance(
+                  {
+                    latitude: currentPosition.latitude,
+                    longitude: currentPosition.longitude,
+                  },
+                  {
                     latitude: toiletData.point_geo.lat,
                     longitude: toiletData.point_geo.lon,
-                  }}
-                  title={toiletData.title}
-                  description={`Distance: ${distance} meters`}
-                />
-              );
-            })}
+                  }
+                );
+
+                return (
+                  <Marker
+                    key={i}
+                    pinColor="tomato"
+                    coordinate={{
+                      latitude: toiletData.point_geo.lat,
+                      longitude: toiletData.point_geo.lon,
+                    }}
+                    title={toiletData.title}
+                    description={`Distance: ${distance} meters`}
+                  />
+                );
+              }
+            )}
           </MapView>
         )
       )}
@@ -246,7 +243,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
-    
   },
   textButton: {
     color: "white",

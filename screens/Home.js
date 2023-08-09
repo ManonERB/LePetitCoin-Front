@@ -110,9 +110,23 @@ export default function Home({ navigation }) {
               }
             );
             return distance <= 1000; // Filter toilets within 1km distance
+          }).map((toiletData) => {
+            const distance = getDistance(
+              {
+                latitude: currentPosition.latitude,
+                longitude: currentPosition.longitude,
+              },
+              {
+                latitude: toiletData.point_geo.lat,
+                longitude: toiletData.point_geo.lon,
+              }
+            );
+            return {
+              ...toiletData,
+              distance: distance / 1000, // Convert meters to kilometers
+            };
           });
-          console.log("Filtered toilets:", filteredToilets.length);
-
+  
           setToilet(filteredToilets);
         })
         .catch((error) => {
@@ -302,7 +316,9 @@ export default function Home({ navigation }) {
                 </View>
                 <View style={styles.distanceEtAvis}>
                   <Text style={styles.distance}>
-                    {data.distance !== undefined ? `Distance: ${data.distance.toFixed(1)} km` : "- m"}
+                  {data.distance !== undefined
+                  ? `Distance: ${data.distance.toFixed(1)} km`
+                  : "- m"}
                   </Text>
                   <View style={styles.avisContainer}>
                     <Text style={styles.avis}>Etoiles</Text>
