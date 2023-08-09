@@ -7,7 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   Modal,
-  Switch,
+   Switch
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
@@ -16,15 +16,34 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import AddToilet from "./AddToilet";
 import * as Location from "expo-location";
-import { getDistance } from "geolib";
-import MultiSlider from "@ptomasroos/react-native-multi-slider";
+import { getDistance } from 'geolib';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import SelectMultiple from 'react-native-select-multiple'
 
 const Stack = createNativeStackNavigator();
 // store configuré dans App.js - sert pour récupérer les cards avec infos des toilets dans la BDD
 
 export default function Home({ navigation }) {
+
+  const [currentPosition, setCurrentPosition] = useState(null);
+  const [rechercherUnCoin, setRechercherUnCoin] = useState("");
+  const [toilet, setToilet] = useState([]);
+  const [filteredToilets, setFilteredToilets] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false); // passer à false
+  const [handicapAccess, setHandicapAccess] = useState(false); // état = pour les toogles
+  const [tableALanger, setTableALanger] = useState(false);
+  const [cleanliness, setCleanliness] = useState(0);
+  const [state, setState] = useState(false);
+  const [communesFiltrees, setCommunesFiltrees] = useState([]);
+  const [proprete, setProprete] = useState([0,5]);
+  const [selectedGratuite, setSelectedGratuite] = useState([]); // plusieurs options possibles
+  const [searchedToilets, setSearchedToilets] = useState([]);
+  
+  const gratuiteOptions = ['Gratuites ?', 'Payantes ?']; 
+  const onGratuiteSelectionsChange = (selectedItems) => {
+    setSelectedGratuite(selectedItems);
+  };
   const user = useSelector((state) => state.user.value);
-  const [proprete, setProprete] = useState([0, 5]);
 
   const handleValuesChange = (values) => {
     const [minValue, maxValue] = values;
@@ -36,25 +55,22 @@ export default function Home({ navigation }) {
     }
   };
 
-  const [currentPosition, setCurrentPosition] = useState(null);
-  const [rechercherUnCoin, setRechercherUnCoin] = useState("");
-  const [toilet, setToilet] = useState([]);
-  const [searchedToilets, setSearchedToilets] = useState([]);
-  const [modalVisible, setModalVisible] = useState(false); // passer à false
-  const [handicapAccess, setHandicapAccess] = useState(false); // état = pour les toogles
-  const [tableALanger, setTableALanger] = useState(false);
-  const [cleanliness, setCleanliness] = useState(0);
-  const [filteredToilets, setFilteredToilets] = useState([]);
-
   const toggleSwitchHandicapAccess = () =>
     setHandicapAccess((previousState) => !previousState); // previousState = initialisation (false ou true)
   const toggleSwitchTableALanger = () =>
     setTableALanger((previousState) => !previousState);
 
-  const handleClose = () => {
-    setModalVisible(false);
-  };
+    
 
+    const handleClose = () => {
+      setModalVisible(false);
+    };
+    const handleSubmit = () => {
+        setModalVisible(false);
+        setRechercherUnCoin("");
+        setCommunesFiltrees([]);
+      };
+      
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -172,82 +188,99 @@ export default function Home({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      <Modal visible={modalVisible} animationType="fade" transparent>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.InputPlaceholderModal}>
-              <TextInput
-                placeholder="Recherchez votre trône royal..."
-                style={styles.placeholderModal}
+  <Modal visible={modalVisible} animationType="fade" transparent>
+  <ScrollView style={styles.scroll}>
+   <View style={styles.centeredView}>
+      <View style={styles.modalView}>
+       <View style={styles.InputPlaceholderModal}>
+        <TextInput placeholder="Recherchez  votre trône royal..." style={styles.placeholderModal} />
+        <FontAwesome
+          name="search"
+          onPress={() => handleSearchByCommune()}
+          size={20}
+          color="#B08BBB"
+          // à vérifier le chemin pour aller chercher le nom de la commune
+        />
+       </View>
+       <View style={styles.containerTogglesGeneral}>
+          <Text style={styles.rechercheText}>
+          Niveau de propreté souhaité:</Text>
+         <View style={styles.containerToggles}>
+          <View style={styles.containerMinMax}>
+            <Text style={styles.MinMax}>Min : {proprete[0]}  </Text>
+            <Text style={styles.MinMax}>Max : {proprete[1]}  </Text>
+          </View>
+            <MultiSlider style={styles.multiSlider}          
+            trackColor={{false: '#767577', true: '#B08BBB'}}
+            thumbColor={handicapAccess ? '#A86B98' : '#A86B98'}
+            ios_backgroundColor="#3e3e3e"
+            values={proprete} 
+            max={5} 
+            trackStyle={{ height: 2, 
+                          backgroundColor: '#767577',  // Couleur pour la barre du curseur
+                          }}
+            selectedStyle={{ backgroundColor: '#B08BBB' }} // Couleur pour la plage sélectionnée 
+            unselectedStyle={{ backgroundColor: '#767577' }} // Couleur pour la plage non sélectionnée 
+            markerStyle={{ backgroundColor: '#A86B98' }} // Couleur pour les pouces
+            onValuesChange={handleValuesChange} // Gérer les changements de valeurs
+            />
+         </View>
+              <View style={styles.checkboxContainer}>
+              <Text style={styles.rechercheText}>
+                Souhaitez-vous des toilettes :
+              </Text>
+              <SelectMultiple
+                  checkboxStyle={{ tintColor: '#A86B98' }} 
+                  labelStyle={{ color: '#767577' }} 
+                  selectedCheckboxStyle={{ backgroundColor: 'white' }}
+                  items={gratuiteOptions}
+                  selectedItems={selectedGratuite}
+                  onSelectionsChange={onGratuiteSelectionsChange}
               />
-              <FontAwesome
-                name="search"
-                onPress={() => handleSearchByCommune()}
-                size={20}
-                color="#B08BBB"
-                // à vérifier le chemin pour aller chercher le nom de la commune
-              />
-            </View>
-            <View style={styles.containerTogglesGeneral}>
-              <Text style={styles.rechercheText}>Propreté :</Text>
-              <View style={styles.containerToggles}>
-                <View style={styles.containerMinMax}>
-                  <Text style={styles.MinMax}>Min : {proprete[0]} </Text>
-                  <Text style={styles.MinMax}>Max : {proprete[1]} </Text>
-                </View>
-                <MultiSlider
-                  style={styles.multiSlider}
-                  trackColor={{ false: "#767577", true: "#B08BBB" }}
-                  thumbColor={handicapAccess ? "#A86B98" : "#A86B98"}
-                  ios_backgroundColor="#3e3e3e"
-                  values={proprete}
-                  max={5}
-                  trackStyle={{
-                    height: 2,
-                    backgroundColor: "#767577", // Couleur pour la barre du curseur
-                  }}
-                  selectedStyle={{ backgroundColor: "#B08BBB" }} // Couleur pour la plage sélectionnée
-                  unselectedStyle={{ backgroundColor: "#767577" }} // Couleur pour la plage non sélectionnée
-                  markerStyle={{ backgroundColor: "#A86B98" }} // Couleur pour les pouces
-                  onValuesChange={handleValuesChange} // Gérer les changements de valeurs
-                />
-              </View>
-              <View style={styles.containerToggles}>
-                <Text style={styles.rechercheText}>Accès handicapé :</Text>
-                <View style={styles.toggles}>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "#B08BBB" }}
-                    thumbColor={handicapAccess ? "#A86B98" : "#A86B98"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={toggleSwitchHandicapAccess}
-                    value={handicapAccess}
-                    transparent
-                  />
-                </View>
-              </View>
-              <View style={styles.containerToggles}>
-                <Text style={styles.rechercheText}>Table à langer :</Text>
-                <View style={styles.toggles}>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "#B08BBB" }}
-                    thumbColor={handicapAccess ? "#A86B98" : "#A86B98"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={toggleSwitchTableALanger}
-                    value={tableALanger}
-                    transparent
-                  />
-                </View>
-              </View>
-            </View>
-            <TouchableOpacity
-              onPress={() => handleClose()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.textButton}>Close</Text>
-            </TouchableOpacity>
+        </View>
+         <View style={styles.containerToggles}>
+          <Text style={styles.rechercheText}>
+            Souhaitez-vous un accès handicapé ?
+          </Text>
+          <View style = {styles.toggles}>
+          <Switch
+            trackColor={{false: '#767577', true: '#B08BBB'}}
+            thumbColor={handicapAccess ? '#A86B98' : '#A86B98'}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitchHandicapAccess}
+            value={handicapAccess}
+            transparent
+          />
+          </View>
+         </View>
+        <View style={styles.containerToggles}>
+          <Text style={styles.rechercheText}>
+            Souhaitez-vous une table à langer ? 
+          </Text>
+          <View style = {styles.toggles}>
+          <Switch
+            trackColor={{false: '#767577', true: '#B08BBB'}}
+            thumbColor={handicapAccess ? '#A86B98' : '#A86B98'}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitchTableALanger}
+            value={tableALanger}
+            transparent
+          />
           </View>
         </View>
+  
+          </View>
+          <View style={styles.containerButtonsAddClose}>
+          <TouchableOpacity onPress={() => handleClose()} style={styles.button} activeOpacity={0.8}>
+              <Text style={styles.textButtonClose}>Close</Text>
+           </TouchableOpacity>
+           <TouchableOpacity onPress={() => handleSubmit()} style={styles.buttonAdd} activeOpacity={0.8}>
+          <Text style={styles.textButtonAdd}>Add</Text>
+        </TouchableOpacity>
+        </View>
+        </View>
+       </View>
+       </ScrollView>
       </Modal>
       <ScrollView style={styles.scroll}>
         {(searchedToilets.length > 0 ? searchedToilets : toilet).map(
@@ -255,9 +288,7 @@ export default function Home({ navigation }) {
             <TouchableOpacity
               key={i}
               style={styles.cardToilet}
-              onPress={() =>
-                navigation.navigate("ToiletPage", { toilet: data })
-              }
+              onPress={() => navigation.navigate("ToiletPage", { toiletId: data._id, data })}
             >
               <Image
                 style={styles.image}
@@ -266,21 +297,12 @@ export default function Home({ navigation }) {
               <View style={styles.textCard}>
                 <Text style={styles.title}>{data.commune}</Text>
                 <View style={styles.caracteristiques}>
-                  <Text>
-                    Gratuit : {data.fee !== undefined ? `${data.fee}` : "- -"}
-                  </Text>
-                  <Text>
-                    Horaires:{" "}
-                    {data.tags_opening_hours !== null
-                      ? `${data.tags_opening_hours}`
-                      : "- -"}
-                  </Text>
+                  <Text>Gratuit : {data.fee !== undefined ? `${data.fee}` : "non renseigné"}</Text>
+                  <Text>Horaires : {data.tags_opening_hours !== null ? `${data.tags_opening_hours}` : "non renseigné"}</Text>
                 </View>
                 <View style={styles.distanceEtAvis}>
                   <Text style={styles.distance}>
-                    {data.distance !== undefined
-                      ? `Distance: ${data.distance.toFixed(1)} km`
-                      : "-"}
+                    {data.distance !== undefined ? `Distance: ${data.distance.toFixed(1)} km` : "- m"}
                   </Text>
                   <View style={styles.avisContainer}>
                     <Text style={styles.avis}>Etoiles</Text>
@@ -302,7 +324,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     paddingTop: 40,
   },
-
   title: {
     color: "#A86B98",
     fontSize: 16,
@@ -393,6 +414,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     textAlign: "center",
     width: "100%",
+    
   },
   buttonMap: {
     borderTopStartRadius: 12,
@@ -468,8 +490,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     padding: 30,
-    width: "90%",
-    height: "80%",
+    width: "95%",
+    height: "95%",
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
@@ -524,14 +546,33 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    width: 150,
+    width: 100,
     marginTop: 20,
-    height: "10%",
+    height: 40,
+    backgroundColor: "white",
+    borderColor : "#B08BBB",
+    borderWidth : 2,
+    borderRadius: 10,
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
+  },
+  buttonAdd : {
+    width: 100,
+    marginTop: 20,
+    height: 40,
     backgroundColor: "#A86B98",
     borderRadius: 10,
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
+    marginLeft : 40
+  },
+  containerButtonsAddClose : {
+    flexDirection : 'row',
+    alignItems: "space-between",
+    alignContent: "space-between",
+    marginBottom : 10
   },
   containerTogglesGeneral: {
     marginTop: 20,
@@ -540,11 +581,19 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
   },
-  rechercheText: {
-    fontSize: 12,
-    color: "#A86B98",
-    fontWeight: "bold",
-    textAlign: "center",
+  textButtonClose: {
+    color: "#B08BBB",
+    justifyContent: "center",
+    height: 24,
+    fontWeight: "600",
+    fontSize: 15,
+  },
+  textButtonAdd: {
+    color: "white",
+    justifyContent: "center",
+    height: 24,
+    fontWeight: "600",
+    fontSize: 15,
   },
   MinMax: {
     marginTop: 10,
@@ -553,8 +602,10 @@ const styles = StyleSheet.create({
   containerMinMax: {
     flexDirection: "row",
   },
-  // multiSlider : {
-  //   paddingLeft : 50,
-  //   paddingRight : 50
-  // },
-});
+  checkboxContainer: {
+    padding: 10,
+    height : 150,
+    marginBottom : 10,
+    },
+}
+);

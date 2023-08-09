@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native';
 import { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
@@ -13,11 +13,12 @@ export default function ToiletPage ({route, navigation}) {
     useEffect(() => {
     //  console.log("coucou", route)
      const {toiletId} = route.params
+     console.log("id", toiletId);
     fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/${toiletId}`)
     .then(response => response.json())
     .then((data) => {
-      // console.log(data.data);
-      setToilet(data)
+      console.log("data", data.toilets);
+      setToilet(data.toilets)
     });
 
     fetch(`http://${process.env.EXPO_PUBLIC_IP}/review/${toiletId}`)
@@ -28,16 +29,16 @@ export default function ToiletPage ({route, navigation}) {
     });
    }, []);
 
-   if(toilet?.data?.tags) {
+   if(toilet?.tags) {
     //parse car dans le bdd c'est en string transform en objet
-    const amenity=JSON.parse(toilet.data.tags)
+    const amenity=JSON.parse(toilet.tags)
     // console.log("toutou", amenity.amenity)
    }
-
+   
     // const cardReview = 
-  //  console.log(review);
+   console.log(review);
     return (
-        <SafeAreaView>
+        <ScrollView>
           <View>      
             <Image 
               source={require('../assets/Placeholder_view.png')}
@@ -56,13 +57,13 @@ export default function ToiletPage ({route, navigation}) {
           </View>
           <View>
             <Text style={styles.title}>
-              {toilet.data?.commune} {toilet.data?.code_postal} 
+              {toilet?.commune} {toilet?.code_postal} 
             </Text>
             <View style={styles.header}>
               <View style={styles.list}>
-                <Text style={styles.text}>{`\u2022 ${toilet.data?.tags_opening_hours ? toilet.data.tags_opening_hours : "aucune information disponible"}`}</Text> 
-                <Text style={styles.text}>{`\u2022 ${toilet.data?.tags_opening_hours ? toilet.data.tags_opening_hours : "aucune information disponible"}`}</Text>
-                <Text style={styles.text}>{`\u2022 ${toilet.data?.title ? toilet.data.title : "aucune information disponible"}`}</Text>           
+                <Text style={styles.text}>{`\u2022 ${toilet?.tags_opening_hours ? toilet.tags_opening_hours : "aucune information disponible"}`}</Text> 
+                <Text style={styles.text}>{`\u2022 ${toilet?.tags_opening_hours ? toilet.tags_opening_hours : "aucune information disponible"}`}</Text>
+                <Text style={styles.text}>{`\u2022 ${toilet?.title ? toilet.title : "aucune information disponible"}`}</Text>           
               </View>
               <TouchableOpacity 
               style={styles.review}
@@ -87,38 +88,48 @@ export default function ToiletPage ({route, navigation}) {
             
             <View>
               <Text style={styles.text}>
-              {`\u2022 ${toilet.data?.tags_opening_hours ? toilet.data.tags_opening_hours : "aucune information disponible"}`}</Text> 
-                  <Text style={styles.text}>{`\u2022 ${toilet.data?.drinking_water ? toilet.data.drinking_water : "aucune information disponible"}`}</Text>
-                  <Text style={styles.text}>{`\u2022 ${toilet.data?.title ? toilet.data.title : "aucune information disponible"}`}</Text>
+              {`\u2022 ${toilet?.tags_opening_hours ? toilet.tags_opening_hours : "aucune information disponible"}`}</Text> 
+                  <Text style={styles.text}>{`\u2022 ${toilet?.drinking_water ? toilet.drinking_water : "aucune information disponible"}`}</Text>
+                  <Text style={styles.text}>{`\u2022 ${toilet?.title ? toilet.title : "aucune information disponible"}`}</Text>
             </View>
             <View>
   
               <Text style={styles.text}>
-              {`\u2022 ${toilet.data?.tags_opening_hours ? toilet.data.tags_opening_hours : "aucune information disponible"}`}</Text> 
-                  <Text style={styles.text}>{`\u2022 ${toilet.data?.drinking_water ? toilet.data.drinking_water : "aucune information disponible"}`}</Text>
-                  <Text style={styles.text}>{`\u2022 ${toilet.data?.title ? toilet.data.title : "aucune information disponible"}`}</Text>
+              {`\u2022 ${toilet?.tags_opening_hours ? toilet.tags_opening_hours : "aucune information disponible"}`}</Text> 
+                  <Text style={styles.text}>{`\u2022 ${toilet?.drinking_water ? toilet.drinking_water : "aucune information disponible"}`}</Text>
+                  <Text style={styles.text}>{`\u2022 ${toilet?.title ? toilet.title : "aucune information disponible"}`}</Text>
             </View>
           </View>
           <View>
             <View style={styles.reviewContainer}>
             <Text style={styles.titleReview}> Ce qu'ils disent</Text>
             </View>
-            {review && review.map((data, i) => {
-                // You were missing the return statement here
-                
-                  <View key={i} style={styles.cardReview}>
-                    <View>
-                      <Text>title: {data.title}</Text>
-                      <Text>Rating: {data.rating}</Text>
-                    </View>
-                    <View>
-                      <Text>{data.review}</Text>
-                    </View>
+            {review.map((data,i) => {
+              console.log(data);
+              return(
+              <View key={i} style={[styles.cardReview, styles.shadowProp]}>
+                <View style={styles.cardText}>
+                  <View style={styles.cardHeaderText}>
+                    <Text>title: {data.title} </Text>
+                    <Text>note: {data.rating}/5</Text>
                   </View>
-                
-              })}
+                  <View style={styles.cardReviewText}>
+                    <Text>avis: {data.text}</Text>
+                    <Text style={styles.userName}>- {data.user.userName}</Text>
+                  </View>
+                </View>
+                <View style={styles.cardReviewImg}>
+                  <Image 
+                    source={require('../assets/Placeholder_view.png')}
+                    style={styles.cardimg}
+                  />
+                </View>
+              </View>
+
+              )
+            })}
           </View>
-        </SafeAreaView>
+        </ScrollView>
     )
 }
 
@@ -201,13 +212,50 @@ textReview:{
 },
 reviewContainer:{
   paddingTop:15,
-  
  },
  cardReview:{
-  backgroundColor:"red",
+  // padding:10,
   width:"100%",
   height:300,
- }
+},
+// shadowProp: {
+//   shadowColor: '#171717',
+//   shadowOffset: {width: -2, height: 4},
+//   shadowOpacity: 0.2,
+//   shadowRadius: 3,
+// },
+cardReview:{
+  flexDirection:"row",
+  justifyContent:"space-between",
+  padding:20,
+  margin:10,
+  // shadowColor: "#000",
+  // shadowOffset: {
+  //   width: 9,
+  //   height: 3,
+  // },
+  // shadowOpacity: 0.2,
+  // shadowRadius: 4.65,
+  // elevation: 5,
+  // backgroundColor:"red",
+},
+cardimg:{
+  width:80,
+  height:80,
+  borderRadius:12,
+},
+cardHeaderText:{
+  width:250,
+  flexDirection:"row",
+  justifyContent:"space-between",
+  paddingRight:10,
+  paddingBottom:10,
+},
+userName:{
+  paddingTop:10,
+  paddingRight:10,
+  textAlign:"right",
+}
 
 });
   
