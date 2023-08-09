@@ -14,22 +14,45 @@
         reducer: funfact,
       });
       
+      
+      export default function FunFacts () {
+          const [refreshing, setRefreshing] = useState(false);
+          const dispatch = useDispatch()
+          //state.funFact.value = acéder aux valeurs du reducer funfact
+          const funFact = useSelector((state) => state.funfact.value)
+          
+          const [randomIndex, setRandomIndex] = useState(0); // useState pour gérer l'état de l'index de l'image aléatoire à afficher.
+        
+          const getRandomImage =() => {
+          const imageNames = ['img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg', 'img4.jpg', 
+          'img6.jpg', 'img7.jpg', 'img8.jpg', 'img9.jpg', 'img10.jpg', 'img11.jpg', 'img12.jpg', 'img13.jpg', 
+          'img14.jpg', 'img15.jpg', 'img16.jpg', 'img17.jpg', 'img18.jpg', 'img19.jpg', 'img20.jpg', 'img21.jpg', 
+          'img22.jpg', 'img23.png', 'img24.png', 'img25.jpg', 'img26.jpg', 'img27.png', 'img28.jpg', 'img29.jpg', 
+          'img30.jpg', 'img31.jpg', 'img32.jpg', 'img33.jpg', 'img34.jpg', 'img35.jpg', 'img36.jpg', 'img37.jpg', 
+          'img38.jpg', 'img39.jpg', 'img40.jpg', 'img41.jpg', 'img42.jpg', 'img43.jpg', 'img44.jpg', 'img45.jpg', 
+          'img46.jpg', 'img47.jpg', 'img48.jpg', 'img49.jpg', 'img50.jpg', 'img51.jpg', 'img52.jpg', 'img53.jpg', 
+          'img54.jpg', 'img55.jpg', 'img56.jpg', 'img57.jpg', 'img58.jpg', 'img59.jpg', 'img60.jpg', 'img61.jpg', 
+          'img62.jpg', 'img63.jpg', 'img64.jpg', 'img65.jpg', 'img66.jpg']; 
+            
+          const randomImageIndex = Math.floor(Math.random() * 66);
+            console.log(randomImageIndex)
+        return `../assets/picturesFunFacts/${imageNames[randomImageIndex]}`;
+    };    
 
-    export default function FunFacts () {
-        const [refreshing, setRefreshing] = useState(false);
-        const dispatch = useDispatch()
-        //state.funFact.value = acéder aux valeurs du reducer funfact
-        const funFact = useSelector((state) => state.funfact.value)
+            useEffect(() => { // chaque rechargement du composant, va sortir une image
+                setRandomIndex(getRandomImage); 
+             }, []); // Utilisation d'un tableau vide pour exécuter useEffect une seule fois
+                         
 
         const onRefresh = React.useCallback(() => {
             setRefreshing(true);
             fetchFunFact()
-    })
+        })
         //     setTimeout(() => {
-        //     }, 2000);
-        // }, []);
-
-        const handleReload = () => {
+            //     }, 2000);
+            // }, []);
+            
+            const handleReload = () => {
             fetchFunFact();
         }; 
         
@@ -57,8 +80,8 @@
             <View style={styles.imageTitleAndText}>
               <View style={styles.containerImage}>
                 <Image style={styles.image}
-                       source={require("../assets/LeSplendido.jpg")}
-                        />
+                source={require('../assets/picturesFunFacts/img1.jpg')}
+                />
               </View>
               <View style={styles.titleAndText}>
                 <Text style={styles.title}>
@@ -105,7 +128,8 @@ const styles = StyleSheet.create({
     image : {
         width : 200,
         height : 200,
-        borderRadius : 10
+        borderRadius : 10,
+        // backgroundColor : "blue"
         },
     titleAndText : {
         alignItems : "center",
@@ -117,7 +141,7 @@ const styles = StyleSheet.create({
         },        
     title: {
         backgroundColor: '#fff',
-        textAlign: 'flex-start',
+        textAlign: 'justify',
         paddingLeft : 20,
         paddingTop : 10,
         fontSize: 18,
@@ -132,7 +156,7 @@ const styles = StyleSheet.create({
         lineHeight: 25,
         },
     text : {
-        color : "B08BBB",
+        color : "black",
         fontSize : 15,
         textAlign : "center",
         justifyContent : "center",
@@ -157,4 +181,3 @@ const styles = StyleSheet.create({
 
 
     });
-    

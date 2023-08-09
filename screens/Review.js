@@ -162,7 +162,7 @@ export default function Review({ navigation }) {
             <Text style={styles.titleHolder}>Titre</Text>
             <TextInput
               style={styles.reviewTitle}
-              placeholder="Canaliser le poète en vous"
+              placeholder="Canalisez le poète en vous"
               mode="outlined"
               value={title}
               onChangeText={setTitle}
@@ -170,7 +170,7 @@ export default function Review({ navigation }) {
             <View style={styles.bottomContainer}>
               <TextInput
                 style={styles.reviewText}
-                placeholder="Rédiger une ode aux petits coins"
+                placeholder="Rédigez une ode aux petits coins"
                 mode="outlined"
                 value={review}
                 onChangeText={setReview}
