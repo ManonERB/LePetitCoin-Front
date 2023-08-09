@@ -1,12 +1,11 @@
-    import { Text, View, Image, SafeAreaView, ScrollView, StyleSheet, RefreshControl, TouchableOpacity } from 'react-native';
-    import FontAwesome from 'react-native-vector-icons/FontAwesome5';
-    import React, { useState, useEffect } from 'react';
-    import { configureStore, combineReducers } from '@reduxjs/toolkit';
-    import { Provider, useDispatch, useSelector } from 'react-redux';
-    import { recupeFunFact } from '../reducers/funfact';
-    import funfact from '../reducers/funfact';
-    import imageNames from './ImagesArray';
-
+import { Text, View, Image, SafeAreaView, ScrollView, StyleSheet, RefreshControl, TouchableOpacity } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
+import React, { useState, useEffect } from 'react';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { recupeFunFact } from '../reducers/funfact';
+import funfact from '../reducers/funfact';
+import imageNames from './ImagesArray';
 //     // Combinaison des reducers en utilisant combineReducers
 //     const rootReducer = combineReducers({
 //     funFact: funfact.reducer,
@@ -14,85 +13,85 @@
     const store = configureStore({
         reducer: funfact,
       });
-      
-      
+
+
       export default function FunFacts () {
           const [refreshing, setRefreshing] = useState(false);
           const dispatch = useDispatch()
           //state.funFact.value = acéder aux valeurs du reducer funfact
           const funFact = useSelector((state) => state.funfact.value)
-          
+
           const [randomIndex, setRandomIndex] = useState(0); // useState pour gérer l'état de l'index de l'image aléatoire à afficher.
-        
-          const getRandomImage =() => {     
+
+          const getRandomImage =() => {
           const randomImageIndex = Math.floor(Math.random() * 66);
             console.log(randomImageIndex)
         return imageNames[randomImageIndex];
     };    
 
-            useEffect(() => { // chaque rechargement du composant, va sortir une image
-                setRandomIndex(getRandomImage); 
-             }, []); // Utilisation d'un tableau vide pour exécuter useEffect une seule fois
-                         
+        useEffect(() => { // chaque rechargement du composant, va sortir une image
+            setRandomIndex(getRandomImage); 
+         }, []); // Utilisation d'un tableau vide pour exécuter useEffect une seule fois
+                     
 
-        const onRefresh = React.useCallback(() => {
-            setRefreshing(true);
-            fetchFunFact()
-        })
-        //     setTimeout(() => {
-            //     }, 2000);
-            // }, []);
-            
-            const handleReload = () => {
-            fetchFunFact();
-        }; 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        fetchFunFact()
+    })
+    //     setTimeout(() => {
+        //     }, 2000);
+        // }, []);
         
-        const fetchFunFact = () => {
-            fetch(`http://${process.env.EXPO_PUBLIC_IP}/funFacts`)
-              .then ((res) => res.json())
-              .then((data) => {
-                dispatch(recupeFunFact(data)); // RecupeFunfact met à jour le store avec les données récupérées
+        const handleReload = () => {
+        fetchFunFact();
+    }; 
+    
+    const fetchFunFact = () => {
+        fetch(`http://${process.env.EXPO_PUBLIC_IP}/funFacts`)
+          .then ((res) => res.json())
+          .then((data) => {
+            dispatch(recupeFunFact(data)); // RecupeFunfact met à jour le store avec les données récupérées
 
-              });
-          };
+          });
+      };
    
-          useEffect(() => {
-            fetchFunFact();
-          }, []);
+      useEffect(() => {
+        fetchFunFact();
+      }, []);
 
-        return (
-    <Provider store={store}>
-        <SafeAreaView style={styles.container}>
-            <ScrollView
-            contentContainerStyle={styles.scrollView}
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }>
-            <View style={styles.imageTitleAndText}>
-              <View style={styles.containerImage}>
-                <Image style={styles.image}
-                source={getRandomImage()}
-                />
-              </View>
-              <View style={styles.titleAndText}>
-                <Text style={styles.title}>
-                {funFact.title}
-                </Text>
-                <Text style={styles.text}>
-                {funFact.text}
-                </Text>
+    return (
+<Provider store={store}>
+    <SafeAreaView style={styles.container}>
+        <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        <View style={styles.imageTitleAndText}>
+          <View style={styles.containerImage}>
+            <Image style={styles.image}
+            source={getRandomImage()}
+            />
+          </View>
+          <View style={styles.titleAndText}>
+            <Text style={styles.title}>
+            {funFact.title}
+            </Text>
+            <Text style={styles.text}>
+            {funFact.text}
+            </Text>
 
-              </View>                
-              <TouchableOpacity style={styles.buttonRefresh} onPress={() => handleReload()}>
-                    <FontAwesome name='redo-alt' size={22} solid color='#A86B98' />      
-                </TouchableOpacity>
-            </View>
-            </ScrollView>
-        </SafeAreaView>
-    </Provider>
+          </View>                
+          <TouchableOpacity style={styles.buttonRefresh} onPress={() => handleReload()}>
+                <FontAwesome name='redo-alt' size={22} solid color='#A86B98' />      
+            </TouchableOpacity>
+        </View>
+        </ScrollView>
+    </SafeAreaView>
+</Provider>
 
-        )
-    }
+    )
+}
     
 
 const styles = StyleSheet.create({
@@ -120,6 +119,7 @@ const styles = StyleSheet.create({
         width : 300,
         height : 300,
         borderRadius : 10,
+        objectFit: 'contain'
         // backgroundColor : "blue"
         },
     titleAndText : {
