@@ -16,15 +16,11 @@ const Stack = createNativeStackNavigator();
 export default function Home({ navigation }) {
 
   const [currentPosition, setCurrentPosition] = useState(null);
-  const [rechercherUnCoin, setRechercherUnCoin] = useState("");
   const [toilet, setToilet] = useState([]);
   const [filteredToilets, setFilteredToilets] = useState([]);
   const [modalVisible, setModalVisible] = useState(false); // passer à false
   const [handicapAccess, setHandicapAccess] = useState(false); // état = pour les toogles
   const [tableALanger, setTableALanger] = useState(false);
-  const [cleanliness, setCleanliness] = useState(0);
-  const [state, setState] = useState(false);
-  const [communesFiltrees, setCommunesFiltrees] = useState([]);
   const [proprete, setProprete] = useState([0,5]);
   const gratuiteOptions = ['Gratuites ?', 'Payantes ?']; 
   const [selectedGratuite, setSelectedGratuite] = useState([]); // plusieurs options possibles
