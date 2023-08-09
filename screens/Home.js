@@ -225,7 +225,7 @@ export default function Home({ navigation }) {
             <TouchableOpacity
               key={i}
               style={styles.cardToilet}
-              onPress={() => navigation.navigate("ToiletDetails", { toilet: data })}
+              onPress={() => navigation.navigate("ToiletPage", { toiletId: data._id, data })}
             >
               <Image
                 style={styles.image}
@@ -239,7 +239,7 @@ export default function Home({ navigation }) {
                 </View>
                 <View style={styles.distanceEtAvis}>
                   <Text style={styles.distance}>
-                    {data.distance !== undefined ? `Distance: ${data.distance.toFixed(1)} km` : "-"}
+                    {data.distance !== undefined ? `Distance: ${data.distance.toFixed(1)} km` : "- m"}
                   </Text>
                   <View style={styles.avisContainer}>
                     <Text style={styles.avis}>Etoiles</Text>
