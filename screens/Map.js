@@ -9,29 +9,70 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { Dimensions } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
-import AddToilet from "./AddToilet";
+import { getDistance } from 'geolib';
+
 
 export default function Map({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [rechercherUnCoin, setRechercherUnCoin] = useState("");
+  const [toilet, setToilet] = useState ([]);
+  const [initialRegion, setInitialRegion] = useState(null);
   //add loading function to avoid crash due to current position not being loaded before map
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status === "granted") {
-        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-          console.log("ici", location); // vérifier que l'on reçoit bien ma location
-          setCurrentPosition(location.coords); // mettre quoi renvoyer. pas forcément location.coords
-          setLoading(false); // Set loading to false when location data is available
+        const location = await Location.getCurrentPositionAsync({});
+        setCurrentPosition(location.coords);
+        setInitialRegion({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: 0.04,
+          longitudeDelta: 0.02,
         });
+        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
+          setCurrentPosition(location.coords);
+        });
+        setLoading(false);
       }
     })();
   }, []);
+
+
+  useEffect(() => {
+    if (currentPosition) { // Check if currentPosition is not null
+      fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/map`)
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log('data', data.toilets);
+  
+          const filteredToilets = data.toilets.filter((toiletData) => {
+            const distance = getDistance(
+              {
+                latitude: currentPosition.latitude,
+                longitude: currentPosition.longitude,
+              },
+              {
+                latitude: toiletData.point_geo.lat,
+                longitude: toiletData.point_geo.lon,
+              }
+            );
+            return distance <= 1000; // Filter toilets within 1km distance
+          });
+  
+          setToilet(filteredToilets);
+        });
+    }
+  }, [currentPosition]);
+
+  const handleSearchByCommune = () => {
+    
+  };
 
   return (
     <View style={styles.mapContainer}>
@@ -42,17 +83,15 @@ export default function Map({ navigation }) {
           onChangeText={(value) => setRechercherUnCoin(value)}
           value={rechercherUnCoin}
         />
-        {/* en value l'état "rechercherUnCoin', au clic, déclenchement de la fonction handleSubmit, et ... interrogation de l'API ? + filtre de la recherche*/}
         <FontAwesome
           name="search"
-          // onPress={() => handleSubmit(data.records[0].fields.commune)} size={25} color='#ec6e5b'
-          // à vérifier le chemin pour aller chercher le nom de la commune
+          onPress={handleSearchByCommune}
+          size={25}
+          color="#B08BBB"
+          style={styles.searchIcon}
         />
       </View>
       <View style={styles.containerButtons}>
-        {/* Utilisez les props de navigation pour naviguer vers "AddToilet" */}
-        {/* <Stack.Navigator initialRouteName='Home'>
-                <Stack.Screen > */}
         <TouchableOpacity
           style={styles.buttonAddToilet}
           activeOpacity={0.8}
@@ -60,8 +99,6 @@ export default function Map({ navigation }) {
         >
           <Text style={styles.textButton}>Un petit coin à ajouter ?</Text>
         </TouchableOpacity>
-        {/* </Stack.Screen>
-                </Stack.Navigator> */}
         <View style={styles.buttonShadow}>
           <TouchableOpacity
             style={styles.buttonMap}
@@ -72,31 +109,54 @@ export default function Map({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      {/* Conditional rendering: Show loading indicator while fetching location */}
       {loading ? (
         <ActivityIndicator size="large" color="#ffffff" />
       ) : (
-        /* only Show MapView when currentPosition is available */
         currentPosition && (
           <MapView
-            initialRegion={{
-              latitude: currentPosition.latitude,
-              longitude: currentPosition.longitude,
-              latitudeDelta: 0.04,
-              longitudeDelta: 0.02,
-            }}
+            initialRegion={initialRegion}
             mapType="hybrid"
             style={styles.map}
           >
-            <Marker coordinate={currentPosition} title="My position" />
-            {/* Add more markers for WC locations */}
+            <Marker
+              pinColor="#fecb2d"
+              title="My location"
+              coordinate={{
+                latitude: currentPosition.latitude,
+                longitude: currentPosition.longitude,
+              }}
+            />
+            {toilet.map((toiletData, i) => {
+              const distance = getDistance(
+                {
+                  latitude: currentPosition.latitude,
+                  longitude: currentPosition.longitude,
+                },
+                {
+                  latitude: toiletData.point_geo.lat,
+                  longitude: toiletData.point_geo.lon,
+                }
+              );
+
+              return (
+                <Marker
+                  key={i}
+                  pinColor="red"
+                  coordinate={{
+                    latitude: toiletData.point_geo.lat,
+                    longitude: toiletData.point_geo.lon,
+                  }}
+                  title={toiletData.title}
+                  description={`Distance: ${distance} meters`}
+                />
+              );
+            })}
           </MapView>
         )
       )}
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   map: {
     width: "100%",
@@ -127,7 +187,7 @@ const styles = StyleSheet.create({
   InputPlaceholder: {
     // rajouter ombre
     flexDirection: "row",
-    width: "85%",
+    width: "90%",
     height: 50,
     alignContent: "center",
     alignItems: "center",
@@ -158,6 +218,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
+    
   },
   textButton: {
     color: "white",

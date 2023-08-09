@@ -7,23 +7,29 @@ import {
   TouchableOpacity,
   Animated,
   View,
+  KeyboardAvoidingView,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import { Camera, CameraType, FlashMode } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 import Home from "./Home";
 
 export default function Review({ navigation }) {
-  const [rating, setRating] = useState(0);
+  
+  const [starRating, setStarRating] = useState(null);
   const [title, setTitle] = useState("");
-  const [review, setReview] = useState("");
+  const [text, setText] = useState("");
+  const [review, setReview] = useState({});
+  const [image, setImage] = useState(null);
 
   const [heartRating, setHeartRating] = useState(false);
-  const [starRating, setStarRating] = useState(null);
-  // const [hasPermission, setHasPermission] = useState(false);
+  const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
+
 
   // Create a reference to the camera
   // let cameraRef = useRef(null);
@@ -60,21 +66,77 @@ export default function Review({ navigation }) {
   //   return <View />;
   // }
 
-  //add state for stars and heart
+  const pickImage = async () => {
+    // Check for media library permissions
+    const hasMediaLibraryPermission = await getMediaLibraryPermission();
+  
+    if (!hasMediaLibraryPermission) {
+      return;
+    }
+  
+    // Check for camera permissions
+    const hasCameraPermission = await getCameraPermission();
+  
+    if (!hasCameraPermission) {
+      return;
+    }
+  
+    // Launch the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    console.log(result);
+  
+    if (!result.cancelled) {
+      setImage(result.assets[0].uri);
+    }
+    
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button title="Pick an image from camera roll" onPress={pickImage} />
+      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+    </View>
+    );
+  };
+  
 
   //animation for touchable icons
   const animatedButtonScale = new Animated.Value(1);
   const animatedHeartScale = new Animated.Value(1);
+  const animatedHeartRotation = new Animated.Value(0);
+  const animatedHeartStyle = {
+    transform: [
+      { scale: animatedHeartScale },
+      {
+        rotate: animatedHeartRotation.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['0deg', '180deg'], // You can adjust the range as needed
+        }),
+      },
+    ],
+  };
 
   // minimized functions that handle in  & out animations
   const handleHeartPressIn = () => {
-    Animated.spring(animatedHeartScale, {
-      toValue: 1.2,
-      useNativeDriver: true,
-      speed: 50,
-      bounciness: 1,
-    }).start();
+    Animated.parallel([
+      Animated.spring(animatedHeartScale, {
+        toValue: 1.2,
+        useNativeDriver: true,
+        speed: 50,
+        bounciness: 1,
+      }),
+      Animated.timing(animatedHeartRotation, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
+
   const handleHeartPressOut = () => {
     Animated.spring(animatedHeartScale, {
       toValue: 1,
@@ -117,13 +179,17 @@ export default function Review({ navigation }) {
   // }
 
   const handleSubmitReview = () => {
+    if (review.length === 0) {
+      consoleLog('error')
+      return;
+    }
     fetch("http://10.20.2.181:3000/review", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         title: title,
-        rating: rating,
-        review: review,
+        rating: starRating,
+        text: text,
       }),
     })
       .then((response) => response.json())
@@ -158,8 +224,8 @@ export default function Review({ navigation }) {
           </View>
         </View>
         <View>
-          <View style={styles.reviewParts}>
-            <Text style={styles.titleHolder}>Titre</Text>
+          <KeyboardAvoidingView style={styles.reviewParts}>
+            <Text style={styles.titleHolder}>Donner votre avis</Text>
             <TextInput
               style={styles.reviewTitle}
               placeholder="Canalisez le poète en vous"
@@ -172,11 +238,14 @@ export default function Review({ navigation }) {
                 style={styles.reviewText}
                 placeholder="Rédigez une ode aux petits coins"
                 mode="outlined"
-                value={review}
-                onChangeText={setReview}
+                value={text}
+                onChangeText={setText}
+                multiline
+                numberOfLines={6}
+                maxLength={250}
               ></TextInput>
             </View>
-          </View>
+          </KeyboardAvoidingView>
           <View style={styles.bottomBoxes}>
             <View style={styles.bottomBoxLeft}>
               <Text style={styles.headingFav}>Ajouter aux favoris</Text>
@@ -185,7 +254,7 @@ export default function Review({ navigation }) {
                 onPressOut={handleHeartPressOut}
                 onPress={handleHeartFlip}
               >
-                <Animated.View style={[animatedHeartScaleStyle]}>
+                <Animated.View style={[animatedHeartScaleStyle, animatedHeartStyle]}>
                   <FontAwesome
                     name="heart"
                     size={24}
@@ -305,7 +374,7 @@ export default function Review({ navigation }) {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonSubmit}>
-          <Text style={styles.submitText} onPress={() => handleSubmitReview()}>
+          <Text style={styles.submitText} onPress={() => handleSubmitReview({setReview})}>
             Ajouter
           </Text>
         </TouchableOpacity>
@@ -440,9 +509,6 @@ const styles = StyleSheet.create({
     width: 370,
     justifyContent: "flex-start",
     padding: 10,
-    // borderWidth: 1,
-    // borderRadius: 12,
-    // borderColor: "#A86B98",
   },
   titleHolder: {
     padding: 0,
@@ -452,7 +518,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     zIndex: 1,
     textAlign: "center",
-    width: 33,
+    width: 100,
   },
   reviewTitle: {
     width: "98%",
@@ -462,14 +528,16 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: "#A86B98",
     paddingLeft: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 15,
+    paddingBottom: 8,
     zIndex: 0,
   },
   reviewText: {
-    display: "flex",
-    marginLeft: 10,
-    flexWrap: "wrap",
+    marginHorizontal: 10,
+    height: '90%',
+    fontSize: 18,
+    textAlign: 'left',
+    textAlignVertical: 'top'
   },
   bottomRow: {
     flexDirection: "row",
