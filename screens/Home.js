@@ -28,6 +28,8 @@ export default function Home({ navigation }) {
   const [proprete, setProprete] = useState([0,5]);
   const gratuiteOptions = ['Gratuites ?', 'Payantes ?']; 
   const [selectedGratuite, setSelectedGratuite] = useState([]); // plusieurs options possibles
+  const [rechercherUnCoin, setRechercherUnCoin] = useState("");
+  const [communesFiltrees, setCommunesFiltrees] = useState([]);
 
   const onGratuiteSelectionsChange = (selectedItems) => {
     setSelectedGratuite(selectedItems);
@@ -55,10 +57,21 @@ export default function Home({ navigation }) {
       );
       setFilteredToilets(searchResults);
       setCommunesFiltrees(resultatsRecherche.map(data => data.commune));
-
+  
+      setFilteredToilets(filteredToilets);
     };
-    
 
+    useEffect(() => {
+      fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/`)
+        .then(response => response.json())
+        .then(data => {  
+          setToilet(data.toilets);
+        })
+        .catch((error) => {
+          console.error('Error fetching toilet data:', error);
+        });
+    });
+   
     const handleClose = () => {
       setModalVisible(false);
     };
@@ -162,14 +175,18 @@ export default function Home({ navigation }) {
    <View style={styles.centeredView}>
       <View style={styles.modalView}>
        <View style={styles.InputPlaceholderModal}>
-        <TextInput placeholder="Recherchez  votre trône royal..." style={styles.placeholderModal} />
-        <FontAwesome
-          name="search"
-          onPress={() => handleSearchByCommune()}
-          size={20}
-          color="#B08BBB"
-          // à vérifier le chemin pour aller chercher le nom de la commune
+        <TextInput placeholder="Recherchez  votre trône royal..." style={styles.placeholderModal} 
+        onChangeText={(value) => setRechercherUnCoin(value)} // Mettre à jour recherche dans le state
+        value={rechercherUnCoin} // Utiliser la valeur du state pour le contenu du champ
         />
+        <FontAwesome
+        name="search"
+        onPress={() => handleSearchByCommune()} // Appel de la fonction pour filtrer les toilettes
+        size={20}
+        color="#B08BBB"
+        style={styles.searchIcon}
+      />
+        
        </View>
        <View style={styles.containerTogglesGeneral}>
           <Text style={styles.rechercheText}>
@@ -240,11 +257,11 @@ export default function Home({ navigation }) {
   
           </View>
           <View style={styles.containerButtonsAddClose}>
-          <TouchableOpacity onPress={() => handleClose()} style={styles.button} activeOpacity={0.8}>
+          {/* <TouchableOpacity onPress={() => handleClose()} style={styles.button} activeOpacity={0.8}>
               <Text style={styles.textButtonClose}>Close</Text>
-           </TouchableOpacity>
+           </TouchableOpacity> */}
            <TouchableOpacity onPress={() => handleSubmit()} style={styles.buttonAdd} activeOpacity={0.8}>
-          <Text style={styles.textButtonAdd}>Add</Text>
+          <Text style={styles.textButtonAdd}>Rechercher</Text>
         </TouchableOpacity>
         </View>
         </View>
