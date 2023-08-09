@@ -5,6 +5,7 @@
     import { Provider, useDispatch, useSelector } from 'react-redux';
     import { recupeFunFact } from '../reducers/funfact';
     import funfact from '../reducers/funfact';
+    import imageNames from './ImagesArray';
 
 //     // Combinaison des reducers en utilisant combineReducers
 //     const rootReducer = combineReducers({
@@ -23,20 +24,10 @@
           
           const [randomIndex, setRandomIndex] = useState(0); // useState pour gérer l'état de l'index de l'image aléatoire à afficher.
         
-          const getRandomImage =() => {
-          const imageNames = ['img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg', 'img4.jpg', 
-          'img6.jpg', 'img7.jpg', 'img8.jpg', 'img9.jpg', 'img10.jpg', 'img11.jpg', 'img12.jpg', 'img13.jpg', 
-          'img14.jpg', 'img15.jpg', 'img16.jpg', 'img17.jpg', 'img18.jpg', 'img19.jpg', 'img20.jpg', 'img21.jpg', 
-          'img22.jpg', 'img23.png', 'img24.png', 'img25.jpg', 'img26.jpg', 'img27.png', 'img28.jpg', 'img29.jpg', 
-          'img30.jpg', 'img31.jpg', 'img32.jpg', 'img33.jpg', 'img34.jpg', 'img35.jpg', 'img36.jpg', 'img37.jpg', 
-          'img38.jpg', 'img39.jpg', 'img40.jpg', 'img41.jpg', 'img42.jpg', 'img43.jpg', 'img44.jpg', 'img45.jpg', 
-          'img46.jpg', 'img47.jpg', 'img48.jpg', 'img49.jpg', 'img50.jpg', 'img51.jpg', 'img52.jpg', 'img53.jpg', 
-          'img54.jpg', 'img55.jpg', 'img56.jpg', 'img57.jpg', 'img58.jpg', 'img59.jpg', 'img60.jpg', 'img61.jpg', 
-          'img62.jpg', 'img63.jpg', 'img64.jpg', 'img65.jpg', 'img66.jpg']; 
-            
+          const getRandomImage =() => {     
           const randomImageIndex = Math.floor(Math.random() * 66);
             console.log(randomImageIndex)
-        return `../assets/picturesFunFacts/${imageNames[randomImageIndex]}`;
+        return imageNames[randomImageIndex];
     };    
 
             useEffect(() => { // chaque rechargement du composant, va sortir une image
@@ -80,7 +71,7 @@
             <View style={styles.imageTitleAndText}>
               <View style={styles.containerImage}>
                 <Image style={styles.image}
-                source={require('../assets/picturesFunFacts/img1.jpg')}
+                source={getRandomImage()}
                 />
               </View>
               <View style={styles.titleAndText}>
@@ -126,8 +117,8 @@ const styles = StyleSheet.create({
         marginTop: 30,
         },
     image : {
-        width : 200,
-        height : 200,
+        width : 300,
+        height : 300,
         borderRadius : 10,
         // backgroundColor : "blue"
         },
