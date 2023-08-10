@@ -13,7 +13,6 @@ import { useDispatch } from "react-redux";
 import {login} from "../reducers/user"
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import SignUp from "./signUp";
-import { login } from "../reducers/user";
 
 export default function SignIn({ navigation }) {
   const dispatch = useDispatch();
