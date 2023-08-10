@@ -18,9 +18,9 @@ export default function Map({ navigation }) {
   const [toilet, setToilet] = useState([]);
   const [searchedToilets, setSearchedToilets] = useState([]);
   const [initialRegion, setInitialRegion] = useState(null);
+  const [lastPressedMarkerId, setLastPressedMarkerId] = useState(null);
   //add loading function to avoid crash due to current position not being loaded before map
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -96,6 +96,10 @@ export default function Map({ navigation }) {
     }
   };
 
+  const handleMarkerPress = (toiletId) => {
+    navigation.navigate("ToiletPage", { toiletId });
+  };
+  
   return (
     <View style={styles.mapContainer}>
       <View style={styles.InputPlaceholder}>
@@ -163,15 +167,16 @@ export default function Map({ navigation }) {
 
                 return (
                   <Marker
-                    key={i}
-                    pinColor="tomato"
-                    coordinate={{
-                      latitude: toiletData.point_geo.lat,
-                      longitude: toiletData.point_geo.lon,
-                    }}
-                    title={toiletData.title}
-                    description={`Distance: ${distance} meters`}
-                  />
+                  key={i}
+                  pinColor="tomato"
+                  coordinate={{
+                    latitude: toiletData.point_geo.lat,
+                    longitude: toiletData.point_geo.lon,
+                  }}
+                  title={toiletData.title}
+                  description={`Distance: ${distance} meters`}
+                  onPress={() => handleMarkerPress(toiletData._id)} // Pass the toilet ID
+                />
                 );
               }
             )}

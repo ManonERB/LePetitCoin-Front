@@ -8,120 +8,160 @@ import {
   Animated,
   View,
   KeyboardAvoidingView,
-  ScrollView,
+  FlatList,
+  ScrollView
 } from "react-native";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
-import { Camera, CameraType, FlashMode } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
-import { launchCameraAsync } from "expo-image-picker";
 import Home from "./Home";
+import { useSelector } from "react-redux";
 
-export default function Review({ navigation }) {
+export default function Review({ navigation, route }) {
   
   const [starRating, setStarRating] = useState(null);
+  const [cleanliness, setCleanliness] = useState(null);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [review, setReview] = useState({});
-  const [image, setImage] = useState(null);
-
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [galleryPermission, setGalleryPermission] = useState(null);
+  const [selectedMarker, setSelectedMarker] = useState(null);
   const [heartRating, setHeartRating] = useState(false);
-  const [hasPermission, setHasPermission] = useState(false);
-  const [type, setType] = useState(CameraType.back);
-  const [flashMode, setFlashMode] = useState(FlashMode.off);
+  const user = useSelector((state) => state.user.value);
 
+  const CLOUD_URL = process.env.CLOUDINARY_URL;
 
-  // Create a reference to the camera
-  // let cameraRef = useRef(null);
+  useEffect(() => {
+    // Vérifier et demander la permission d'accéder à la galerie
+    (async () => {
+      const galleryStatus =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      setGalleryPermission(galleryStatus.status === "granted");
+    })();
+  }, []);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const { status } = await Camera.requestCameraPermissionsAsync();
-  //     setHasPermission(status === "granted");
-  //   })();
-  // }, []);
+  const removeImage = (imageUri) => {
+    setSelectedImages(selectedImages.filter((image) => image.uri !== imageUri));
+  };
 
-  // const takePicture = async () => {
-  //   const photo = await cameraRef.current.takePictureAsync({ quality: 0.5 });
-  //   const formData = new FormData();
+  const SelectedImageItem = ({ item }) =>
+  (
+    <View style={styles.selectedImageItem}>
+    <Image source={{ uri: item }} style={styles.selectedImage} />
+    <TouchableOpacity
+      onPress={() => removeImage(item)}
+      style={styles.deleteIconContainer}
+      >
+      <FontAwesome
+        name="times"
+        size={20}
+        color="#A86B98"
+        style={styles.deleteIcon}
+        />
+    </TouchableOpacity>
+  </View>
+  );
 
-  //   formData.append("photoFromFront", {
-  //     uri: photo.uri,
-  //     name: "photo.jpg",
-  //     type: "image/jpeg",
-  //   });
+  const handleUpload = async (image) => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "ml_default");
+    data.append("cloud-name", "dipkmwqfj");
+    fetch("https://api.cloudinary.com/v1_1/dipkmwqfj/image/upload", {
+      method: "POST",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then(async (data) => {
+        console.log(data);
 
-  //   fetch("http://10.20.2.181:3000/upload", {
-  //     method: "POST",
-  //     body: formData,
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       //add to redux store if upload is successful
-  //       dispatch(addPhoto(data.url));
-  //     });
-  // };
-
-  // if (!hasPermission || !isFocused) {
-  //   return <View />;
-  // }
+    if (data) {
+      setSelectedImages([...selectedImages, data.url]);
+    } else {
+      alert("Erreur lors du téléchargement de l'image sur Cloudinary");
+    }
+  });
+  };
 
   const pickImage = async () => {
-    // Check for media library permissions
-    const hasMediaLibraryPermission = await getMediaLibraryPermission();
-  
-    if (!hasMediaLibraryPermission) {
-      return;
-      let data = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes:ImagePicker.MediaTypeOptions.Images,
-        allowsEditing:true,
-        aspect:[1,1],
-        quality:0.5
-      });
-      if(!data.canceled){
-        let newFile = {
-          uri:data.uri,
-          type:`test/${data.uri.split(".")[1]}`,
-          name:`test.${data.uri.split(".")[1]}`};
-          handleUpload(newFile);
-        }
-      } else {  Alert.alert('Siz bu funksiyani isletmek ucun icaze vermelisiz'); 
-    }
+    let data = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [3, 4],
+      quality: 1,
+      // allowsMultipleSelection: true,
+    });
+
+  if (!data.canceled) {
+    let newFile = {
+      uri: data.uri,
+      type: `test/${data.uri.split(".")[1]}`,
+      name: `test.${data.uri.split(".")[1]}`,
+    };
+    handleUpload(newFile);
+  }
   };
 
-  
-    // Check for camera permissions
-  const takePicture = async () => {  
-    const hasCameraPermission = await getCameraPermission();
-  
-    if (!hasCameraPermission) {
-      return;
-    }
-  
-    // Launch the image library
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
+  const takePhoto = async () => {
+    let data = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [3, 4],
       quality: 1,
     });
-  
-    console.log(result);
-  
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-    
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-    </View>
-    );
+
+if (!data.canceled) {
+  let newFile = {
+    uri: data.uri,
+    type: `test/${data.uri.split(".")[1]}`,
+    name: `test.${data.uri.split(".")[1]}`,
   };
-  
+  handleUpload(newFile);
+}
+  };
+
+  const handleSubmitReview = () => {
+    const {toiletId} = route.params
+    const token = user.token
+    
+    if (review.length === 0) {
+      console.Log('error')
+      return;
+    }
+    fetch(`http://${process.env.EXPO_PUBLIC_IP}/review/${token}/${toiletId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: title,
+        rating: starRating,
+        text: text,
+        pictures: selectedImages,
+        // cleanliness: 
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('data', data)
+        if (data.result) {
+          alert("Votre annonce a été publiée avec succès !");
+      navigation.navigate("Home");
+      setTitle("");
+      setText("");
+      setSelectedImages([]);
+    } else {
+      alert("Une erreur est survenue lors de la publication de l'annonce.");
+    }
+  })
+  .catch((error) => {
+    console.error("Erreur lors de la publication de l'annonce :", error);
+    
+  });
+  };
+
+
+  if (galleryPermission === false) {
+    return <Text>Pas d'accès au stockage interne</Text>;
+  }
 
   //animation for touchable icons
   const animatedButtonScale = new Animated.Value(1);
@@ -139,6 +179,8 @@ export default function Review({ navigation }) {
     ],
   };
 
+
+  
   // minimized functions that handle in  & out animations
   const handleHeartPressIn = () => {
     Animated.parallel([
@@ -197,50 +239,36 @@ export default function Review({ navigation }) {
   //   return <View />;
   // }
 
-  const handleSubmitReview = () => {
-    if (review.length === 0) {
-      consoleLog('error')
-      return;
-    }
-    fetch(`http://${process.env.EXPO_PUBLIC_IP}/review`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: title,
-        rating: starRating,
-        text: text,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          console.log(data);
-        }
-      });
-  };
+
 
   return (
-    <View style={styles.container}>
-      <Camera type={type}></Camera>
+    <ScrollView contentContainerStyle={styles.contentContainer}>
       <Text style={styles.title}>Evaluer ce coin</Text>
       <View style={styles.boxContainer}>
         <View style={styles.topBox}>
-          <Image
-            style={styles.images}
-            source={require("../assets/Placeholder_view.png")}
-          />
-          <View style={styles.iconSpacing}>
-            <View style={styles.plusButton} activeOpacity={0.8}>
-              <TouchableOpacity style={styles.plusPic}>
-                <FontAwesome name="plus" size={18} color="white" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.cameraButton} activeOpacity={0.8}>
-              <TouchableOpacity style={styles.cameraPic}>
-                <FontAwesome name="camera" size={18} color="white" />
-              </TouchableOpacity>
-            </View>
+          <View style={styles.images}>
+              <FlatList
+                  data={selectedImages}
+                  renderItem={SelectedImageItem}
+                  keyExtractor={(item, index) => index.toString()}
+                  horizontal
+                  style={styles.imageView}
+                />
           </View>
+            <View style={styles.iconSpacing}>
+              <View style={styles.plusButton} activeOpacity={0.8}>
+                <TouchableOpacity style={styles.plusPic}>
+                  <FontAwesome name="plus" size={18} color="white" onPress={() => pickImage()} />
+                  <Text style={styles.buttonLabels}>gallery</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.cameraButton} activeOpacity={0.8}>
+                <TouchableOpacity style={styles.cameraPic}>
+                  <FontAwesome name="camera" size={18} color="white" onPress={() => takePhoto()}/>
+                  <Text style={styles.buttonLabels}>camera</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
         </View>
         <View>
           <KeyboardAvoidingView style={styles.reviewParts}>
@@ -273,12 +301,13 @@ export default function Review({ navigation }) {
                 onPressOut={handleHeartPressOut}
                 onPress={handleHeartFlip}
               >
-                <Animated.View style={[animatedHeartScaleStyle, animatedHeartStyle]}>
+                <Animated.View >
                   <FontAwesome
                     name="heart"
                     size={24}
                     solid={heartRating}
                     color={heartRating ? "red" : "#CCCCCC"}
+                    style={{ transform: [{rotateZ: '180deg'}]}}
                   />
                 </Animated.View>
               </TouchableOpacity>
@@ -398,17 +427,18 @@ export default function Review({ navigation }) {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  contentContainer: {
     width: "100%",
+    height: '100%',
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "space-between",
     padding: 10,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
   },
   title: {
     fontSize: 48,
@@ -416,33 +446,48 @@ const styles = StyleSheet.create({
     height: 80,
   },
   images: {
-    width: 350,
-    height: 200,
-    borderRadius: 12,
-    marginBottom: 20,
+    width: '100%',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  selectedImage: {
+    flexWrap: "wrap",
+    width: 130,
+    height: 250,
+    resizeMode: "cover",
+    borderRadius: 4,
+    margin: 5,
+    justifyContent: 'center',
+  },
+  deleteIconContainer: {
+    position: "absolute",
+    top: 18,
+    right: 55,
+    width: 26,
+    height: 26,
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    borderRadius: 100,
+    alignItems: 'center',
+    padding: 3,
   },
   boxContainer: {
     flexDirection: "column",
     justifyContent: "space-between",
     alignContent: "center",
-    paddingBottom: 40,
     height: "80%",
     width: "100%",
   },
   topBox: {
     alignItems: "center",
-    marginTop: 10,
     zIndex: -1,
   },
   bottomBoxes: {
     flexDirection: "row",
-    justifyContent: "center",
     alignItems: "center",
     borderBottomWidth: 1,
     borderTopWidth: 1,
     borderColor: "#A86B98",
     height: "16%",
-    marginBottom: -20,
   },
   bottomBoxLeft: {
     flexDirection: "column",
@@ -461,17 +506,16 @@ const styles = StyleSheet.create({
     height: 60,
   },
   iconSpacing: {
-    position: "absolute",
-    marginTop: "35%",
+    margin: 10,
     flexDirection: "row",
   },
   plusPic: {
-    width: 50,
+    width: 90,
     height: 50,
     backgroundColor: "#B08BBB",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 25,
+    borderRadius: 6,
     shadowColor: "#000",
     shadowOffset: {
       width: 9,
@@ -482,15 +526,15 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   plusButton: {
-    paddingRight: 70,
+    paddingRight: 40,
   },
   cameraPic: {
-    width: 50,
+    width: 90,
     height: 50,
     backgroundColor: "#B08BBB",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 25,
+    borderRadius: 6,
     shadowColor: "#000",
     shadowOffset: {
       width: 9,
@@ -501,7 +545,13 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   cameraButton: {
-    paddingLeft: 70,
+    paddingLeft: 40,
+  },
+  buttonLabels: {
+    color: 'white',
+  },
+  selectedImageItem: {
+    marginRight: 10,
   },
   headingRate: {
     fontSize: 18,
@@ -524,7 +574,7 @@ const styles = StyleSheet.create({
     color: "#ffb300",
   },
   reviewParts: {
-    height: "67%",
+    height: "52%",
     width: 370,
     justifyContent: "flex-start",
     padding: 10,
