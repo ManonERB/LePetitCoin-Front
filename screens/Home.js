@@ -1,29 +1,29 @@
-import {
-  Text,
-  TouchableOpacity,
-  View,
-  TextInput,
-  Image,
-  StyleSheet,
-  ScrollView,
-  Modal,
-  Switch
-} from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import React, { useState, useEffect } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import FontAwesome from "react-native-vector-icons/FontAwesome5";
-import AddToilet from "./AddToilet";
-import * as Location from "expo-location";
-import { getDistance } from 'geolib';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import SelectMultiple from 'react-native-select-multiple'
+  import {
+    Text,
+    TouchableOpacity,
+    View,
+    TextInput,
+    Image,
+    StyleSheet,
+    ScrollView,
+    Modal,
+   Switch
+  } from "react-native";
+  import { useDispatch, useSelector } from "react-redux";
+  import React, { useState, useEffect } from "react";
+  import { NavigationContainer } from "@react-navigation/native";
+  import { createNativeStackNavigator } from "@react-navigation/native-stack";
+  import FontAwesome from "react-native-vector-icons/FontAwesome5";
+  import AddToilet from "./AddToilet";
+  import * as Location from "expo-location";
+  import { getDistance } from 'geolib';
+  import MultiSlider from '@ptomasroos/react-native-multi-slider';
+  import SelectMultiple from 'react-native-select-multiple'
 
-const Stack = createNativeStackNavigator();
-// store configuré dans App.js - sert pour récupérer les cards avec infos des toilets dans la BDD
+  const Stack = createNativeStackNavigator();
+  // store configuré dans App.js - sert pour récupérer les cards avec infos des toilets dans la BDD
 
-export default function Home({ navigation }) {
+  export default function Home({ navigation }) {
 
   const [currentPosition, setCurrentPosition] = useState(null);
   const [toilet, setToilet] = useState([]);
@@ -47,19 +47,23 @@ export default function Home({ navigation }) {
   
   const user = useSelector((state) => state.user.value);
 
-  const handleValuesChange = (values) => {
-    const [minValue, maxValue] = values;
-    // Vérifier si le min et le max ont la même valeur
-    if (minValue === maxValue) {
-      setProprete([minValue, maxValue + 1]);
-    } else {
-      setProprete(values);
-    }
-  };
+    const handleValuesChange = (values) => {
+      const [minValue, maxValue] = values;
+      // Vérifier si le min et le max ont la même valeur
+      if (minValue === maxValue) {
+        setProprete([minValue, maxValue + 1]);
+      } else {
+        setProprete(values);
+      }
+    };
 
   const handleOpenModalFilters = () => {
     setModalFiltersVisible(true);
   };
+
+    const handleOpenModalFilters = () => {
+      setModalFiltersVisible(true);
+    };
 
   const toggleSwitchHandicapAccess = () =>
     setHandicapAccess((previousState) => !previousState); // previousState = initialisation (false ou true)
@@ -605,6 +609,125 @@ useEffect(() => {
       elevation: 5,
     },
 
+    InputPlaceholderModal: {
+      flexDirection: "row",
+      marginBottom: 10,
+      borderRadius: 8,
+      width: "90%",
+      height: 50,
+      paddingLeft: 10,
+      alignContent: "space-between",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "#white",
+      shadowColor: "grey",
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      },
+      shadowOpacity: 0.29,
+      shadowRadius: 4.65,
+      elevation: 7,
+    },
+    placeholderModal: {
+      flexDirection: "row",
+      borderRadius: 8,
+      marginBottom: 10,
+      paddingLeft: 10,
+      fontWeight: "bold",
+      color: "#B08BBB",
+      fontSize: 13,
+      alignContent: "space-between",
+      alignItems: "center",
+      justifyContent: "center",
+      height: 50,
+      width: "100%",
+    },
+    input: {
+      width: 150,
+      borderBottomColor: "white",
+      borderBottomWidth: 1,
+      fontSize: 16,
+    },
+    button: {
+      width: 100,
+      marginTop: 20,
+      height: 40,
+      backgroundColor: "white",
+      borderColor : "#B08BBB",
+      borderWidth : 2,
+      borderRadius: 10,
+      alignItems: "center",
+      alignContent: "center",
+      justifyContent: "center",
+    },
+    buttonFiltres : {
+      width: 100,
+      height: 40,
+      borderWidth : 2,
+      borderColor : "#B08BBB",
+      backgroundColor: "white",
+      borderRadius: 10,
+      alignItems: "center",
+      alignContent: "center",
+      justifyContent: "center",
+      marginBottom : 10,
+    },
+    buttonAdd : {
+      width: 100,
+      marginTop: 20,
+      height: 40,
+      backgroundColor: "#A86B98",
+      borderRadius: 10,
+      alignItems: "center",
+      alignContent: "center",
+      justifyContent: "center",
+    },
+    containerButtonsAddClose : {
+      flexDirection : 'row',
+      alignItems: "space-between",
+      alignContent: "space-between",
+      marginBottom : 10
+    },
+    containerTogglesGeneral: {
+      marginTop: 20,
+    },
+    containerToggles: {
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    textButtonClose: {
+      color: "#B08BBB",
+      justifyContent: "center",
+      height: 24,
+      fontWeight: "600",
+      fontSize: 15,
+    },
+    textButtonFiltres : {
+      color : "#B08BBB",
+      fontWeight : 'bold',
+    },
+    textButtonAdd: {
+      color: "white",
+      justifyContent: "center",
+      height: 24,
+      fontWeight: "600",
+      fontSize: 15,
+    },
+    MinMax: {
+      marginTop: 10,
+      color: "#767577",
+    },
+    containerMinMax: {
+      flexDirection: "row",
+    },
+    checkboxContainer: {
+      padding: 10,
+      height : 150,
+      marginBottom : 10,
+      },
+  }
+  );
     InputPlaceholderModal: {
       flexDirection: "row",
       marginBottom: 10,
