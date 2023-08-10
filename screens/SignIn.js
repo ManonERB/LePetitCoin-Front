@@ -13,8 +13,10 @@ import { useDispatch } from "react-redux";
 import {login} from "../reducers/user"
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import SignUp from "./signUp";
+import { login } from "../reducers/user";
 
 export default function SignIn({ navigation }) {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [inputEmpty, setInputEmpty] = useState(false);
@@ -23,7 +25,6 @@ export default function SignIn({ navigation }) {
   const EMAIL_REGEX =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    const dispatch = useDispatch()
   const handleSubmit = () => {
     fetch(`http://${process.env.EXPO_PUBLIC_IP}/users/signin`, {
       method: "POST",
@@ -35,8 +36,7 @@ export default function SignIn({ navigation }) {
         if (EMAIL_REGEX.test(email)) {
           if (data.result) {
             //redirige au click de l'input a la Home
-            console.log(data.token);
-            dispatch(login({token:data.token}))
+            dispatch(login({token:data.token}));
             navigation.navigate("TabNavigator");
 
           } else {

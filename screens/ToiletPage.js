@@ -25,6 +25,8 @@ export default function ToiletPage ({route, navigation}) {
   //   longitudeDelta: 0.02,
   // });
 
+    // const {toiletId} = route.params
+    
     useEffect(() => {
     //  console.log("coucou", route)
      console.log("id", toiletId);
@@ -91,27 +93,18 @@ export default function ToiletPage ({route, navigation}) {
             </View>
           </View>
           <View>
+            <View style={styles.titleName}>
             <Text style={styles.title}>
               {toilet?.commune} {toilet?.code_postal} 
             </Text>
+            </View>
             <View style={styles.header}>
               <View style={styles.list}>
-                <Text style={styles.text}>{`\u2022 ${toilet?.tags_opening_hours ? toilet.tags_opening_hours : "aucune information disponible"}`}</Text> 
-                <Text style={styles.text}>{`\u2022 ${toilet?.tags_opening_hours ? toilet.tags_opening_hours : "aucune information disponible"}`}</Text>
-                <Text style={styles.text}>{`\u2022 ${toilet?.title ? toilet.title : "aucune information disponible"}`}</Text>           
+                <Text style={styles.text}>Horaires : {`${toilet?.tags_opening_hours ? toilet.tags_opening_hours : "Info indisponible"}`}</Text> 
+                <Text style={styles.text}>Gratuité : {`${toilet?.tags_fee ? toilet.tags_fee : "Info indisponible"}`}</Text>
+                <Text style={styles.text}>Type : {`${toilet?.title ? toilet.title : "Info indisponible"}`}</Text>           
               </View>
-              <TouchableOpacity 
-              style={styles.review}
-              onPress={()=>navigation.navigate('Review',{toiletId})}
-              >
-                <Text style={styles.textReview}>Donner votre avis</Text>
-                <FontAwesome 
-                  name="pen"
-                 size={18} 
-                 color="white"
-                 paddingLeft={20} 
-                      />
-              </TouchableOpacity>
+              
 
             </View>
           </View>
@@ -139,46 +132,65 @@ export default function ToiletPage ({route, navigation}) {
             
             <View>
               <Text style={styles.text}>
-              {`\u2022 ${toilet?.tags_opening_hours ? toilet.tags_opening_hours : "aucune information disponible"}`}</Text> 
-                  <Text style={styles.text}>{`\u2022 ${toilet?.drinking_water ? toilet.drinking_water : "aucune information disponible"}`}</Text>
-                  <Text style={styles.text}>{`\u2022 ${toilet?.title ? toilet.title : "aucune information disponible"}`}</Text>
+          {`${toilet?.tags_opening_hours ? toilet.tags_opening_hours : "aucune information disponible"}`}</Text>  
+              <Text style={styles.text}>Description : {`\u2022 ${toilet?.title ? toilet.title : "Info indisponible"}`}</Text>
+              <Text style={styles.text}>Eau potable : {`\u2022 ${toilet?.drinking_water ? toilet.drinking_water : "Info indisponible"}`}</Text>
+              <Text style={styles.text}>Table-à-langer :{`\u2022 ${toilet?.changing_table ? toilet.changing_table : "Info indisponible"}`}</Text>
             </View>
             <View>
-  
-              <Text style={styles.text}>
-              {`\u2022 ${toilet?.tags_opening_hours ? toilet.tags_opening_hours : "aucune information disponible"}`}</Text> 
-                  <Text style={styles.text}>{`\u2022 ${toilet?.drinking_water ? toilet.drinking_water : "aucune information disponible"}`}</Text>
-                  <Text style={styles.text}>{`\u2022 ${toilet?.title ? toilet.title : "aucune information disponible"}`}</Text>
             </View>
           </View>
           <View>
             <View style={styles.reviewContainer}>
-            <Text style={styles.titleReview}> Ce qu'ils disent</Text>
+            <Text style={styles.barReview}> Ce qu'ils disent</Text>
             </View>
             {review.map((data,i) => {
               console.log(data);
               return(
-              <View key={i} style={[styles.cardReview, styles.shadowProp]}>
+              <View key={i} style={styles.cardReview}>
                 <View style={styles.cardText}>
                   <View style={styles.cardHeaderText}>
-                    <Text>title: {data.title} </Text>
-                    <Text>note: {data.rating}/5</Text>
+                    <Text style={styles.titleReview}>{data.title} </Text>
+                    <Text style={styles.titleRating}>note: {data.rating}/5</Text>
                   </View>
                   <View style={styles.cardReviewText}>
-                    <Text>avis: {data.text}</Text>
+                    <Text style={styles.textReview}>{data.text}</Text>
                     <Text style={styles.userName}>- {data.user.userName}</Text>
                   </View>
                 </View>
                 <View style={styles.cardReviewImg}>
-                  <Image 
-                    source={require('../assets/Placeholder_view.png')}
-                    style={styles.cardimg}
-                  />
-                </View>
+                    {data.pictures[0] ? (
+                      <Image 
+                        source={{ uri: data.pictures[0] }}
+                        style={styles.cardimg}
+                      />
+                    ) : (
+                      <Image 
+                        source={require('../assets/Placeholder_view.png')} // Use your placeholder image source
+                        style={styles.cardimg}
+                      />
+                    )}
+                  </View>
+                
               </View>
 
               )
+              
             })}
+            <View style={styles.avisButton}>
+              <TouchableOpacity 
+                style={styles.review}
+                onPress={()=>navigation.navigate('Review', {toiletId})}
+                >
+                  <Text style={styles.textReview}>Donner votre avis</Text>
+                  <FontAwesome 
+                    name="pen"
+                  size={18} 
+                  color="white"
+                  paddingLeft={20} 
+                        />
+                </TouchableOpacity>
+              </View>
           </View>
         </ScrollView>
     )
@@ -217,15 +229,17 @@ plusPic: {
   },
   title:{
     fontSize:25,
-    color:"#b08bbb",
+    color:"#A86B98",
     fontWeight:"bold",
     textAlign:"center",
     padding:10,
   },
   list:{
     flexDirection:"column",
+    width: '100%',
     paddingLeft:10,
-    
+    textAlign: 'left',
+
  },
  header:{
   flexDirection:"row",
@@ -235,69 +249,66 @@ plusPic: {
 review:{
   backgroundColor:"#b08bbb",
   flexDirection:'row-reverse',
-  justifyContent:"space-between",
+  justifyContent:"space-evenly",
   alignItems:"center",
-  width:130,
-  borderRadius:5,
+  width: '50%',
+  height: 50,
+  borderRadius:12,
+  margin: 10,
 },
 textReview:{
    fontSize:20,
    paddingLeft:15,
    paddingRight:5,
    color:"white"
-
  },
  text:{
-  fontSize:15,
+  fontSize:16,
+  textAlign: 'center',
  },
  subTitle:{
-  color:"#b08bbb",
+  color:"#A86B98",
   padding:15,
   fontSize:20,
-  fontStyle:'italic'
+  fontStyle:'italic',
+  fontWeight: '500'
  },
  equipement:{
-  flexDirection:"row",
+
  },
- titleReview:{
+ barReview:{
   fontSize:25,
   backgroundColor:"#b08bbb",
   width:"50%",
   color:"white",
-  borderRadius:15,
+  borderTopRightRadius: 12,
+  borderBottomRightRadius: 12,
+  height: 35,
+
+  textAlign: 'center',
 },
 reviewContainer:{
   paddingTop:15,
  },
- cardReview:{
-  // padding:10,
-  width:"100%",
-  height:300,
-},
-// shadowProp: {
-//   shadowColor: '#171717',
-//   shadowOffset: {width: -2, height: 4},
-//   shadowOpacity: 0.2,
-//   shadowRadius: 3,
-// },
 cardReview:{
+  width: '95%',
   flexDirection:"row",
-  justifyContent:"space-between",
-  padding:20,
-  margin:10,
-  // shadowColor: "#000",
-  // shadowOffset: {
-  //   width: 9,
-  //   height: 3,
-  // },
-  // shadowOpacity: 0.2,
-  // shadowRadius: 4.65,
-  // elevation: 5,
-  // backgroundColor:"red",
+  alignItems: 'center',
+  justifyContent:"center",
+  margin: 10,
+
+  shadowColor: 'grey',
+  shadowOffset: {
+    width: 1,
+    height: 3,
+  },
+  shadowOpacity: 0.29,
+  shadowRadius: 4.65,
+  elevation: 7,
 },
 cardimg:{
-  width:80,
-  height:80,
+  width:100,
+  height:100,
   borderRadius:12,
 },
 cardHeaderText:{
@@ -311,7 +322,21 @@ userName:{
   paddingTop:10,
   paddingRight:10,
   textAlign:"right",
-}
+  fontSize: 16,
+},
+titleReview: {
+  fontSize: 20,
+},
+textReview: {
+  fontSize: 16,
+},
+titleRating: {
+  color: "#A86B98",
+  fontSize: 20,
+},
+avisButton: {
+alignItems: 'center',
+},
 
 });
   

@@ -10,17 +10,17 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
-import { getDistance } from 'geolib';
-
+import { getDistance } from "geolib";
 
 export default function Map({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [rechercherUnCoin, setRechercherUnCoin] = useState("");
-  const [toilet, setToilet] = useState ([]);
+  const [toilet, setToilet] = useState([]);
+  const [searchedToilets, setSearchedToilets] = useState([]);
+  const [initialRegion, setInitialRegion] = useState(null);
+  const [lastPressedMarkerId, setLastPressedMarkerId] = useState(null);
   //add loading function to avoid crash due to current position not being loaded before map
   const [loading, setLoading] = useState(true);
-
-
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -42,14 +42,14 @@ export default function Map({ navigation }) {
     })();
   }, []);
 
-
   useEffect(() => {
-    if (currentPosition) { // Check if currentPosition is not null
+    if (currentPosition) {
+      // Check if currentPosition is not null
       fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/map`)
         .then((response) => response.json())
         .then((data) => {
           // console.log('data', data.toilets);
-  
+
           const filteredToilets = data.toilets.filter((toiletData) => {
             const distance = getDistance(
               {
@@ -63,12 +63,43 @@ export default function Map({ navigation }) {
             );
             return distance <= 1000; // Filter toilets within 1km distance
           });
-  
+
           setToilet(filteredToilets);
         });
     }
   }, [currentPosition]);
 
+  const handleSearchByCommune = () => {
+    if (rechercherUnCoin === "") {
+      // If search term is empty, show toilets around current position
+      setSearchedToilets([]);
+    } else {
+      // Fetch toilets based on commune search term
+      fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/recherche`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ commune: rechercherUnCoin }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log('data', data.toilets[0].commune)
+          setRechercherUnCoin("");
+          if (data.result) {
+            setSearchedToilets(data.toilets);
+          } else {
+            setSearchedToilets([]);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching toilets:", error);
+        });
+    }
+  };
+
+  const handleMarkerPress = (toiletId) => {
+    navigation.navigate("ToiletPage", { toiletId });
+  };
+  
   return (
     <View style={styles.mapContainer}>
       <View style={styles.InputPlaceholder}>
@@ -121,31 +152,34 @@ export default function Map({ navigation }) {
                 longitude: currentPosition.longitude,
               }}
             />
-            {toilet.map((toiletData, i) => {
-              const distance = getDistance(
-                {
-                  latitude: currentPosition.latitude,
-                  longitude: currentPosition.longitude,
-                },
-                {
-                  latitude: toiletData.point_geo.lat,
-                  longitude: toiletData.point_geo.lon,
-                }
-              );
+            {(searchedToilets.length > 0 ? searchedToilets : toilet).map(
+              (toiletData, i) => {
+                const distance = getDistance(
+                  {
+                    latitude: currentPosition.latitude,
+                    longitude: currentPosition.longitude,
+                  },
+                  {
+                    latitude: toiletData.point_geo.lat,
+                    longitude: toiletData.point_geo.lon,
+                  }
+                );
 
-              return (
-                <Marker
+                return (
+                  <Marker
                   key={i}
-                  pinColor="red"
+                  pinColor="tomato"
                   coordinate={{
                     latitude: toiletData.point_geo.lat,
                     longitude: toiletData.point_geo.lon,
                   }}
                   title={toiletData.title}
                   description={`Distance: ${distance} meters`}
+                  onPress={() => handleMarkerPress(toiletData._id)} // Pass the toilet ID
                 />
-              );
-            })}
+                );
+              }
+            )}
           </MapView>
         )
       )}
@@ -199,6 +233,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.29,
     shadowRadius: 4.65,
     elevation: 7,
+    padding: 10,
   },
   containerButtons: {
     flexDirection: "row",
@@ -213,7 +248,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     justifyContent: "center",
-    
   },
   textButton: {
     color: "white",

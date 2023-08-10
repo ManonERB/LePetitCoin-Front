@@ -5,7 +5,6 @@ import {
   TextInput,
   Image,
   Switch,
-
 } from "react-native";
 import { StyleSheet } from "react-native";
 import Review from "./Review";
@@ -14,28 +13,27 @@ import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 
 export default function Profile({ navigation }) {
   const [darkMode, setDarkMode] = useState(false);
-  const toggledarkMode = () => setDarkMode(previousState => !previousState);
+  const toggledarkMode = () => setDarkMode((previousState) => !previousState);
 
   const [notifications, setNotifications] = useState(false);
-  const toggleNotifications = () => setNotifications(previousState => !previousState);
+  const toggleNotifications = () =>
+    setNotifications((previousState) => !previousState);
 
   const [updates, setUpdates] = useState(true);
-  const toggleUpdates = () => setUpdates(previousState => !previousState);
-
+  const toggleUpdates = () => setUpdates((previousState) => !previousState);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profil</Text>
       <View style={styles.topBox}>
         <View style={styles.avatar}>
-            <View style={styles.userCircle}>
-            </View>
-            <FontAwesome5Icon style={styles.user} name="user"></FontAwesome5Icon>
-            <View style={styles.plusButton} activeOpacity={0.8}>
-              <TouchableOpacity style={styles.plusPic}>
-                <FontAwesome5Icon name="plus" size={18} color="white" />
-              </TouchableOpacity>
-            </View>
+          <View style={styles.userCircle}></View>
+          <FontAwesome5Icon style={styles.user} name="user"></FontAwesome5Icon>
+          <View style={styles.plusButton} activeOpacity={0.8}>
+            <TouchableOpacity style={styles.plusPic}>
+              <FontAwesome5Icon name="plus" size={18} color="white" />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.usernameBox}>
           <Text style={styles.usernameLabel}>Username</Text>
@@ -60,8 +58,8 @@ export default function Profile({ navigation }) {
         <View style={styles.toggleBox}>
           <Text style={styles.toggleText}>Dark mode</Text>
           <Switch
-            trackColor={{false: '#767577', true: '#B08BBB'}}
-            thumbColor={darkMode ? '#A86B98' : '#A86B98'}
+            trackColor={{ false: "#767577", true: "#B08BBB" }}
+            thumbColor={darkMode ? "#A86B98" : "#A86B98"}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggledarkMode}
             value={darkMode}
@@ -71,8 +69,8 @@ export default function Profile({ navigation }) {
         <View style={styles.toggleBox}>
           <Text style={styles.toggleText}>Afficher notifications</Text>
           <Switch
-            trackColor={{false: '#767577', true: '#B08BBB'}}
-            thumbColor={darkMode ? '#A86B98' : '#A86B98'}
+            trackColor={{ false: "#767577", true: "#B08BBB" }}
+            thumbColor={darkMode ? "#A86B98" : "#A86B98"}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggleNotifications}
             value={notifications}
@@ -82,16 +80,14 @@ export default function Profile({ navigation }) {
         <View style={styles.toggleBox}>
           <Text style={styles.toggleText}>Mise à jour automatique</Text>
           <Switch
-            trackColor={{false: '#767577', true: '#B08BBB'}}
-            thumbColor={darkMode ? '#A86B98' : '#A86B98'}
+            trackColor={{ false: "#767577", true: "#B08BBB" }}
+            thumbColor={darkMode ? "#A86B98" : "#A86B98"}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggleUpdates}
             value={updates}
             transparent
           />
         </View>
-        
-
       </View>
       <View style={styles.bottomBars}>
         <View style={styles.eachBar}>
@@ -108,17 +104,11 @@ export default function Profile({ navigation }) {
         </View>
       </View>
       <View style={styles.signOut}>
-          <View style={styles.eachBar}>
-            <Text style={styles.signOutText}>Deconnexion</Text>
-            {/* <FontAwesome5Icon name="power-off" size={22} color="#484848" /> */}
-          </View>
+        <View style={styles.eachBar}>
+          <Text style={styles.signOutText}>Deconnexion</Text>
+          {/* <FontAwesome5Icon name="power-off" size={22} color="#484848" /> */}
+        </View>
       </View>
-      <TouchableOpacity
-        style={styles.buttonReview}
-        onPress={() => navigation.navigate(Review)}
-      >
-        <Text>temp access to Review</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -131,12 +121,11 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   topBox: {
-    marginTop: 20,
+    marginTop: 10,
     width: "100%",
     justifyContent: "space-evenly",
-    alignItems: 'center',
+    alignItems: "center",
     flexDirection: "row",
-
   },
   title: {
     backgroundColor: "#fff",
@@ -147,19 +136,19 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   avatar: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignContent: 'center'
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
   },
   userCircle: {
     width: 120,
     height: 120,
-    backgroundColor: '#D9D9D9',
+    backgroundColor: "#D9D9D9",
     borderRadius: 60,
   },
   user: {
-    fontSize: 68, 
-    position: "absolute"
+    fontSize: 68,
+    position: "absolute",
   },
   username: {
     borderWidth: 1,
@@ -170,12 +159,12 @@ const styles = StyleSheet.create({
   },
   usernameLabel: {
     padding: 0,
-    width: '40%',
+    width: "40%",
     marginBottom: -8,
     marginLeft: 10,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     zIndex: 1,
-    textAlign: 'center'
+    textAlign: "center",
   },
   statBar: {
     flexDirection: "row",
@@ -190,52 +179,51 @@ const styles = StyleSheet.create({
     borderColor: "#A86B98",
     borderRightWidth: 1,
     width: "33.3%",
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column'
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
   },
-Title: {
+  Title: {
     fontSize: 32,
-    textAlign: 'center',
+    textAlign: "center",
   },
   Text: {
     fontSize: 18,
-    textAlign: 'center',
+    textAlign: "center",
   },
   favoris: {
     height: "100%",
     borderColor: "#A86B98",
     borderRightWidth: 1,
     width: "33.3%",
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column'
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
   },
   points: {
     height: "100%",
     width: "33.3%",
     width: "33.3%",
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column'
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
   },
   midBox: {
     marginTop: 10,
-
   },
   toggleBox: {
-    flexDirection: 'row',
+    flexDirection: "row",
     width: 320,
     height: 35,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#D9D9D9',
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#D9D9D9",
     borderRadius: 12,
     margin: 10,
     paddingLeft: 15,
   },
   toggleText: {
-    textAlign: 'left'
+    textAlign: "left",
   },
   bottomBars: {
     width: 320,
@@ -248,9 +236,9 @@ Title: {
     width: "30%",
   },
   eachBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     height: 35,
     marginVertical: 10,
     borderLeftWidth: 1,
@@ -258,15 +246,15 @@ Title: {
     paddingLeft: 10,
   },
   signOut: {
-    width: '100%',
-    paddingLeft: '8%',
+    width: "100%",
+    paddingLeft: "8%",
     borderTopColor: "#A86B98",
     borderTopWidth: 1,
   },
 
   signOutText: {
     color: "#A86B98",
-    fontWeight: 'bold',
-    textAlign: 'right'
+    fontWeight: "bold",
+    textAlign: "right",
   },
 });
