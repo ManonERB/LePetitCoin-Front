@@ -57,10 +57,6 @@
       }
     };
 
-  const handleOpenModalFilters = () => {
-    setModalFiltersVisible(true);
-  };
-
     const handleOpenModalFilters = () => {
       setModalFiltersVisible(true);
     };
@@ -726,8 +722,7 @@ useEffect(() => {
       height : 150,
       marginBottom : 10,
       },
-  }
-  );
+
     InputPlaceholderModal: {
       flexDirection: "row",
       marginBottom: 10,
@@ -844,6 +839,5 @@ useEffect(() => {
       padding: 10,
       height : 150,
       marginBottom : 10,
-      },
-  }
-  );
+    },
+  });
