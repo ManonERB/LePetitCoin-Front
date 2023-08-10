@@ -17,7 +17,6 @@ export default function Map({ navigation }) {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [rechercherUnCoin, setRechercherUnCoin] = useState("");
   const [toilet, setToilet] = useState ([]);
-  const [initialRegion, setInitialRegion] = useState(null);
   //add loading function to avoid crash due to current position not being loaded before map
   const [loading, setLoading] = useState(true);
 
@@ -69,10 +68,6 @@ export default function Map({ navigation }) {
         });
     }
   }, [currentPosition]);
-
-  const handleSearchByCommune = () => {
-    
-  };
 
   return (
     <View style={styles.mapContainer}>

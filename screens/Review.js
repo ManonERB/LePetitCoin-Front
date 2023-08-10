@@ -16,21 +16,26 @@ import { useIsFocused } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import Home from "./Home";
+import { useSelector } from 'react-redux';
 
-export default function Review({ navigation }) {
+
+// import { useRouter } from "next/router";
+
+export default function Review({ navigation, route }) {
   
   const [starRating, setStarRating] = useState(null);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [review, setReview] = useState({});
   const [image, setImage] = useState(null);
+  const [toilet, setToilet] = useState ([]);
 
   const [heartRating, setHeartRating] = useState(false);
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(CameraType.back);
   const [flashMode, setFlashMode] = useState(FlashMode.off);
 
-
+  const user = useSelector((state) => state.user.value);
   // Create a reference to the camera
   // let cameraRef = useRef(null);
 
@@ -65,6 +70,7 @@ export default function Review({ navigation }) {
   // if (!hasPermission || !isFocused) {
   //   return <View />;
   // }
+
 
   const pickImage = async () => {
     // Check for media library permissions
@@ -179,11 +185,13 @@ export default function Review({ navigation }) {
   // }
 
   const handleSubmitReview = () => {
+    const {toiletId} = route.params
     if (review.length === 0) {
       consoleLog('error')
       return;
     }
-    fetch("http://10.20.2.181:3000/review", {
+    const token =user.token
+    fetch(`http://${process.env.EXPO_PUBLIC_IP}/review/${token}/${toiletId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -194,6 +202,9 @@ export default function Review({ navigation }) {
     })
       .then((response) => response.json())
       .then((data) => {
+  console.log(user.token);
+        setTitle('')
+        setText("")
         if (data.result) {
           console.log(data);
         }
@@ -242,7 +253,7 @@ export default function Review({ navigation }) {
                 onChangeText={setText}
                 multiline
                 numberOfLines={6}
-                maxLength={250}
+                maxLength={200}
               ></TextInput>
             </View>
           </KeyboardAvoidingView>
@@ -374,7 +385,7 @@ export default function Review({ navigation }) {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonSubmit}>
-          <Text style={styles.submitText} onPress={() => handleSubmitReview({setReview})}>
+          <Text style={styles.submitText} onPress={() => handleSubmitReview()}>
             Ajouter
           </Text>
         </TouchableOpacity>

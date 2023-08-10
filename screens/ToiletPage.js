@@ -2,17 +2,31 @@ import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'rea
 import { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
+import MapView, { Marker } from "react-native-maps";
+import { getDistance } from 'geolib';
 
+import {Dimensions} from 'react-native';
 
 
 export default function ToiletPage ({route, navigation}) {
     
-    const [toilet, setToilet] = useState({});
-    const [review, setReview] = useState([]);
+  const [toilet, setToilet] = useState({});
+  const [review, setReview] = useState([]);
+  const [currentPosition, setCurrentPosition] = useState(null);
+  const [initialRegion, setInitialRegion] = useState(null);
+
+  const {toiletId} = route.params
+
+  // setCurrentPosition(location.coords);
+  // setInitialRegion({
+  //   latitude: location.coords.latitude,
+  //   longitude: location.coords.longitude,
+  //   latitudeDelta: 0.04,
+  //   longitudeDelta: 0.02,
+  // });
 
     useEffect(() => {
     //  console.log("coucou", route)
-     const {toiletId} = route.params
      console.log("id", toiletId);
     fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/${toiletId}`)
     .then(response => response.json())
@@ -34,7 +48,28 @@ export default function ToiletPage ({route, navigation}) {
     const amenity=JSON.parse(toilet.tags)
     // console.log("toutou", amenity.amenity)
    }
-   
+  //  useEffect(() => {
+  //   if (currentPosition) { // Check if currentPosition is not null
+  //     fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/map`)
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         // console.log('data', data.toilets);
+  
+  //         const filteredToilets = data.toilets.filter((toiletData) => {
+  //           const distance = getDistance(
+  //             {
+  //               latitude: currentPosition.latitude,
+  //               longitude: currentPosition.longitude,
+  //             },
+  //           );
+  //           return distance <= 1000; // Filter toilets within 1km distance
+  //         });
+  
+  //         setToilet(filteredToilets);
+  //       });
+  //   }
+  // }, [currentPosition]);
+
     // const cardReview = 
    console.log(review);
     return (
@@ -67,7 +102,7 @@ export default function ToiletPage ({route, navigation}) {
               </View>
               <TouchableOpacity 
               style={styles.review}
-              onPress={()=>navigation.navigate('Review')}
+              onPress={()=>navigation.navigate('Review',{toiletId})}
               >
                 <Text style={styles.textReview}>Donner votre avis</Text>
                 <FontAwesome 
@@ -82,6 +117,22 @@ export default function ToiletPage ({route, navigation}) {
           </View>
           <View>
             <Text style={styles.subTitle}>Où ce situe ce petit coin ? </Text>
+            {
+              <MapView
+              initialRegion={{
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              style={styles.map}
+              >
+              </MapView>
+            }
+            <View>
+        
+
+            </View>
           </View>
               <Text style={styles.subTitle}>Les équipements royaux de ce trône</Text>
           <View style={styles.equipement}> 
@@ -134,6 +185,11 @@ export default function ToiletPage ({route, navigation}) {
 }
 
 const styles = StyleSheet.create({
+  map: {
+    // flex:1,
+    width: Dimensions.get('window').width,
+    height: 200
+},
 img:{
     width: 380,
     height: 250,
