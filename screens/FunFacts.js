@@ -68,6 +68,7 @@ import imageNames from './ImagesArray';
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
         <View style={styles.imageTitleAndText}>
+        <View style={styles.TitleBox}><Image style={styles.titleFacts} source={require('../assets/FunFacts.jpg')}></Image></View>
           <View style={styles.containerImage}>
             <Image style={styles.image}
             source={getRandomImage()}
@@ -95,80 +96,89 @@ import imageNames from './ImagesArray';
     
 
 const styles = StyleSheet.create({
-    container : {
-        flex: 1,
-        backgroundColor: "#ffffff",
-        alignItems: "center",
-        alignContent : "center",
-        justifyContent : "center",
-        textAlign : "center",
-        paddingTop: 40,
-        width : '100%',
-        height : '100%',
-        },
-    imageTitleAndText : {
-        width : "100%",
-        alignContent : "center",
-        alignItems : "center",
-
-        },
-    containerImage : {
-        marginTop: 30,
-        },
-    image : {
-        width : 300,
-        height : 300,
-        borderRadius : 10,
-        objectFit: 'contain'
-        // backgroundColor : "blue"
-        },
-    titleAndText : {
-        alignItems : "center",
-        alignContent : "center",
-        justifyContent : "center",
-        borderBottomColor : "#A86B98",
-        width : '85%',
-        marginTop : 5
-        },        
-    title: {
-        backgroundColor: '#fff',
-        textAlign: 'justify',
-        paddingLeft : 20,
-        paddingTop : 10,
-        fontSize: 18,
-        color : "#A86B98",
-        fontWeight: 'bold',
-        borderTopColor : "#A86B98",
-        borderStyle : 'solid',
-        borderBottomWidth : 2,
-        width : "100%",
-        borderBottomColor : "#A86B98",
-        paddingBottom : 20,
-        lineHeight: 25,
-        },
-    text : {
-        color : "black",
-        fontSize : 15,
-        textAlign : "center",
-        justifyContent : "center",
-        textAlign : "justify",
-        padding : 20,
-        borderBottomColor : "#A86B98",
-        borderStyle : 'solid',
-        borderBottomWidth : 2,
-        width : "100%",
-        lineHeight: 22,
+container : {
+    flex: 1,
+    backgroundColor: "#ffffff",
+    alignItems: "center",
+    alignContent : "center",
+    justifyContent : "center",
+    textAlign : "center",
+    paddingTop: 40,
+    width : '100%',
+    height : '100%',
+    },
+imageTitleAndText : {
+    width : "100%",
+    alignContent : "center",
+    alignItems : "center",
 
     },
-    buttonRefresh : {
-        width : 50,
-        height : 50,
-        alignItems : "center",
-        alignContent : "center",
-        justifyContent : "center",
-        marginTop : 20,
-        backgroundColor : "white"
+containerImage : {
+    marginTop: 30,
     },
+titleFacts: {
+    width: 180,
+    objectFit: 'contain'
+    },
+image : {
+    width : 300,
+    height : 300,
+    borderRadius : 10,
+    objectFit: 'contain'
+    // backgroundColor : "blue"
+    },
+    Title: {
+    width: '90%',
+    objectFit: 'fill',
+
+    },
+titleAndText : {
+    alignItems : "center",
+    alignContent : "center",
+    justifyContent : "center",
+    borderBottomColor : "#A86B98",
+    width : '85%',
+    marginTop : 5
+    },        
+title: {
+    backgroundColor: '#fff',
+    textAlign: 'justify',
+    paddingLeft : 20,
+    paddingTop : 10,
+    fontSize: 18,
+    color : "#A86B98",
+    fontWeight: 'bold',
+    borderTopColor : "#A86B98",
+    borderStyle : 'solid',
+    borderBottomWidth : 2,
+    width : "100%",
+    borderBottomColor : "#A86B98",
+    paddingBottom : 20,
+    lineHeight: 25,
+    },
+text : {
+    color : "black",
+    fontSize : 15,
+    textAlign : "center",
+    justifyContent : "center",
+    textAlign : "justify",
+    padding : 20,
+    borderBottomColor : "#A86B98",
+    borderStyle : 'solid',
+    borderBottomWidth : 2,
+    width : "100%",
+    lineHeight: 22,
+
+},
+buttonRefresh : {
+    width : 50,
+    height : 50,
+    alignItems : "center",
+    alignContent : "center",
+    justifyContent : "center",
+    marginTop : 20,
+    backgroundColor : "white"
+},
 
 
     });
