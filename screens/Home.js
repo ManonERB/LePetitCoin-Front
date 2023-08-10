@@ -115,7 +115,7 @@
               } else if (isGratuiteSelected && toiletIsFree) {
                 return true;
               } else if (isPayantesSelected && !toiletIsFree) {
-                return true;
+                return false;
               } else {
                 return false;
               }
@@ -124,7 +124,7 @@
             const filteredByProprete = filteredToilets.filter((toiletData) => {
               const toiletProprete = toiletData.cleanliness;
               return toiletProprete >= proprete[0] && toiletProprete <= proprete[1];
-            });
+            }); // proprete[0] (valeur minimale) et proprete[1] (valeur maximale) définies par le curseur
     
             const filteredByDistance = filteredByProprete.filter((toiletData) => {
               const distance = getDistance(
@@ -161,6 +161,9 @@
 
     const handleSearchAndClose = () => {
       handleSearchByCommune(); 
+      if (rechercherUnCoin !== "") {
+        setSelectedGratuite([...selectedGratuite, { label: rechercherUnCoin }]);
+      }
       setModalVisible(false); 
     };
 
@@ -192,7 +195,10 @@
                 }
                 return true; // Return all toilets if handicapAccess toggle is off
               });
-    
+              const filteredByProprete = filteredByHandicapAccess.filter((toiletData) => {
+                const toiletProprete = toiletData.cleanliness;
+                return toiletProprete >= proprete[0] && toiletProprete <= proprete[1];
+              });
               setSearchedToilets(filteredByHandicapAccess);
             } else {
               setSearchedToilets([]);
