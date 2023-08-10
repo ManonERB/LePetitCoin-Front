@@ -24,6 +24,7 @@ export default function SignIn({ navigation }) {
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     const dispatch = useDispatch()
+    
   const handleSubmit = () => {
     fetch(`http://${process.env.EXPO_PUBLIC_IP}/users/signin`, {
       method: "POST",
