@@ -12,7 +12,7 @@ export default function FavoriteToilets () {
         <View style={styles.container}>
           <View>
             <View style={styles.topLogo}>
-                <Image style={styles.logo} source={require('../assets/Favoris.jpg')}></Image>
+                <Image style={styles.logo} source={require('../assets/Favoris2.jpg')}></Image>
             </View>
           </View>
           <View style={styles.placeholder}>
@@ -38,12 +38,12 @@ container: {
 topLogo: {
   width: 180,
   height: 200,
-  marginTop: 40,
+  marginTop: 50,
   justifyContent: 'flex-start',
   alignItems: 'center',
 },
 logo: {
-  width: '155%',
+  width: '175%',
   resizeMode: 'contain',
 },
 placeholder: {
