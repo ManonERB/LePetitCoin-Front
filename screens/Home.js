@@ -57,9 +57,6 @@
       }
     };
 
-    const handleOpenModalFilters = () => {
-      setModalFiltersVisible(true);
-    };
 
   const toggleSwitchHandicapAccess = () =>
     setHandicapAccess((previousState) => !previousState); // previousState = initialisation (false ou true)
@@ -113,6 +110,7 @@ useEffect(() => {
               longitude: toiletData.point_geo.lon,
             }
           );
+          toiletData.distance = distance;
           return distance <= 1000; // Filter toilets within 1km distance
         });
         console.log("Filtered toilets:", filteredToilets.length);
@@ -142,10 +140,15 @@ useEffect(() => {
           setRechercherUnCoin("");
           if (data.result) {
             const filteredByHandicapAccess = data.toilets.filter((toiletData) => {
+              
+              
               if (handicapAccess) {
                 return toiletData.handicapAccess === true;
               }
+              
+
               return true; // Return all toilets if handicapAccess toggle is off
+              
             });
   
             setSearchedToilets(filteredByHandicapAccess);
@@ -397,11 +400,11 @@ useEffect(() => {
                 </View>
                 <View style={styles.distanceEtAvis}>
                   <Text style={styles.distance}>
-                  {data.distance !== undefined
-                  ? data.distance >= 1
-                    ? `Distance: ${data.distance.toFixed(1)} km`
-                    : `Distance: ${(data.distance * 1000).toFixed(0)} m`
-                  : "-"}
+                    {data.distance !== undefined
+                    ? data.distance >= 1
+                      ? `${data.distance.toFixed(0)} m`
+                      : `Distance: ${(data.distance * 1000).toFixed(0)} m`
+                    : "Distance: -"}
                   </Text>
                   <View style={styles.avisContainer}>
                     <Text style={styles.avis}>Etoiles</Text>
