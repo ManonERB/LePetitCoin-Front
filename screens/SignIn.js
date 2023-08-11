@@ -10,9 +10,9 @@ import {
   View,
 } from "react-native";
 import { useDispatch } from "react-redux";
+import {login} from "../reducers/user"
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import SignUp from "./signUp";
-import { login } from "../reducers/user";
 
 export default function SignIn({ navigation }) {
   const dispatch = useDispatch();
@@ -37,6 +37,7 @@ export default function SignIn({ navigation }) {
             //redirige au click de l'input a la Home
             dispatch(login({token:data.token}));
             navigation.navigate("TabNavigator");
+
           } else {
             setInputEmpty(true);
           }

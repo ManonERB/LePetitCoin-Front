@@ -2,24 +2,57 @@ import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'rea
 import { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
+import MapView, { Marker } from "react-native-maps";
+import { getDistance } from 'geolib';
+import * as Location from "expo-location";
 
+import {Dimensions} from 'react-native';
 
 
 export default function ToiletPage ({route, navigation}) {
     
-    const [toilet, setToilet] = useState({});
-    const [review, setReview] = useState([]);
+  const [toilet, setToilet] = useState(null);
+  const [review, setReview] = useState([]);
+  const [currentPosition, setCurrentPosition] = useState(null);
+  const [initialRegion, setInitialRegion] = useState(null);
 
-    const {toiletId} = route.params
-    
+  const {toiletId} = route.params
+
+  // setCurrentPosition(location.coords);
+  // setInitialRegion({
+  //   latitude: location.coords.latitude,
+  //   longitude: location.coords.longitude,
+  //   latitudeDelta: 0.04,
+  //   longitudeDelta: 0.02,
+  // });
+
     useEffect(() => {
+
+      (async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+  
+        if (status) {
+          const location = await Location.getCurrentPositionAsync({});
+          setCurrentPosition(location.coords);
+          console.log("ma position mise à jour", location)
+        console.log(location);
+          setInitialRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          });
+          Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
+            setCurrentPosition(location.coords);
+          });
+        }
+      })();
     //  console.log("coucou", route)
-     const {toiletId} = route.params
-     console.log("id", toiletId);
+    //  console.log("id", toiletId);
     fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/${toiletId}`)
     .then(response => response.json())
     .then((data) => {
-      console.log("data", data.toilets);
+      // console.log("data", data.toilets.point_geo.lat);
       setToilet(data.toilets)
     });
 
@@ -29,16 +62,83 @@ export default function ToiletPage ({route, navigation}) {
       // console.log(data);
       setReview(data)
     });
-   }, []);
+
+    
+
+   }, [toiletId]);
 
    if(toilet?.tags) {
     //parse car dans le bdd c'est en string transform en objet
     const amenity=JSON.parse(toilet.tags)
     // console.log("toutou", amenity.amenity)
    }
-   
+
+  
+  // useEffect(() => {
+  //   if (currentPosition) { // Check if currentPosition is not null
+  //     fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/map`)
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         // console.log('data', data.toilets);
+          
+  //         const filteredToilets = data.toilets.filter((toiletData) => {
+  //           const distance = getDistance(
+  //             {
+  //               latitude: currentPosition.latitude,
+  //               longitude: currentPosition.longitude,
+  //             },
+  //             {
+  //               latitude: toiletData?.point_geo?.lat,
+  //               longitude: toiletData?.point_geo?.lon,
+  //             }
+  //             );
+  //             return distance <= 1000; // Filter toilets within 1km distance
+  //         })
+
+  //       });
+  //   }
+  //   // {console.log(coordinate)}
+
+  // }, [currentPosition]);
+
+
+  //  useEffect(() => {
+  //   if (currentPosition) { // Check if currentPosition is not null
+  //     fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet/map`)
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         // console.log('data', data.toilets);
+  
+  //         const filteredToilets = data.toilets.filter((toiletData) => {
+  //           const distance = getDistance(
+  //             {
+  //               latitude: currentPosition.latitude,
+  //               longitude: currentPosition.longitude,
+  //             },
+  //           );
+  //           return distance <= 1000; // Filter toilets within 1km distance
+  //         });
+  
+  //         setToilet(filteredToilets);
+  //       });
+  //   }
+  // }, [currentPosition]);
+
     // const cardReview = 
-   console.log(review);
+  //  console.log(review);
+
+
+  // const distance = getDistance(
+  //   {
+  //     latitude: currentPosition.latitude,
+  //     longitude: currentPosition.longitude,
+  //   },
+  //   {
+  //     latitude: toilet.point_geo?.lat,
+  //     longitude: toilet.point_geo?.lon,
+  //   }
+// );
+console.log("toilet",toilet)
     return (
         <ScrollView>
           <View>      
@@ -58,11 +158,9 @@ export default function ToiletPage ({route, navigation}) {
             </View>
           </View>
           <View>
-            <View style={styles.titleName}>
             <Text style={styles.title}>
               {toilet?.commune} {toilet?.code_postal} 
             </Text>
-            </View>
             <View style={styles.header}>
               <View style={styles.list}>
                 <Text style={styles.text}>Horaires : {`${toilet?.tags_opening_hours ? toilet.tags_opening_hours : "Info indisponible"}`}</Text> 
@@ -74,8 +172,31 @@ export default function ToiletPage ({route, navigation}) {
             </View>
           </View>
           <View>
-            <Text style={styles.subTitle}>Où ce situe ce petit coin ? </Text>
-          </View>
+        <Text style={styles.subTitle}>Où ce situe ce petit coin ? </Text>
+        {currentPosition && (
+          <MapView initialRegion={initialRegion} style={styles.map}>
+            <Marker
+              pinColor="#fecb2d"
+              title="My location"
+              coordinate={{
+                latitude: initialRegion?.latitude,
+                longitude: initialRegion?.longitude,
+              }}
+            />
+            {toilet &&
+
+                <Marker
+                  pinColor="red"
+                  coordinate={{
+                    latitude: toilet?.point_geo?.lat,
+                    longitude: toilet?.point_geo?.lon,
+                  }}
+                  title={toilet.title}
+                />
+              }
+          </MapView>
+        )}
+        </View>
               <Text style={styles.subTitle}>Les équipements royaux de ce trône</Text>
           <View style={styles.equipement}> 
             
@@ -94,9 +215,9 @@ export default function ToiletPage ({route, navigation}) {
             <Text style={styles.barReview}> Ce qu'ils disent</Text>
             </View>
             {review.map((data,i) => {
-              console.log(data);
+              // console.log(data);
               return(
-              <View key={i} style={styles.cardReview}>
+              <View key={i} style={[styles.cardReview, styles.shadowProp]}>
                 <View style={styles.cardText}>
                   <View style={styles.cardHeaderText}>
                     <Text style={styles.titleReview}>{data.title} </Text>
@@ -146,6 +267,12 @@ export default function ToiletPage ({route, navigation}) {
 }
 
 const styles = StyleSheet.create({
+  map: {
+    // flex:1,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    // height: 200
+},
 img:{
     width: 380,
     height: 250,

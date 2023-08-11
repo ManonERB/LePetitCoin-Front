@@ -289,7 +289,7 @@ if (!data.canceled) {
                 onChangeText={setText}
                 multiline
                 numberOfLines={6}
-                maxLength={250}
+                maxLength={200}
               ></TextInput>
             </View>
           </KeyboardAvoidingView>
@@ -422,7 +422,7 @@ if (!data.canceled) {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonSubmit}>
-          <Text style={styles.submitText} onPress={() => handleSubmitReview({setReview})}>
+          <Text style={styles.submitText} onPress={() => handleSubmitReview()}>
             Ajouter
           </Text>
         </TouchableOpacity>
