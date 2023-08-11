@@ -10,10 +10,12 @@ import {
   View,
 } from "react-native";
 import { useDispatch } from "react-redux";
+import {login} from "../reducers/user"
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import SignUp from "./signUp";
 
 export default function SignIn({ navigation }) {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [inputEmpty, setInputEmpty] = useState(false);
@@ -33,7 +35,9 @@ export default function SignIn({ navigation }) {
         if (EMAIL_REGEX.test(email)) {
           if (data.result) {
             //redirige au click de l'input a la Home
+            dispatch(login({token:data.token}));
             navigation.navigate("TabNavigator");
+
           } else {
             setInputEmpty(true);
           }

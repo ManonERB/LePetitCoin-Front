@@ -8,7 +8,9 @@ import Home from "./Home"
 
 export default function AddToilet ({navigation}) {
     // const [title, setTitle] = useState('');
-    const [address, setAddress] = useState('');
+    const [commune, setCommune] = useState('');
+    const [lon, setLon] = useState(0);
+    const [lat, setLat] = useState(0);
     const [availability, setAvailability] = useState('');
 
     // gestion des switch
@@ -36,6 +38,9 @@ export default function AddToilet ({navigation}) {
 
     const handleSubmit = () => {
 
+      const numericLon = parseFloat(lon);
+      const numericLat = parseFloat(lat);
+
       fetch(`http://${process.env.EXPO_PUBLIC_IP}/toilet`, {
   
       method: 'POST',
@@ -43,7 +48,9 @@ export default function AddToilet ({navigation}) {
       headers: { 'Content-Type': 'application/json' },
   
       body: JSON.stringify({
-        address,
+        commune,
+        lon: numericLon, // Use the converted numericLon
+        lat: numericLat, // Use the converted numericLat
         type: publicToilet,
         availability,
         fee,
@@ -54,7 +61,6 @@ export default function AddToilet ({navigation}) {
         toiletPaper,
         cleanliness,
         feminineHygieneProduct
-      
       })
     })
     .then(response => response.json())
@@ -102,13 +108,33 @@ export default function AddToilet ({navigation}) {
         /> 
       </View>*/}
       <View style={styles.inputContainer}>
-      <Text style={styles.label}>Adress :</Text>
+      <Text style={styles.label}>Commune :</Text>
         <TextInput
         style={styles.input}
-        onChangeText={setAddress}
-        value={address}
-        placeholder="Adress"
+        onChangeText={setCommune}
+        value={commune}
+        placeholder='ex: "Marseille 5e"'
       />
+      </View>
+      <View style={styles.inputContainerLonLat}>
+        <View style={styles.LonLat}>
+        <Text style={styles.label}>longitude :</Text>
+          <TextInput
+          style={styles.input}
+          onChangeText={setLon}
+          value={lon}
+          placeholder="5.367855"
+          maxLength={8}
+        />
+        <Text style={styles.label}>latitude :</Text>
+          <TextInput
+          style={styles.input}
+          onChangeText={setLat}
+          value={lat}
+          placeholder="42.367855"
+          maxLength={9}
+        />
+        </View>
       </View>
       <View style={styles.inputContainer}>
       <Text style={styles.label}>Disponibilité :</Text>
@@ -116,25 +142,11 @@ export default function AddToilet ({navigation}) {
         style={styles.input}
         onChangeText={setAvailability}
         value={availability}
-        placeholder="Disponibilité"
+        placeholder="ex: Lun-Ven 6h-18h"
       />
       </View>
     </View>
-       {/* currentPosition && (
-          <MapView
-            initialRegion={{
-              latitude: currentPosition.latitude,
-              longitude: currentPosition.longitude,
-              latitudeDelta: 0.04,
-              longitudeDelta: 0.02,
-            }}
-            mapType="hybrid"
-            style={styles.map}
-          >
-            <Marker coordinate={currentPosition} title="My position" />
-            {/* Add more markers for WC locations */}
-          {/* </MapView>
-        ) */}
+
         
 
     <Text style={styles.title2}>Caractéristiques</Text>
@@ -369,11 +381,26 @@ container2: {
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+
     marginBottom: 10,
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
     padding: 5,
+  },
+  inputContainerLonLat: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 5,
+  },
+  LonLat: {
+  flexDirection: 'row',
+  alignItems: 'center'
   },
   label: {
     marginRight: 10,

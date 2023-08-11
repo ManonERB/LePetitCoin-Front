@@ -8,10 +8,39 @@ import {
 } from "react-native";
 import { StyleSheet } from "react-native";
 import Review from "./Review";
-import { useState } from "react";
+import React, { useState } from "react";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
+import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
+import * as Font from 'expo-font';
+
 
 export default function Profile({ navigation }) {
+  // let customFonts = {
+  //   'Inter-Black': require('../assets/fonts/Inter-Black.ttf'),
+  //   'Inter-Regular': require('../assets/fonts/Inter-Regular.ttf')
+  // };
+
+  // class YourComponent extends React.Component {
+  //   state = {
+  //     fontsLoaded: false,
+  //   };
+  
+  //   _loadFontsAsync = async () => {
+  //     await Font.loadAsync(customFonts);
+  //     this.setState({ fontsLoaded: true });
+  //   };
+  
+  //   componentDidMount() {
+  //     this._loadFontsAsync();
+  //   }
+  
+  //   render() {
+  //     if (!this.state.fontsLoaded) {
+  //       return <View />; // You can return any placeholder component here
+  //     }
+  //   }
+  // }
+
   const [darkMode, setDarkMode] = useState(false);
   const toggledarkMode = () => setDarkMode((previousState) => !previousState);
 
@@ -22,22 +51,24 @@ export default function Profile({ navigation }) {
   const [updates, setUpdates] = useState(true);
   const toggleUpdates = () => setUpdates((previousState) => !previousState);
 
+  const [userName, setUserName] = useState("")
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profil</Text>
+      <View><Image style={styles.titleProfil}source={require('../assets/Profil.jpg')}></Image></View>
       <View style={styles.topBox}>
         <View style={styles.avatar}>
           <View style={styles.userCircle}></View>
-          <FontAwesome5Icon style={styles.user} name="user"></FontAwesome5Icon>
+            <FontAwesome5Icon style={styles.user} name="user"></FontAwesome5Icon>
           <View style={styles.plusButton} activeOpacity={0.8}>
-            <TouchableOpacity style={styles.plusPic}>
+            <TouchableOpacity style={styles.plusPic} >
               <FontAwesome5Icon name="plus" size={18} color="white" />
             </TouchableOpacity>
           </View>
         </View>
         <View style={styles.usernameBox}>
           <Text style={styles.usernameLabel}>Username</Text>
-          <TextInput style={styles.username}></TextInput>
+          <TextInput style={styles.username} onChangeText={() => setUserName()}></TextInput>
         </View>
       </View>
       <View style={styles.statBar}>
@@ -105,7 +136,7 @@ export default function Profile({ navigation }) {
       </View>
       <View style={styles.signOut}>
         <View style={styles.eachBar}>
-          <Text style={styles.signOutText}>Deconnexion</Text>
+          <Text style={styles.signOutText}>Tirer la chaise d'eau, pour quitter Le Petit Coin</Text>
           {/* <FontAwesome5Icon name="power-off" size={22} color="#484848" /> */}
         </View>
       </View>
@@ -120,8 +151,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     backgroundColor: "white",
   },
-  topBox: {
+  titleProfil: {
     marginTop: 10,
+    width: 100,
+    objectFit: 'contain'
+  },
+  topBox: {
+    marginBottom: 20,
     width: "100%",
     justifyContent: "space-evenly",
     alignItems: "center",
@@ -136,15 +172,30 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   avatar: {
-    justifyContent: "center",
+    justifyContent: 'center',
     alignItems: "center",
-    alignContent: "center",
+    flexDirection: "row"
+
   },
   userCircle: {
     width: 120,
     height: 120,
     backgroundColor: "#D9D9D9",
     borderRadius: 60,
+  },
+  plusPic: {
+
+  },
+  plusButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+    backgroundColor: "#A86B98",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   user: {
     fontSize: 68,
@@ -190,6 +241,7 @@ const styles = StyleSheet.create({
   Text: {
     fontSize: 18,
     textAlign: "center",
+
   },
   favoris: {
     height: "100%",

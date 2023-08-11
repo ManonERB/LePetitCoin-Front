@@ -106,18 +106,20 @@ export default function  SignUp ({ navigation }) {
             />
           </View>
       </View>
+      <View style={styles.shadow}>
       <TouchableOpacity
         onPress={() => handleSubmit()}
         style={styles.button}
         activeOpacity={0.8}
       >
-        {inputEmpty && <Text style={styles.error}>Veuillez remplir tout les champs de saisie</Text>}
 
-       {emailError && <Text style={styles.error}>email incorrect</Text>}
 
         <Text style={styles.textButton}>Sign Up</Text>
       </TouchableOpacity>
-
+      
+      </View>
+        {inputEmpty && <Text style={styles.error}>Veuillez remplir tout les champs de saisie</Text>}
+       {emailError && <Text style={styles.error}>email incorrect</Text>}
 
       <View style={styles.media}>
         <TouchableOpacity>
@@ -234,9 +236,9 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         fontSize: 20,
         width: 230,
-        textAlign: 'center',  
-        textAlignVertical: 'center',
-        backgroundColor: "#B08BBB",
+        textAlign: "center",
+        textAlignVertical: "center",
+        color: "#B08BBB",
         borderRadius: 8,
       },
       icon: {
@@ -251,6 +253,27 @@ const styles = StyleSheet.create({
       color:'red',
       padding:30,
       fontWeight:'bold'
-  }
-
+  },
+  shadow: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "65%",
+    height: 50,
+    marginTop: 20,
+    borderRadius: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    marginBottom: 10,
+    // borderStyle : "solid",
+    // borderColor : "black",
+    // borderWidth : 1,
+    shadowColor: "grey",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
+  },
 });
