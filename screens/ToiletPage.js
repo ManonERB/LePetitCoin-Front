@@ -201,11 +201,9 @@ console.log("toilet",toilet)
           <View style={styles.equipement}> 
             
             <View>
-              <Text style={styles.text}>
-          {`${toilet?.tags_opening_hours ? toilet.tags_opening_hours : "aucune information disponible"}`}</Text>  
-              <Text style={styles.text}>Description : {`\u2022 ${toilet?.title ? toilet.title : "Info indisponible"}`}</Text>
-              <Text style={styles.text}>Eau potable : {`\u2022 ${toilet?.drinking_water ? toilet.drinking_water : "Info indisponible"}`}</Text>
-              <Text style={styles.text}>Table-à-langer :{`\u2022 ${toilet?.changing_table ? toilet.changing_table : "Info indisponible"}`}</Text>
+              <Text style={styles.text}>Description : {`${toilet?.title ? toilet.title : "Info indisponible"}`}</Text>
+              <Text style={styles.text}>Eau potable : {`${toilet?.drinking_water ? toilet.drinking_water : "Info indisponible"}`}</Text>
+              <Text style={styles.text}>Table-à-langer : {`${toilet?.changing_table ? toilet.changing_table : "Info indisponible"}`}</Text>
             </View>
             <View>
             </View>
@@ -217,7 +215,7 @@ console.log("toilet",toilet)
             {review.map((data,i) => {
               // console.log(data);
               return(
-              <View key={i} style={[styles.cardReview, styles.shadowProp]}>
+              <View key={i} style={styles.cardReview}>
                 <View style={styles.cardText}>
                   <View style={styles.cardHeaderText}>
                     <Text style={styles.titleReview}>{data.title} </Text>
@@ -252,7 +250,7 @@ console.log("toilet",toilet)
                 style={styles.review}
                 onPress={()=>navigation.navigate('Review', {toiletId})}
                 >
-                  <Text style={styles.textReview}>Donner votre avis</Text>
+                  <Text style={styles.reviewButtonText}>Donner votre avis</Text>
                   <FontAwesome 
                     name="pen"
                   size={18} 
@@ -271,7 +269,7 @@ const styles = StyleSheet.create({
     // flex:1,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-    // height: 200
+    height: 200
 },
 img:{
     width: 380,
@@ -322,17 +320,11 @@ review:{
   flexDirection:'row-reverse',
   justifyContent:"space-evenly",
   alignItems:"center",
-  width: '50%',
+  width: '60%',
   height: 50,
   borderRadius:12,
-  margin: 10,
+
 },
-textReview:{
-   fontSize:20,
-   paddingLeft:15,
-   paddingRight:5,
-   color:"white"
- },
  text:{
   fontSize:16,
   textAlign: 'center',
@@ -367,7 +359,6 @@ cardReview:{
   alignItems: 'center',
   justifyContent:"center",
   margin: 10,
-
   shadowColor: 'grey',
   shadowOffset: {
     width: 1,
@@ -388,6 +379,10 @@ cardHeaderText:{
   justifyContent:"space-between",
   paddingRight:10,
   paddingBottom:10,
+  flexWrap: 'wrap'
+},
+cardReviewText: {
+  flexWrap: 'no-wrap'
 },
 userName:{
   paddingTop:10,
@@ -399,14 +394,23 @@ titleReview: {
   fontSize: 20,
 },
 textReview: {
+  width: 250,
   fontSize: 16,
+  paddingLeft:15,
+   paddingRight:5,
+   flexWrap: 'nowrap',
 },
 titleRating: {
   color: "#A86B98",
   fontSize: 20,
 },
 avisButton: {
-alignItems: 'center',
+  margin: 50,
+  alignItems: 'center',
+  justifyContent: 'center'
+},
+reviewButtonText: {
+
 },
 
 });
