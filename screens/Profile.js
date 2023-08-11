@@ -9,37 +9,13 @@ import {
 import { StyleSheet } from "react-native";
 import Review from "./Review";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
-import { useFonts, Inter_900Black } from '@expo-google-fonts/inter';
-import * as Font from 'expo-font';
-
+import { logout } from '../reducers/user';
 
 export default function Profile({ navigation }) {
-  // let customFonts = {
-  //   'Inter-Black': require('../assets/fonts/Inter-Black.ttf'),
-  //   'Inter-Regular': require('../assets/fonts/Inter-Regular.ttf')
-  // };
-
-  // class YourComponent extends React.Component {
-  //   state = {
-  //     fontsLoaded: false,
-  //   };
-  
-  //   _loadFontsAsync = async () => {
-  //     await Font.loadAsync(customFonts);
-  //     this.setState({ fontsLoaded: true });
-  //   };
-  
-  //   componentDidMount() {
-  //     this._loadFontsAsync();
-  //   }
-  
-  //   render() {
-  //     if (!this.state.fontsLoaded) {
-  //       return <View />; // You can return any placeholder component here
-  //     }
-  //   }
-  // }
+ 
+  const dispatch = useDispatch();
 
   const [darkMode, setDarkMode] = useState(false);
   const toggledarkMode = () => setDarkMode((previousState) => !previousState);
@@ -53,6 +29,11 @@ export default function Profile({ navigation }) {
 
   const [userName, setUserName] = useState("")
 
+  const handleLogout = () => {
+		dispatch(logout())
+    navigation.navigate("SignIn");
+
+			}
   return (
     <View style={styles.container}>
       <View><Image style={styles.titleProfil}source={require('../assets/Profil.jpg')}></Image></View>
@@ -73,15 +54,15 @@ export default function Profile({ navigation }) {
       </View>
       <View style={styles.statBar}>
         <View style={styles.avis}>
-          <Text style={styles.Title}>5</Text>
+          <Text style={styles.Title}>2</Text>
           <Text style={styles.Text}>avis</Text>
         </View>
         <View style={styles.favoris}>
-          <Text style={styles.Title}>12</Text>
+          <Text style={styles.Title}>0</Text>
           <Text style={styles.Text}>favoris</Text>
         </View>
         <View style={styles.points}>
-          <Text style={styles.Title}>0</Text>
+          <Text style={styles.Title}>10</Text>
           <Text style={styles.Text}>coin points</Text>
         </View>
       </View>
@@ -126,18 +107,20 @@ export default function Profile({ navigation }) {
           <FontAwesome5Icon name="share-alt" size={22} color="#484848" />
         </View>
         <View style={styles.eachBar}>
-          <Text>Acheter PQ</Text>
+          <Text>Achetez du PQ</Text>
           <FontAwesome5Icon name="toilet-paper" size={22} color="#484848" />
         </View>
         <View style={styles.eachBar}>
-          <Text>Parametres</Text>
+          <Text>Paramètres</Text>
           <FontAwesome5Icon name="cog" size={22} color="#484848" />
         </View>
       </View>
       <View style={styles.signOut}>
         <View style={styles.eachBar}>
-          <Text style={styles.signOutText}>Tirer la chaise d'eau, pour quitter Le Petit Coin</Text>
-          {/* <FontAwesome5Icon name="power-off" size={22} color="#484848" /> */}
+          <TouchableOpacity onPress={handleLogout}>
+          <Text style={styles.signOutText}>Tirez la chaise d'eau, pour quitter Le Petit Coin...</Text>
+          </TouchableOpacity>
+         
         </View>
       </View>
     </View>

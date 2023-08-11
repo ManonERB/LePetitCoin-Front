@@ -122,9 +122,9 @@ titleFacts: {
     },
 image : {
     width : 300,
-    height : 300,
+    height : 350,
     borderRadius : 10,
-    objectFit: 'contain'
+    objectFit: 'fill'
     // backgroundColor : "blue"
     },
     Title: {

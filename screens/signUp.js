@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   View,
   Text,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Image
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 // import SignIn from './SignIn'
@@ -60,10 +61,8 @@ export default function  SignUp ({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={styles.topLogo}>
-          <Text style={styles.logoText}>LE PETIT C</Text>              
-              <FontAwesome  name="toilet-paper" color="#B08BBB" size={34} style={styles.toilet}/>
-          <Text style={styles.logoText}>IN</Text>
+       <View style={styles.topLogo}>
+        <Image style={styles.logo} source={require('../assets/logo.jpg')}></Image>
       </View>
     
         <View style={styles. inputHolder}>
@@ -162,6 +161,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 80,
       },
+      logo: {
+        width: '80%',
+        resizeMode: 'contain',
+        },
       logoText: {
       fontSize: 38,
       color: "#B08BBB",
@@ -237,9 +240,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
         width: 230,
         textAlign: "center",
-        textAlignVertical: "center",
         color: "#B08BBB",
         borderRadius: 8,
+        alignItems: 'center',
       },
       icon: {
     
@@ -247,6 +250,7 @@ const styles = StyleSheet.create({
       signUp: {
         marginTop: '20%',
         fontSize: 22,
+        color: "#B08BBB",
     
       },
     error:{

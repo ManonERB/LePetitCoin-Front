@@ -131,7 +131,7 @@ export default function SignIn({ navigation }) {
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={() => navigation.navigate(SignUp)}>
-        <Text style={styles.signUp}>pas de compte?</Text>
+        <Text style={styles.signUp}>Pas encore de compte ?</Text>
       </TouchableOpacity>
     </View>
   );

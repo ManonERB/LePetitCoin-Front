@@ -27,15 +27,18 @@ const store = configureStore({
 });
 
 const TabIcon = ({ iconName, size, color, isActive }) => {
+  const shouldRotate = iconName === 'heart' && isActive;
+  const rotationDegree = shouldRotate ? '180deg' : '0deg';
+  const transformStyle = { transform: [{ rotate: rotationDegree }] };
+
   return (
     <View
-      style={
-        isActive
-          ? styles.activeTabIconContainer
-          : styles.inactiveTabIconContainer
-      }
+      style={[
+        styles.tabIconContainer,
+        isActive ? styles.activeTabIconContainer : styles.inactiveTabIconContainer,
+      ]}
     >
-      <FontAwesome name={iconName} size={size} color={color} solid />
+      <FontAwesome name={iconName} size={size} color={color} solid style={transformStyle} />
     </View>
   );
 };

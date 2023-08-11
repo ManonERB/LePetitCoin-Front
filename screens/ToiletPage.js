@@ -143,7 +143,7 @@ console.log("toilet",toilet)
         <ScrollView>
           <View>      
             <Image 
-              source={require('../assets/Placeholder_view.png')}
+              source={require('../assets/TP-mars.png')}
               style={styles.img}
             />
             <View 
@@ -152,7 +152,11 @@ console.log("toilet",toilet)
             >
                 <TouchableOpacity 
                   style={styles.plusPic}>
-                  <FontAwesome name="heart" size={18} color="white" 
+                  <FontAwesome name="heart"
+                  size={20}
+                  solid
+                  color={"white"}
+                  style={{ transform: [{rotateZ: '180deg'}]}}
                   />
                 </TouchableOpacity>
             </View>
@@ -172,7 +176,7 @@ console.log("toilet",toilet)
             </View>
           </View>
           <View>
-        <Text style={styles.subTitle}>Où ce situe ce petit coin ? </Text>
+        <Text style={styles.subTitle}>Où se situe ce petit coin ? </Text>
         {currentPosition && (
           <MapView initialRegion={initialRegion} style={styles.map}>
             <Marker
@@ -210,7 +214,7 @@ console.log("toilet",toilet)
           </View>
           <View>
             <View style={styles.reviewContainer}>
-            <Text style={styles.barReview}> Ce qu'ils disent</Text>
+            <Text style={styles.barReview}> Ce qu'ils en disent</Text>
             </View>
             {review.map((data,i) => {
               // console.log(data);
@@ -250,7 +254,7 @@ console.log("toilet",toilet)
                 style={styles.review}
                 onPress={()=>navigation.navigate('Review', {toiletId})}
                 >
-                  <Text style={styles.reviewButtonText}>Donner votre avis</Text>
+                  <Text style={styles.reviewButtonText}>Donnez votre avis</Text>
                   <FontAwesome 
                     name="pen"
                   size={18} 
@@ -340,14 +344,14 @@ review:{
 
  },
  barReview:{
-  fontSize:25,
+  fontSize:22,
   backgroundColor:"#b08bbb",
   width:"50%",
   color:"white",
   borderTopRightRadius: 12,
   borderBottomRightRadius: 12,
   height: 35,
-
+  textAlignVertical: 'center',
   textAlign: 'center',
 },
 reviewContainer:{
@@ -410,7 +414,10 @@ avisButton: {
   justifyContent: 'center'
 },
 reviewButtonText: {
-
+color: 'white',
+fontWeight: 'bold',
+fontSize: 18 ,
+marginHorizontal: 15
 },
 
 });
