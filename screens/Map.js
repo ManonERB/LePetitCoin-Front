@@ -17,14 +17,17 @@ export default function Map({ navigation }) {
   const [rechercherUnCoin, setRechercherUnCoin] = useState("");
   const [toilet, setToilet] = useState([]);
   const [searchedToilets, setSearchedToilets] = useState([]);
+  const [filteredToilets, setFilteredToilets] = useState([]);
   const [initialRegion, setInitialRegion] = useState(null);
   const [lastPressedMarkerId, setLastPressedMarkerId] = useState(null);
+
   //add loading function to avoid crash due to current position not being loaded before map
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-
+        // set user's current location and set initial map region
       if (status === "granted") {
         const location = await Location.getCurrentPositionAsync({});
         setCurrentPosition(location.coords);
@@ -41,7 +44,8 @@ export default function Map({ navigation }) {
       }
     })();
   }, []);
-
+  
+  // Fetch toilets around user's current position
   useEffect(() => {
     if (currentPosition) {
       // Check if currentPosition is not null
@@ -141,9 +145,9 @@ export default function Map({ navigation }) {
         currentPosition && (
           <MapView
             initialRegion={initialRegion}
-            mapType="hybrid"
+            mapType="roadmap"
             style={styles.map}
-          >
+          > 
             <Marker
               pinColor="#fecb2d"
               title="My location"

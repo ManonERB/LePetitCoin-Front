@@ -9,17 +9,18 @@ import {
   View,
   KeyboardAvoidingView,
   FlatList,
-  ScrollView
+  ScrollView,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import { useIsFocused } from "@react-navigation/native";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 import Home from "./Home";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import ConfettiCannon from "react-native-confetti-cannon";
 
 export default function Review({ navigation, route }) {
-  
+
   const [starRating, setStarRating] = useState(null);
   const [cleanliness, setCleanliness] = useState(null);
   const [title, setTitle] = useState("");
@@ -29,6 +30,7 @@ export default function Review({ navigation, route }) {
   const [galleryPermission, setGalleryPermission] = useState(null);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [heartRating, setHeartRating] = useState(false);
+  const confettiCannonRef = useRef();
   const user = useSelector((state) => state.user.value);
 
   const CLOUD_URL = process.env.CLOUDINARY_URL;
@@ -46,22 +48,21 @@ export default function Review({ navigation, route }) {
     setSelectedImages(selectedImages.filter((image) => image.uri !== imageUri));
   };
 
-  const SelectedImageItem = ({ item }) =>
-  (
+  const SelectedImageItem = ({ item }) => (
     <View style={styles.selectedImageItem}>
-    <Image source={{ uri: item }} style={styles.selectedImage} />
-    <TouchableOpacity
-      onPress={() => removeImage(item)}
-      style={styles.deleteIconContainer}
+      <Image source={{ uri: item }} style={styles.selectedImage} />
+      <TouchableOpacity
+        onPress={() => removeImage(item)}
+        style={styles.deleteIconContainer}
       >
-      <FontAwesome
-        name="times"
-        size={20}
-        color="#A86B98"
-        style={styles.deleteIcon}
+        <FontAwesome
+          name="times"
+          size={20}
+          color="#A86B98"
+          style={styles.deleteIcon}
         />
-    </TouchableOpacity>
-  </View>
+      </TouchableOpacity>
+    </View>
   );
 
   const handleUpload = async (image) => {
@@ -77,12 +78,12 @@ export default function Review({ navigation, route }) {
       .then(async (data) => {
         console.log(data);
 
-    if (data) {
-      setSelectedImages([...selectedImages, data.url]);
-    } else {
-      alert("Erreur lors du téléchargement de l'image sur Cloudinary");
-    }
-  });
+        if (data) {
+          setSelectedImages([...selectedImages, data.url]);
+        } else {
+          alert("Erreur lors du téléchargement de l'image sur Cloudinary");
+        }
+      });
   };
 
   const pickImage = async () => {
@@ -93,14 +94,14 @@ export default function Review({ navigation, route }) {
       // allowsMultipleSelection: true,
     });
 
-  if (!data.canceled) {
-    let newFile = {
-      uri: data.uri,
-      type: `test/${data.uri.split(".")[1]}`,
-      name: `test.${data.uri.split(".")[1]}`,
-    };
-    handleUpload(newFile);
-  }
+    if (!data.canceled) {
+      let newFile = {
+        uri: data.uri,
+        type: `test/${data.uri.split(".")[1]}`,
+        name: `test.${data.uri.split(".")[1]}`,
+      };
+      handleUpload(newFile);
+    }
   };
 
   const takePhoto = async () => {
@@ -110,22 +111,22 @@ export default function Review({ navigation, route }) {
       quality: 1,
     });
 
-if (!data.canceled) {
-  let newFile = {
-    uri: data.uri,
-    type: `test/${data.uri.split(".")[1]}`,
-    name: `test.${data.uri.split(".")[1]}`,
-  };
-  handleUpload(newFile);
-}
+    if (!data.canceled) {
+      let newFile = {
+        uri: data.uri,
+        type: `test/${data.uri.split(".")[1]}`,
+        name: `test.${data.uri.split(".")[1]}`,
+      };
+      handleUpload(newFile);
+    }
   };
 
   const handleSubmitReview = () => {
-    const {toiletId} = route.params
-    const token = user.token
-    
+    const { toiletId } = route.params;
+    const token = user.token;
+
     if (review.length === 0) {
-      console.Log('error')
+      console.Log("error");
       return;
     }
     fetch(`http://${process.env.EXPO_PUBLIC_IP}/review/${token}/${toiletId}`, {
@@ -136,28 +137,27 @@ if (!data.canceled) {
         rating: starRating,
         text: text,
         pictures: selectedImages,
-        // cleanliness: 
+        // cleanliness:
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('data', data)
+        console.log("data", data);
         if (data.result) {
           alert("Votre annonce a été publiée avec succès !");
-      navigation.navigate("Home");
-      setTitle("");
-      setText("");
-      setSelectedImages([]);
-    } else {
-      alert("Une erreur est survenue lors de la publication de l'annonce.");
-    }
-  })
-  .catch((error) => {
-    console.error("Erreur lors de la publication de l'annonce :", error);
-    
-  });
+          confettiCannonRef.current.start();
+          navigation.navigate("Home");
+          setTitle("");
+          setText("");
+          setSelectedImages([]);
+        } else {
+          alert("Une erreur est survenue lors de la publication de l'annonce.");
+        }
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la publication de l'annonce :", error);
+      });
   };
-
 
   if (galleryPermission === false) {
     return <Text>Pas d'accès au stockage interne</Text>;
@@ -167,21 +167,20 @@ if (!data.canceled) {
   const animatedButtonScale = new Animated.Value(1);
   const animatedHeartScale = new Animated.Value(1);
   const animatedHeartRotation = new Animated.Value(0);
+
   const animatedHeartStyle = {
     transform: [
       { scale: animatedHeartScale },
       {
         rotate: animatedHeartRotation.interpolate({
           inputRange: [0, 1],
-          outputRange: ['0deg', '180deg'], // You can adjust the range as needed
+          outputRange: ["0deg", "180deg"], // adjust the range as needed
         }),
       },
     ],
   };
 
-
-  
-  // minimized functions that handle in  & out animations
+  // functions and animation for HEART
   const handleHeartPressIn = () => {
     Animated.parallel([
       Animated.spring(animatedHeartScale, {
@@ -197,7 +196,6 @@ if (!data.canceled) {
       }),
     ]).start();
   };
-
   const handleHeartPressOut = () => {
     Animated.spring(animatedHeartScale, {
       toValue: 1,
@@ -206,6 +204,16 @@ if (!data.canceled) {
       bounciness: 1,
     }).start();
   };
+  const handleHeartFlip = () => {
+    setHeartRating(!heartRating); // Toggle the heart rating state
+    animatedHeartScale.setValue(1); // Set the scale value to 1 for the initial state
+  };
+  //style for the animation
+  const animatedHeartScaleStyle = {
+    transform: [{ scale: animatedHeartScale }],
+  };
+
+  //animation for STARS
   const handlePressIn = () => {
     Animated.spring(animatedButtonScale, {
       toValue: 1.2,
@@ -222,24 +230,10 @@ if (!data.canceled) {
       bounciness: 1,
     }).start();
   };
-  const handleHeartFlip = () => {
-    setHeartRating(!heartRating); // Toggle the heart rating state
-    animatedHeartScale.setValue(1); // Set the scale value to 1 for the initial state
-  };
-
-  //styles for the animation
-  const animatedHeartScaleStyle = {
-    transform: [{ scale: animatedHeartScale }],
-  };
+  //style for the animation
   const animatedScaleStyle = {
     transform: [{ scale: animatedButtonScale }],
   };
-
-  // if (!hasPermission || !useIsFocused) {
-  //   return <View />;
-  // }
-
-
 
   return (
     <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -247,28 +241,34 @@ if (!data.canceled) {
       <View style={styles.boxContainer}>
         <View style={styles.topBox}>
           <View style={styles.images}>
-              <FlatList
-                  data={selectedImages}
-                  renderItem={SelectedImageItem}
-                  keyExtractor={(item, index) => index.toString()}
-                  horizontal
-                  style={styles.imageView}
-                />
+            <FlatList
+              data={selectedImages}
+              renderItem={SelectedImageItem}
+              keyExtractor={(item, index) => index.toString()}
+              horizontal
+              style={styles.imageView}
+            />
           </View>
-            <View style={styles.iconSpacing}>
-              <View style={styles.plusButton} activeOpacity={0.8}>
-                <TouchableOpacity style={styles.plusPic}>
-                  <FontAwesome name="plus" size={18} color="white" onPress={() => pickImage()} />
-                  <Text style={styles.buttonLabels}>gallery</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.cameraButton} activeOpacity={0.8}>
-                <TouchableOpacity style={styles.cameraPic}>
-                  <FontAwesome name="camera" size={18} color="white" onPress={() => takePhoto()}/>
-                  <Text style={styles.buttonLabels}>camera</Text>
-                </TouchableOpacity>
-              </View>
+          <View style={styles.iconSpacing}>
+            <View style={styles.plusButton} activeOpacity={0.8}>
+              <TouchableOpacity
+                style={styles.plusPic}
+                onPress={() => pickImage()}
+              >
+                <FontAwesome name="plus" size={18} color="white" />
+                <Text style={styles.buttonLabels}>gallery</Text>
+              </TouchableOpacity>
             </View>
+            <View style={styles.cameraButton} activeOpacity={0.8}>
+              <TouchableOpacity
+                style={styles.cameraPic}
+                onPress={() => takePhoto()}
+              >
+                <FontAwesome name="camera" size={18} color="white" />
+                <Text style={styles.buttonLabels}>camera</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
         <View>
           <KeyboardAvoidingView style={styles.reviewParts}>
@@ -301,13 +301,13 @@ if (!data.canceled) {
                 onPressOut={handleHeartPressOut}
                 onPress={handleHeartFlip}
               >
-                <Animated.View >
+                <Animated.View>
                   <FontAwesome
                     name="heart"
                     size={24}
                     solid={heartRating}
-                    color={heartRating ? "red" : "#CCCCCC"}
-                    style={{ transform: [{rotateZ: '180deg'}]}}
+                    color={heartRating ? "#A86B98" : "#CCCCCC"}
+                    style={{ transform: [{ rotateZ: "180deg" }] }}
                   />
                 </Animated.View>
               </TouchableOpacity>
@@ -427,6 +427,14 @@ if (!data.canceled) {
           </Text>
         </TouchableOpacity>
       </View>
+      <ConfettiCannon
+        ref={confettiCannonRef} // Assign the ref to the ConfettiCannon
+        count={200}
+        origin={{ x: -10, y: 0 }}
+        autoStart={false} // Set autoStart to false
+        fadeOut={true}
+        colors={["#B08BBB", "#A86B98"]}
+      />
     </ScrollView>
   );
 }
@@ -434,11 +442,11 @@ if (!data.canceled) {
 const styles = StyleSheet.create({
   contentContainer: {
     width: "100%",
-    height: '100%',
+    height: "100%",
     backgroundColor: "#fff",
     padding: 10,
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
+    alignItems: "center",
+    justifyContent: "space-evenly",
   },
   title: {
     fontSize: 48,
@@ -446,9 +454,9 @@ const styles = StyleSheet.create({
     height: 80,
   },
   images: {
-    width: '100%',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    width: "100%",
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   selectedImage: {
     flexWrap: "wrap",
@@ -457,7 +465,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 4,
     margin: 5,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   deleteIconContainer: {
     position: "absolute",
@@ -467,7 +475,7 @@ const styles = StyleSheet.create({
     height: 26,
     backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderRadius: 100,
-    alignItems: 'center',
+    alignItems: "center",
     padding: 3,
   },
   boxContainer: {
@@ -548,7 +556,7 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
   },
   buttonLabels: {
-    color: 'white',
+    color: "white",
   },
   selectedImageItem: {
     marginRight: 10,
@@ -603,10 +611,10 @@ const styles = StyleSheet.create({
   },
   reviewText: {
     marginHorizontal: 10,
-    height: '90%',
+    height: "90%",
     fontSize: 18,
-    textAlign: 'left',
-    textAlignVertical: 'top'
+    textAlign: "left",
+    textAlignVertical: "top",
   },
   bottomRow: {
     flexDirection: "row",

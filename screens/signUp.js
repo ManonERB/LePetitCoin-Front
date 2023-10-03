@@ -11,7 +11,6 @@ import {
   Image
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
-// import SignIn from './SignIn'
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../reducers/user";
 import SignIn from "./SignIn";

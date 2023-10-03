@@ -5,18 +5,21 @@ import {
   TextInput,
   Image,
   Switch,
+  Alert,
 } from "react-native";
 import { StyleSheet } from "react-native";
-import Review from "./Review";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 import { logout } from '../reducers/user';
 
-export default function Profile({ navigation }) {
- 
-  const dispatch = useDispatch();
 
+export default function Profile({ navigation }) {
+  const username = useSelector ((state) => state.user.value.username)
+  const favorites = useSelector ((state) => state.favorites.toilet);
+  const dispatch = useDispatch();
+  const [userName, setUserName] = useState("")
+  
   const [darkMode, setDarkMode] = useState(false);
   const toggledarkMode = () => setDarkMode((previousState) => !previousState);
 
@@ -27,13 +30,31 @@ export default function Profile({ navigation }) {
   const [updates, setUpdates] = useState(true);
   const toggleUpdates = () => setUpdates((previousState) => !previousState);
 
-  const [userName, setUserName] = useState("")
 
   const handleLogout = () => {
-		dispatch(logout())
-    navigation.navigate("SignIn");
+    // demander la confirmation
+    Alert.alert(
+      "Confirmer Deconnexion",
+      "Êtes-vous sûr de vouloir vous déconnecter ? Vous perdrez vos favoris :(",
+      [
+        {
+          text: "Annuler",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Confirmer",
+          onPress: () => {
+            // Perform logout action and navigate to the sign-in screen
+            dispatch(logout());
+            navigation.navigate("SignIn");
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
-			}
   return (
     <View style={styles.container}>
       <View><Image style={styles.titleProfil}source={require('../assets/Profil.jpg')}></Image></View>
@@ -48,8 +69,9 @@ export default function Profile({ navigation }) {
           </View>
         </View>
         <View style={styles.usernameBox}>
-          <Text style={styles.usernameLabel}>Username</Text>
-          <TextInput style={styles.username} onChangeText={() => setUserName()}></TextInput>
+          <Text style={styles.usernameLabel}>Pseudo</Text>
+          <Text style={styles.username}>{username}</Text>
+          <Text style={styles.changeName}>changez votre pseudo</Text>
         </View>
       </View>
       <View style={styles.statBar}>
@@ -58,7 +80,7 @@ export default function Profile({ navigation }) {
           <Text style={styles.Text}>avis</Text>
         </View>
         <View style={styles.favoris}>
-          <Text style={styles.Title}>0</Text>
+          <Text style={styles.Title}>{favorites.length}</Text>
           <Text style={styles.Text}>favoris</Text>
         </View>
         <View style={styles.points}>
@@ -118,7 +140,7 @@ export default function Profile({ navigation }) {
       <View style={styles.signOut}>
         <View style={styles.eachBar}>
           <TouchableOpacity onPress={handleLogout}>
-          <Text style={styles.signOutText}>Tirez la chaise d'eau, pour quitter Le Petit Coin...</Text>
+          <Text style={styles.signOutText}>Tirez la chaise d'eau, et se deconnecter..</Text>
           </TouchableOpacity>
          
         </View>
@@ -188,17 +210,29 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#A86B98",
     borderRadius: 12,
+    padding: 5,
     height: 40,
     width: 160,
+    fontSize: 24,
+    textAlignVertical: 'center',
+    textAlign: 'center'
   },
   usernameLabel: {
     padding: 0,
-    width: "40%",
+    width: "30%",
     marginBottom: -8,
     marginLeft: 10,
+    color: "#A86B98",
     backgroundColor: "white",
     zIndex: 1,
     textAlign: "center",
+  },
+  changeName: {
+    width: '100%',
+
+    marginTop: 15,
+    textAlign: 'center',
+    textDecorationLine: 'underline'
   },
   statBar: {
     flexDirection: "row",
@@ -291,5 +325,6 @@ const styles = StyleSheet.create({
     color: "#A86B98",
     fontWeight: "bold",
     textAlign: "right",
+    textDecorationLine: 'underline',
   },
 });

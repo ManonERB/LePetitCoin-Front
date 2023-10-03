@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import { useDispatch } from "react-redux";
-import {login} from "../reducers/user"
+import { login } from "../reducers/user";
 import FontAwesome from "react-native-vector-icons/FontAwesome5";
 import SignUp from "./signUp";
 
@@ -21,9 +21,22 @@ export default function SignIn({ navigation }) {
   const [inputEmpty, setInputEmpty] = useState(false);
   const [emailError, setEmailError] = useState(false);
 
+
+  // Clear email and password fields when the component mounts
+  useEffect(() => {
+    const clearFields = navigation.addListener("focus", () => {
+      setEmail("");
+      setPassword("");
+    });
+
+    return clearFields;
+  }, [navigation]);
+
+  //regex pour la validation d'unstructure d'addresse mail
   const EMAIL_REGEX =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+  // Function to handle form submission for new user
   const handleSubmit = () => {
     fetch(`http://${process.env.EXPO_PUBLIC_IP}/users/signin`, {
       method: "POST",
@@ -34,10 +47,10 @@ export default function SignIn({ navigation }) {
       .then((data) => {
         if (EMAIL_REGEX.test(email)) {
           if (data.result) {
-            //redirige au click de l'input a la Home
-            dispatch(login({token:data.token}));
+            console.log(data)
+            //If user data is valid, dispatch login state and redirect to the home page
+            dispatch(login({ token: data.token, username: data.username }));
             navigation.navigate("TabNavigator");
-
           } else {
             setInputEmpty(true);
           }
@@ -50,13 +63,16 @@ export default function SignIn({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.topLogo}>
-        <Image style={styles.logo} source={require('../assets/logo.jpg')}></Image>
+        <Image
+          style={styles.logo}
+          source={require("../assets/logo.jpg")}
+        ></Image>
       </View>
 
       <View style={styles.inputHolder}>
         <View style={styles.label}>
           <View style={styles.mailHolder}>
-          <Text style={styles.email}>Mail</Text>
+            <Text style={styles.email}>Mail</Text>
           </View>
           <TextInput
             //changeText avec le changement d'etat
@@ -74,11 +90,11 @@ export default function SignIn({ navigation }) {
         </View>
         <View style={styles.label}>
           <View style={styles.passwordHolder}>
-          <Text style={styles.password}>Mot de Passe</Text>
+            <Text style={styles.password}>Mot de Passe</Text>
           </View>
           <TextInput
             //changeText avec le changement d'etat
-            onChangeText={(value) => setPassword(value)} 
+            onChangeText={(value) => setPassword(value)}
             //la valeur de l'input
             value={password}
             style={styles.input}
@@ -138,7 +154,7 @@ export default function SignIn({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-container: {
+  container: {
     flex: 1,
     backgroundColor: "#ffffff",
     alignItems: "center",
@@ -147,42 +163,42 @@ container: {
   topLogo: {
     width: 200,
     flexDirection: "row",
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   logo: {
-  width: '155%',
-  resizeMode: 'contain',
+    width: "155%",
+    resizeMode: "contain",
   },
   email: {
     padding: 0,
     position: "relative",
     marginBottom: -17,
     marginLeft: 10,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     zIndex: 1,
-    textAlign: 'center'
+    textAlign: "center",
   },
   mailHolder: {
-    justifyContent: 'center',
-    backgroundColor: 'white',
+    justifyContent: "center",
+    backgroundColor: "white",
     width: 37,
-    height: 17
+    height: 17,
   },
   password: {
     padding: 0,
     position: "relative",
     marginBottom: -17,
     marginLeft: 10,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     zIndex: 1,
-    textAlign: 'center'
+    textAlign: "center",
   },
   passwordHolder: {
-    justifyContent: 'center',
-    backgroundColor: 'white',
+    justifyContent: "center",
+    backgroundColor: "white",
     width: 85,
-    height: 20
+    height: 20,
   },
   input: {
     width: 250,

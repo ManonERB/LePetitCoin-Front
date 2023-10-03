@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+
 const initialState = {
   value: { 
     token: null,
@@ -13,11 +14,14 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
+      console.log('login action payload:', action.payload);
       state.value.token = action.payload.token;
+      state.value.username = action.payload.username;
     },
     logout: (state, action) => {
       state.value.token = null
       state.value.username = null
+      
     },
     addPhoto: (state, action) => {
       state.value.photos.push(action.payload)
