@@ -236,6 +236,7 @@ export default function ToiletPage({ route, navigation }) {
                   longitude: toilet?.point_geo?.lon,
                 }}
                 title={toilet.title}
+                
               />
             )}
           </MapView>
@@ -280,7 +281,7 @@ export default function ToiletPage({ route, navigation }) {
           <View style={styles.barReview}>
             <Text style={styles.barReviewText}> Ce qu'ils en disent</Text>
             <Text style={styles.averageRating}>
-              Note global : {averageRating.toFixed(2)}{" "}
+            Note globale : {isNaN(averageRating) ? '0' : averageRating.toFixed(2)}
               {/* Format the rating to 2 decimal places */}
             </Text>
           </View>
@@ -357,11 +358,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     top: "20%",
-    right: "5%",
+    right: "3%",
   },
   recenter: {
     flexDirection: "row",
-    width: 80,
+    width: 75,
     height: 30,
     backgroundColor: "white",
     borderRadius: 12,

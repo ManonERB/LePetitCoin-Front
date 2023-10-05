@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "LePetitCoin",
-    "slug": "LePetitCoin",
+    "slug": "le-petit-coin",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,10 +22,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.filltr.lepetitcoin"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e8d2fdb4-e4c0-43b4-9249-14613be81893"
+      }
+    },
+    "owner": "filltr"
   }
 }
